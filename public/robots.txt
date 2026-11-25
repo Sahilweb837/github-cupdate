@@ -12,6 +12,7 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /auth/
 Disallow: /guest
+Disallow: /live-stats
 
 # Prevent duplicate filtered/search parameter crawling
 Disallow: /*?filter=

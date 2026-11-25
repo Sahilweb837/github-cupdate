@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — Meet Someone. Share a Coffee. Create a Connection.'))
+@section('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — World’s Best Free Coffee & Live Video Dating Website'))
+
+@push('preload')
+<link rel="preload" as="image" href="{{ asset('images/hero-coffee-couple.jpg') }}" fetchpriority="high">
+@endpush
 
 @push('head')
 <script type="application/ld+json">
@@ -29,38 +33,51 @@
         <div class="hero-copy">
             <div class="eyebrow-pill">
                 <x-icon name="coffee" class="cup-icon-xs" />
-                <span>Meet Someone. Share a Coffee. Create a Connection.</span>
+                <span>WORLD’S #1 FREE COFFEE &amp; LIVE VIDEO DATING</span>
             </div>
 
             <h1 class="hero-title">{{ $headline }}</h1>
             <p class="hero-subtitle">{{ $subheadline }}</p>
 
-            <div class="hero-actions">
-                <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink">
-                    Find Your Connection
+            <div class="free-offer-banner">
+                <div>
+                    <strong>Free Forever Access ($0)</strong>
+                    <span>Chat, OmeTV-style Live Video &amp; Moments — no paid paywall</span>
+                </div>
+                <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink btn-sm">
+                    {{ auth()->check() ? 'Open Free App' : 'Claim Free Access' }}
                 </a>
-                <a href="{{ route('how-it-works') }}" class="btn btn-outline">
-                    Explore How It Works
+            </div>
+
+            <div class="hero-actions mt-16">
+                <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink">
+                    Join Now — 100% Free
+                </a>
+                <a href="{{ route('live-video.index') }}" class="btn btn-coffee">
+                    <x-icon name="video" class="cup-icon-xs" /> Start Live Video
+                </a>
+                <a href="{{ route('moments.index') }}" class="btn btn-outline">
+                    Share Moments
                 </a>
             </div>
 
             <div class="trust-pills" aria-label="Platform Trust Highlights">
-                <span><x-icon name="shield" class="cup-icon-xs" /> Genuine Profiles</span>
+                <span><x-icon name="shield" class="cup-icon-xs" /> Anti-Nudity &amp; Anti-Spam</span>
                 <span><x-icon name="message" class="cup-icon-xs" /> Free Chat</span>
-                <span><x-icon name="video" class="cup-icon-xs" /> Free Video Calling</span>
-                <span><x-icon name="heart" class="cup-icon-xs" /> Safe Community</span>
+                <span><x-icon name="video" class="cup-icon-xs" /> OmeTV Live Video</span>
+                <span><x-icon name="heart" class="cup-icon-xs" /> <strong data-live-visitors>{{ $liveStats['active_visitors'] }}</strong> Live Now</span>
             </div>
         </div>
 
         <div class="hero-visual">
             <div class="hero-shape-blush" aria-hidden="true"></div>
             <div class="hero-photo-frame">
-                <img src="{{ asset('images/hero-coffee-couple.jpg') }}" alt="Two people enjoying coffee together in a warm modern cafe" class="hero-photo">
+                <img src="{{ asset('images/hero-coffee-couple.jpg') }}" alt="Two people enjoying coffee together in a warm modern cafe" class="hero-photo" fetchpriority="high" decoding="async">
                 <div class="floating-badge badge-bottom-left">
                     <span class="badge-coffee-dot"><x-icon name="coffee" class="cup-icon-xs" /></span>
                     <div>
-                        <div class="badge-title">Coffee First, Always</div>
-                        <div class="badge-sub">Himachal Pradesh &amp; Beyond</div>
+                        <div class="badge-title">100% Free · Zero Paywalls</div>
+                        <div class="badge-sub">{{ $totalSeoCities }}+ India &amp; Global Cities</div>
                     </div>
                 </div>
             </div>
@@ -71,25 +88,28 @@
 <section class="section-white">
     <div class="container">
         <div class="section-heading centered">
-            <span class="eyebrow-text">HOW CUPDATE WORKS</span>
-            <h2 class="section-title">Three simple steps to real connection</h2>
+            <span class="eyebrow-text">BUILT FOR REAL CONNECTIONS</span>
+            <h2 class="section-title">Everything free — live video, coffee dates &amp; moments</h2>
         </div>
 
         <div class="cards-grid-3">
             <article class="minimal-card">
-                <div class="card-icon-soft"><x-icon name="compass" class="cup-icon-md" /></div>
-                <h3 class="card-title">1. Discover People</h3>
-                <p class="card-desc">Find interesting people nearby across Himachal Pradesh and explore genuine profiles.</p>
+                <div class="card-icon-soft"><x-icon name="video" class="cup-icon-md" /></div>
+                <h3 class="card-title">1. OmeTV-Style Live Video</h3>
+                <p class="card-desc">Match face-to-face in real time with verified members &amp; safe guests across India and worldwide — tap Next anytime.</p>
+                <a href="{{ route('live-video.index') }}" class="text-link mt-8">Open Live Video →</a>
             </article>
             <article class="minimal-card">
-                <div class="card-icon-soft"><x-icon name="message" class="cup-icon-md" /></div>
-                <h3 class="card-title">2. Start Connecting</h3>
-                <p class="card-desc">Send messages, make friends, start respectful conversations, or hop on a free video call.</p>
+                <div class="card-icon-soft"><x-icon name="heart" class="cup-icon-md" /></div>
+                <h3 class="card-title">2. Shareable Coffee Moments</h3>
+                <p class="card-desc">Women and members can share café stories &amp; photos safely to CupDate, WhatsApp, Instagram, X, and Facebook.</p>
+                <a href="{{ route('moments.index') }}" class="text-link mt-8">Explore Moments →</a>
             </article>
             <article class="minimal-card">
-                <div class="card-icon-soft"><x-icon name="coffee" class="cup-icon-md" /></div>
-                <h3 class="card-title">3. Meet Over Coffee</h3>
-                <p class="card-desc">Turn meaningful online connections into comfortable, real-life daytime coffee dates.</p>
+                <div class="card-icon-soft"><x-icon name="shield" class="cup-icon-md" /></div>
+                <h3 class="card-title">3. Clean, No-Nudity &amp; Anti-Spam</h3>
+                <p class="card-desc">Automated text &amp; photo moderation blocks spam links and explicit content before it ever reaches your inbox.</p>
+                <a href="{{ route('safety') }}" class="text-link mt-8">Safety Standards →</a>
             </article>
         </div>
     </div>
@@ -99,7 +119,7 @@
     <div class="container">
         <div class="discover-header-row">
             <div>
-                <span class="eyebrow-text">FEATURED PEOPLE</span>
+                <span class="eyebrow-text">REAL PROFILES · NO FAKE DATA</span>
                 <h2 class="section-title">Genuine members on CupDate</h2>
             </div>
             <a href="{{ route('public.discover') }}" class="text-link">Browse all profiles →</a>
@@ -126,75 +146,50 @@
             </form>
         </div>
 
-        <div class="skeleton-grid-wrap" data-skeleton-container>
-            <div class="skeleton-overlay" data-skeleton-loader aria-hidden="true">
-                @for ($i = 0; $i < 3; $i++)
-                    <div class="skeleton-card">
-                        <div class="skeleton-box skeleton-img"></div>
-                        <div class="skeleton-box skeleton-line w-60"></div>
-                        <div class="skeleton-box skeleton-line w-85"></div>
+        <div class="profiles-grid mt-20">
+            @forelse ($featuredUsers as $person)
+                <article class="profile-card-public js-profile-preview"
+                         data-name="{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif"
+                         data-city="{{ $person->city }}, {{ $person->state }}"
+                         data-coffee="{{ $person->coffee_preference ?? 'Cappuccino' }}"
+                         data-bio="{{ $person->bio ?: 'Enjoying good coffee and genuine conversation.' }}"
+                         data-avatar="{{ $person->avatarUrl() }}"
+                         data-verified="{{ $person->is_verified ? 'Verified Member' : 'Member' }}">
+                    <div class="profile-card-img-wrap">
+                        <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }} in {{ $person->city }}" loading="lazy" decoding="async">
+                        @if ($person->is_online)
+                            <span class="online-pill"><span class="online-dot"></span> Online</span>
+                        @endif
+                        @if ($person->is_verified)
+                            <span class="verified-pill"><x-icon name="check" class="cup-icon-xs" /> Verified</span>
+                        @endif
                     </div>
-                @endfor
-            </div>
-
-            <div class="profiles-grid" data-skeleton-content>
-                @forelse ($featuredUsers as $person)
-                    <article class="profile-card-public">
-                        <div class="profile-card-img-wrap">
-                            <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }} in {{ $person->city }}" loading="lazy">
-                            @if ($person->is_online)
-                                <span class="online-pill"><span class="online-dot"></span> Online</span>
-                            @endif
-                            @if ($person->is_verified)
-                                <span class="verified-pill"><x-icon name="check" class="cup-icon-xs" /> Verified</span>
-                            @endif
+                    <div class="profile-card-body">
+                        <div class="profile-card-top">
+                            <h3>{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif</h3>
+                            <span class="city-tag"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $person->city }}</span>
                         </div>
-                        <div class="profile-card-body">
-                            <div class="profile-card-top">
-                                <h3>{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif</h3>
-                                <span class="city-tag"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $person->city }}</span>
-                            </div>
-                            <p class="profile-card-bio">{{ Str::limit($person->bio ?: 'Enjoying good coffee and genuine conversation.', 90) }}</p>
-                            <div class="tag-list">
-                                @foreach (array_slice($person->interestsList(), 0, 3) as $tag)
-                                    <span class="tag-soft">{{ $tag }}</span>
-                                @endforeach
-                            </div>
-                            <a href="{{ auth()->check() ? route('app.discover', ['q' => $person->firstName()]) : route('register') }}" class="btn btn-pink btn-full btn-sm">
-                                Send Request
+                        <p class="profile-card-bio">{{ Str::limit($person->bio ?: 'Enjoying good coffee and genuine conversation.', 90) }}</p>
+                        <div class="tag-list">
+                            @foreach (array_slice($person->interestsList(), 0, 3) as $tag)
+                                <span class="tag-soft">{{ $tag }}</span>
+                            @endforeach
+                        </div>
+                        <div class="profile-card-actions-row">
+                            <button type="button" class="btn btn-outline btn-sm js-open-profile-modal">View Profile</button>
+                            <a href="{{ auth()->check() ? route('app.discover', ['q' => $person->firstName()]) : route('register') }}" class="btn btn-pink btn-sm">
+                                Join Free
                             </a>
                         </div>
-                    </article>
-                @empty
-                    <div class="empty-state-card">
-                        <h3>No matching profiles for this filter yet</h3>
-                        <p>Try another city or interest, or create your free CupDate profile today.</p>
-                        <a href="{{ route('register') }}" class="btn btn-pink btn-sm">Create Free Account</a>
                     </div>
-                @endforelse
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section-white">
-    <div class="container editorial-grid">
-        <div class="editorial-media">
-            <img src="{{ asset('images/cafe-blue-bottle.jpg') }}" alt="Sunlit coffee shop table with two ceramic coffee cups" loading="lazy" class="editorial-photo">
-        </div>
-        <div class="editorial-copy">
-            <span class="eyebrow-text">WHY CUPDATE</span>
-            <h2 class="section-title">Designed for trust, comfort, and real-world chemistry</h2>
-            <div class="feature-check-grid">
-                <div><x-icon name="check" class="cup-icon-sm" /> Genuine profile verification</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Free 1-to-1 messaging</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Free WebRTC video calls</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Nearby Himachal connections</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Interest-based discovery</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Granular privacy controls</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Instant report &amp; block</div>
-                <div><x-icon name="check" class="cup-icon-sm" /> Respectful, adult-free space</div>
-            </div>
+                </article>
+            @empty
+                <div class="empty-state-card">
+                    <h3>No matching profiles for this filter yet</h3>
+                    <p>Try another city or interest, or create your free CupDate profile today.</p>
+                    <a href="{{ route('register') }}" class="btn btn-pink btn-sm">Create Free Account</a>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -202,12 +197,17 @@
 <section class="section-cream">
     <div class="container coffee-feature-grid">
         <div>
-            <span class="eyebrow-text">COFFEE DATE CULTURE</span>
+            <span class="eyebrow-text">BEST FREE COFFEE DATING IN THE WORLD</span>
             <h2 class="section-title">{{ $coffeeHeading }}</h2>
-            <p class="section-lead">Sometimes the best connections begin with a simple hello and a cup of coffee.</p>
-            <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-coffee">
-                Plan Your Coffee Date
-            </a>
+            <p class="section-lead">Meet over real coffee, connect on free OmeTV-style live video, or share your coffee moments with friends — always 100% free.</p>
+            <div class="hero-actions mt-16">
+                <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-coffee">
+                    Plan Free Coffee Date
+                </a>
+                <a href="{{ route('live-video.index') }}" class="btn btn-outline">
+                    Try Live Video Now
+                </a>
+            </div>
         </div>
         <div class="cafe-places-stack">
             @foreach ($datePlaces as $place)
@@ -225,12 +225,22 @@
 </section>
 
 <section class="section-white">
-    <div class="container narrow centered">
-        <span class="eyebrow-text">REAL STORIES ONLY</span>
-        <h2 class="section-title">Authentic community experiences</h2>
-        <div class="honest-story-card">
-            <p>CupDate never publishes fabricated reviews or synthetic testimonials. Only verified members who have genuinely connected and met in person can submit a story for community review.</p>
-            <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-outline btn-sm">Start Your Real Connection</a>
+    <div class="container">
+        <div class="discover-header-row">
+            <div>
+                <span class="eyebrow-text">100+ INDIA &amp; GLOBAL SEO GUIDES</span>
+                <h2 class="section-title">Free coffee dating in your city &amp; country</h2>
+            </div>
+            <a href="{{ route('cities') }}" class="text-link">View all {{ $totalSeoCities }}+ cities →</a>
+        </div>
+
+        <div class="cities-seo-grid mt-20">
+            @foreach ($seoCitiesPreview as $seoCity)
+                <a href="{{ route('seo.city', $seoCity['slug']) }}" class="city-seo-card">
+                    <strong>Dating in {{ $seoCity['name'] }}</strong>
+                    <span>{{ $seoCity['state'] }}, {{ $seoCity['country'] }}</span>
+                </a>
+            @endforeach
         </div>
     </div>
 </section>
@@ -239,16 +249,16 @@
     <div class="container">
         <div class="section-heading centered">
             <span class="eyebrow-text">SAFETY &amp; TRUST</span>
-            <h2 class="section-title">Your Safety Comes First.</h2>
+            <h2 class="section-title">No Nudity. No Spam. Always Safe.</h2>
         </div>
 
         <div class="safety-grid">
-            <div class="safety-pill"><x-icon name="shield" class="cup-icon-sm" /> Profile verification</div>
-            <div class="safety-pill"><x-icon name="lock" class="cup-icon-sm" /> Secure authentication</div>
+            <div class="safety-pill"><x-icon name="shield" class="cup-icon-sm" /> Anti-nudity image check</div>
+            <div class="safety-pill"><x-icon name="lock" class="cup-icon-sm" /> Anti-spam message filter</div>
             <div class="safety-pill"><x-icon name="user" class="cup-icon-sm" /> Privacy settings</div>
-            <div class="safety-pill"><x-icon name="heart" class="cup-icon-sm" /> Community guidelines</div>
-            <div class="safety-pill"><x-icon name="shield" class="cup-icon-sm" /> Report &amp; block user</div>
-            <div class="safety-pill"><x-icon name="sparkles" class="cup-icon-sm" /> Human moderation</div>
+            <div class="safety-pill"><x-icon name="heart" class="cup-icon-sm" /> Safe Moments sharing</div>
+            <div class="safety-pill"><x-icon name="shield" class="cup-icon-sm" /> Instant report &amp; block</div>
+            <div class="safety-pill"><x-icon name="sparkles" class="cup-icon-sm" /> Role-based human moderation</div>
         </div>
         <div class="centered mt-24">
             <a href="{{ route('safety') }}" class="btn btn-outline btn-sm">Read Full Safety Standards</a>
@@ -276,4 +286,21 @@
         </div>
     </div>
 </section>
+
+<div id="profilePreviewModal" class="cup-modal-backdrop" hidden>
+    <div class="cup-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalProfileName">
+        <button type="button" class="cup-modal-close" id="closeProfileModal" aria-label="Close">×</button>
+        <img id="modalProfileImg" src="" alt="" class="cup-modal-avatar">
+        <span class="free-badge-pill mt-12" id="modalProfileBadge">Verified Member</span>
+        <h3 id="modalProfileName" class="mt-8"></h3>
+        <p class="muted-small" id="modalProfileCity"></p>
+        <p id="modalProfileBio" class="mt-12"></p>
+        <p class="muted-small mt-8">Favorite Coffee: <strong id="modalProfileCoffee"></strong></p>
+        <div class="hero-actions mt-16">
+            <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink btn-full">
+                Join Free to Chat &amp; Video Call
+            </a>
+        </div>
+    </div>
+</div>
 @endsection

@@ -812,3 +812,101 @@ button, input, select, textarea { font: inherit; }
     .badge-bottom-left { left: 10px; bottom: 10px; }
     .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
+
+
+/* Brand Logo, Free Promo Strip, Live Visitors, OmeTV Live Video, Moments & 100+ Cities SEO */
+.brand-logo-img { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; display: block; }
+.top-promo-bar { background: var(--coffee-dark); color: var(--white); font-size: 0.78rem; padding: 7px 0; }
+.top-promo-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top-promo-left, .top-promo-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.free-badge-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--pink-dark); color: var(--white); font-weight: 700; font-size: 0.7rem; padding: 3px 10px; border-radius: var(--radius-pill); letter-spacing: 0.03em; }
+.top-promo-text { opacity: 0.92; }
+.live-visitor-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); padding: 3px 10px; border-radius: var(--radius-pill); }
+.top-join-btn { color: #FFD1DC; font-weight: 700; text-decoration: underline; }
+
+.free-offer-banner {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--blush);
+    border: 1px solid #F7C8D4;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.free-offer-banner strong { display: block; font-size: 0.92rem; color: var(--coffee-dark); }
+.free-offer-banner span { font-size: 0.8rem; color: var(--ink-muted); }
+
+.profile-card-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
+.cup-modal-backdrop { position: fixed; inset: 0; background: rgba(25, 16, 14, 0.58); display: grid; place-items: center; z-index: 120; padding: 20px; }
+.cup-modal-backdrop[hidden] { display: none; }
+.cup-modal-card { position: relative; background: var(--white); border-radius: var(--radius-lg); padding: 28px; max-width: 420px; width: 100%; text-align: center; box-shadow: var(--shadow-md); }
+.cup-modal-close { position: absolute; top: 12px; right: 14px; border: none; background: var(--grey-light); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
+.cup-modal-avatar { width: 108px; height: 108px; border-radius: 50%; object-fit: cover; margin: 0 auto; border: 3px solid var(--blush); }
+
+/* 100+ Cities Directory */
+.city-search-input { width: 100%; max-width: 520px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 0.95rem; background: var(--white); }
+.cities-groups-stack { display: flex; flex-direction: column; gap: 28px; }
+.city-group-title { font-size: 1.1rem; color: var(--coffee-dark); margin: 0 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.cities-seo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.city-seo-card { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--white); transition: transform 0.15s ease, border-color 0.15s ease; }
+.city-seo-card:hover { transform: translateY(-2px); border-color: var(--pink-dark); }
+.city-seo-card strong { font-size: 0.9rem; color: var(--coffee-dark); }
+.city-seo-card span { font-size: 0.77rem; color: var(--ink-muted); }
+
+/* OmeTV-Style Live Video */
+.live-hero-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.live-stats-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; min-width: 220px; display: flex; flex-direction: column; gap: 8px; }
+.live-stat-row { display: flex; justify-content: space-between; font-size: 0.85rem; gap: 16px; }
+.ometv-shell { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 20px; align-items: start; }
+.ometv-videos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ometv-video-box { position: relative; background: #1D1512; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 4 / 3; }
+.ometv-video-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ometv-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--white); text-align: center; padding: 16px; background: rgba(29, 21, 18, 0.75); }
+.ometv-badge { position: absolute; left: 12px; bottom: 12px; background: rgba(0,0,0,0.65); color: var(--white); font-size: 0.75rem; padding: 4px 10px; border-radius: var(--radius-pill); }
+.ometv-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+.ometv-controls select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); }
+.safety-strip { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--coffee-dark); background: var(--blush); padding: 10px 14px; border-radius: var(--radius-sm); }
+.ometv-chat-col { background: var(--grey-light); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; display: flex; flex-direction: column; }
+.ometv-chat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.ometv-chat-feed { height: 280px; overflow-y: auto; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.ome-chat-line { font-size: 0.85rem; }
+.ome-chat-line.is-me strong { color: var(--pink-dark); }
+.ometv-chat-form { display: flex; gap: 8px; margin-top: 10px; }
+.ometv-chat-form input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-pill); }
+.ometv-join-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; }
+
+/* Shareable Coffee Moments */
+.moments-layout { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+.moments-composer-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; position: sticky; top: 88px; }
+.moments-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.moment-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.moment-head { display: flex; align-items: center; gap: 10px; }
+.moment-img-wrap img { width: 100%; max-height: 280px; object-fit: cover; border-radius: var(--radius-md); display: block; }
+.moment-body { margin: 0; font-size: 0.94rem; color: var(--ink); line-height: 1.55; }
+.social-share-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+.share-pill { font-size: 0.75rem; font-weight: 600; padding: 5px 10px; border-radius: var(--radius-pill); background: var(--blush); color: var(--coffee-dark); border: 1px solid #F7C8D4; cursor: pointer; }
+.share-pill:hover { background: var(--pink-dark); color: var(--white); border-color: var(--pink-dark); }
+
+/* Enhanced Messages UI */
+.threads-search-wrap { padding: 10px; border-bottom: 1px solid var(--border); }
+.threads-search-wrap input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 0.85rem; }
+.thread-avatar-wrap { position: relative; flex-shrink: 0; }
+.thread-online-dot { position: absolute; right: 0; bottom: 0; width: 10px; height: 10px; border-radius: 50%; background: #22C55E; border: 2px solid var(--white); }
+.mini-verified { color: var(--pink-dark); font-size: 0.75rem; font-weight: 700; margin-left: 4px; }
+.chat-safety-notice { display: flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--cream); border-bottom: 1px solid var(--border); font-size: 0.76rem; color: var(--coffee); }
+.chat-icebreakers { display: flex; gap: 8px; padding: 8px 14px 0; flex-wrap: wrap; }
+.icebreaker-chip { border: 1px solid var(--border); background: var(--blush); color: var(--coffee-dark); font-size: 0.76rem; padding: 5px 10px; border-radius: var(--radius-pill); cursor: pointer; }
+
+@media (max-width: 960px) {
+    .cities-seo-grid { grid-template-columns: repeat(2, 1fr); }
+    .ometv-shell, .moments-layout, .ometv-videos-grid, .moments-grid { grid-template-columns: 1fr; }
+    .moments-composer-card { position: static; }
+}
+@media (max-width: 640px) {
+    .cities-seo-grid { grid-template-columns: 1fr; }
+    .top-promo-text { display: none; }
+}

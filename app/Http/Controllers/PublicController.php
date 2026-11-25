@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\SeoCities;
 use App\Models\BlogPost;
 use App\Models\City;
 use App\Models\ContactMessage;
 use App\Models\DatePlace;
 use App\Models\InterestCategory;
+use App\Models\Moment;
 use App\Models\SiteSetting;
 use App\Models\SupportTicket;
 use App\Models\User;
+use App\Services\LiveStatsService;
+use App\Services\SafetyModerationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class PublicController extends Controller
 {
-    public function home(Request $request): View
+    public function home(Request $request, LiveStatsService $liveStats): View
     {
         $filter = $request->query('filter', 'nearby');
         $cityFilter = $request->query('city');
@@ -44,18 +51,25 @@ class PublicController extends Controller
         };
 
         $featuredUsers = $query->take(6)->get();
-        $cities = City::where('is_active', true)->orderBy('sort_order')->get();
-        $interests = InterestCategory::where('is_active', true)->orderBy('name')->get();
-        $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
+        $cities = Cache::remember('cupdate:home:cities', 60, fn () => City::where('is_active', true)->orderBy('sort_order')->get());
+        $interests = Cache::remember('cupdate:home:interests', 60, fn () => InterestCategory::where('is_active', true)->orderBy('name')->get());
+        $datePlaces = Cache::remember('cupdate:home:places', 60, fn () => DatePlace::orderByDesc('rating')->take(4)->get());
+
+        $recentMoments = collect();
+        if (Schema::hasTable('posts')) {
+            $momentsQuery = Moment::with('user')->latest('created_at');
+            if (Schema::hasColumn('posts', 'is_approved')) {
+                $momentsQuery->where('is_approved', true)->where('is_flagged', false);
+            }
+            $recentMoments = $momentsQuery->take(4)->get();
+        }
 
         $faqs = [
-            ['q' => 'What is CupDate?', 'a' => 'CupDate (cupdate.in) is a genuine dating, friendship, and social connection platform built around real conversations and comfortable coffee dates across Himachal Pradesh and beyond.'],
-            ['q' => 'Is CupDate free?', 'a' => 'Yes. Creating a profile, discovering people, sending chat messages, and making one-to-one video calls are completely free. Optional premium tools are never required to connect.'],
-            ['q' => 'How can I find people nearby?', 'a' => 'Use the Discover filters by city (such as Dharamshala, Kangra, Mandi, or Shimla), shared interests, or online status without exposing your exact street location.'],
-            ['q' => 'Can I video call someone?', 'a' => 'Yes. Once you connect with someone in Messages, you can start a secure, encrypted WebRTC video call directly in your browser with full mute and camera controls.'],
-            ['q' => 'How does profile verification work?', 'a' => 'Verified members confirm their email and submit a profile verification request reviewed by our moderation team so you know you are talking to a real person.'],
-            ['q' => 'Is CupDate safe?', 'a' => 'Safety comes first. CupDate includes profile verification, one-tap block and report tools, image moderation, strict anti-fake-profile policies, and human moderation.'],
-            ['q' => 'How do I delete my account?', 'a' => 'You can permanently delete your account anytime from your Profile Settings page, which removes your profile from discovery immediately.'],
+            ['q' => 'Is CupDate a 100% free coffee and social dating website?', 'a' => 'Yes. CupDate (cupdate.in) is completely free — creating a profile, discovering members across 100+ Indian & global cities, messaging, sharing Coffee Moments, and joining OmeTV-style live video chats cost nothing.'],
+            ['q' => 'How does CupDate Live Video (like OmeTV) work?', 'a' => 'Open the Live Video page, choose your preference and region, and connect face-to-face via encrypted WebRTC with real online members. Tap Next anytime or use one-click safety reporting.'],
+            ['q' => 'Can girls and members share coffee moments on social media?', 'a' => 'Yes. Members can post verified Coffee Moments and share them cleanly to WhatsApp, Instagram, X, or Facebook with built-in anti-nudity and anti-spam safety screening.'],
+            ['q' => 'How can I find people nearby across India and the world?', 'a' => 'Use the Discover filters or explore our 100+ city & country pages from Himachal Pradesh, Delhi, Mumbai, Bengaluru, and Pune to global hubs without exposing your exact street location.'],
+            ['q' => 'How does CupDate prevent nudity, spam, and fake profiles?', 'a' => 'Every message, photo upload, and Coffee Moment passes through automated anti-spam and anti-nudity screening plus human moderator review, verification badges, and instant block/report tools.'],
         ];
 
         return view('pages.home', [
@@ -63,13 +77,89 @@ class PublicController extends Controller
             'cities' => $cities,
             'interests' => $interests,
             'datePlaces' => $datePlaces,
+            'recentMoments' => $recentMoments,
+            'liveStats' => $liveStats->snapshot(),
+            'seoCitiesPreview' => array_slice(array_values(SeoCities::all()), 0, 24),
+            'totalSeoCities' => count(SeoCities::all()),
             'activeFilter' => $filter,
             'activeCity' => $cityFilter,
             'activeInterest' => $interestFilter,
             'faqs' => $faqs,
-            'headline' => SiteSetting::getValue('homepage_headline', 'Your Next Connection Starts With a Coffee.'),
-            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Meet genuine people around you, discover new connections and turn simple conversations into beautiful memories.'),
-            'coffeeHeading' => SiteSetting::getValue('coffee_section_heading', 'Less Swiping. More Meaningful Meetings.'),
+            'headline' => SiteSetting::getValue('homepage_headline', 'World’s Warmest Free Coffee & Live Video Dating Website.'),
+            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Meet genuine people across 100+ Indian cities & worldwide. Free chat, OmeTV-style live video, shareable coffee moments, and zero paid paywalls.'),
+            'coffeeHeading' => SiteSetting::getValue('coffee_section_heading', 'Less Swiping. More Meaningful Coffee Dates — 100% Free.'),
+        ]);
+    }
+
+    public function liveStats(LiveStatsService $liveStats): JsonResponse
+    {
+        return response()->json($liveStats->snapshot());
+    }
+
+    public function cities(): View
+    {
+        return view('pages.cities', [
+            'groups' => SeoCities::grouped(),
+            'totalCities' => count(SeoCities::all()),
+        ]);
+    }
+
+    public function cityLanding(string $slug): View
+    {
+        $city = SeoCities::findBySlug($slug);
+        abort_unless($city !== null, 404);
+
+        $cityName = $city['name'];
+        $stateName = $city['state'];
+        $countryName = $city['country'];
+
+        $membersQuery = User::query()
+            ->where('status', 'active')
+            ->where('profile_visible', true)
+            ->where('is_admin', false);
+
+        if ($countryName === 'India' && $slug !== 'india') {
+            $membersQuery->where(function ($q) use ($cityName, $stateName) {
+                $q->where('city', 'like', "%{$cityName}%")
+                    ->orWhere('state', 'like', "%{$stateName}%");
+            });
+        }
+
+        $allCities = SeoCities::all();
+        $relatedCities = collect($allCities)
+            ->reject(fn ($c) => $c['slug'] === $slug)
+            ->sortByDesc(fn ($c) => $c['state'] === $stateName ? 2 : ($c['country'] === $countryName ? 1 : 0))
+            ->take(12)
+            ->values()
+            ->all();
+
+        $page = [
+            'title' => "Free Coffee Dating & Singles in {$cityName}, {$countryName} | CupDate",
+            'h1' => "Free Coffee Dating & Live Video in {$cityName}",
+            'description' => "Meet verified singles in {$cityName} ({$stateName}, {$countryName}) for free coffee dates, respectful chat, and OmeTV-style live video on CupDate — 100% free forever.",
+            'city' => $city['slug'] === 'india' ? null : $cityName,
+            'state' => $stateName,
+            'country' => $countryName,
+            'intro' => "{$city['vibe']} across {$city['spot']}. CupDate connects genuine people in {$cityName} with 100% free messaging, free live video chat, and strict anti-nudity & anti-spam moderation.",
+            'highlights' => [
+                "100% free dating & social discovery in {$cityName} — no paid subscription required",
+                'Real-time OmeTV-style live video & 1-to-1 encrypted calls',
+                'Share Coffee Moments on WhatsApp, Instagram, and X with safety screening',
+                'Strict anti-nudity, anti-spam & profile verification protection',
+            ],
+            'ideas' => [
+                "Daytime coffee meetup around {$city['spot']}",
+                "Start with a 5-minute CupDate Live Video hello in {$cityName}",
+                'Share your favorite local café moment to spark real conversations',
+            ],
+        ];
+
+        return view('pages.seo-landing', [
+            'slug' => $slug,
+            'page' => $page,
+            'localMembers' => $membersQuery->take(4)->get(),
+            'datePlaces' => DatePlace::orderByDesc('rating')->take(4)->get(),
+            'relatedCities' => $relatedCities,
         ]);
     }
 
@@ -134,7 +224,7 @@ class PublicController extends Controller
         return view('pages.contact');
     }
 
-    public function submitContact(Request $request): RedirectResponse
+    public function submitContact(Request $request, SafetyModerationService $safety): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
@@ -143,6 +233,11 @@ class PublicController extends Controller
             'category' => ['required', 'string', 'max:80'],
             'message' => ['required', 'string', 'min:10', 'max:3000'],
         ]);
+
+        $check = $safety->screenText($validated['subject'] . ' ' . $validated['message']);
+        if (! $check['allowed']) {
+            return back()->withInput()->withErrors(['message' => $check['reason']]);
+        }
 
         ContactMessage::create([
             'name' => $validated['name'],

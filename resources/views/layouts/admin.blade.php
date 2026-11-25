@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate Admin Console')</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -16,7 +17,7 @@
         <div class="admin-topbar-inner">
             <div class="admin-brand-group">
                 <a href="{{ route('admin.dashboard') }}" class="brand-logo">
-                    <span class="brand-mark"><x-icon name="shield" class="cup-icon-sm" /></span>
+                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="32" height="32">
                     <span class="brand-text">CupDate <span>Admin</span></span>
                 </a>
                 <span class="admin-role-pill">{{ strtoupper(str_replace('_', ' ', auth()->user()->role ?? 'super_admin')) }}</span>

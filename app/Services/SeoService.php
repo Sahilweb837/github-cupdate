@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Data\SeoCities;
 use App\Models\BlogPost;
+use App\Models\Moment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class SeoService
 {
@@ -39,8 +43,11 @@ class SeoService
         $today = now()->toAtomString();
 
         $entries = [
-            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate — Meet Someone. Share a Coffee. Create a Connection.'],
+            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate — World’s Best Free Coffee & Social Dating Website'],
             ['loc' => self::canonicalForPath('/discover'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
+            ['loc' => self::canonicalForPath('/live-video'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.95'],
+            ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
+            ['loc' => self::canonicalForPath('/cities'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/how-it-works'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => self::canonicalForPath('/safety'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => self::canonicalForPath('/about-us'), 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'],
@@ -57,16 +64,47 @@ class SeoService
             ['loc' => self::canonicalForPath('/safety-center'), 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
         ];
 
-        $posts = BlogPost::where('is_published', true)->latest('published_at')->get();
-        foreach ($posts as $post) {
+        foreach (SeoCities::all() as $city) {
             $entries[] = [
-                'loc' => self::canonicalForPath('/blog/' . $post->slug),
-                'lastmod' => ($post->updated_at ?? $post->published_at ?? now())->toAtomString(),
-                'changefreq' => 'monthly',
-                'priority' => '0.7',
-                'image' => $post->cover_image ? self::baseUrl() . '/' . ltrim($post->cover_image, '/') : null,
-                'image_title' => $post->title,
+                'loc' => self::canonicalForPath('/dating-in/' . $city['slug']),
+                'lastmod' => $today,
+                'changefreq' => 'weekly',
+                'priority' => '0.85',
             ];
+        }
+
+        try {
+            $posts = BlogPost::where('is_published', true)->latest('published_at')->get();
+            foreach ($posts as $post) {
+                $entries[] = [
+                    'loc' => self::canonicalForPath('/blog/' . $post->slug),
+                    'lastmod' => ($post->updated_at ?? $post->published_at ?? now())->toAtomString(),
+                    'changefreq' => 'monthly',
+                    'priority' => '0.7',
+                    'image' => $post->cover_image ? self::baseUrl() . '/' . ltrim($post->cover_image, '/') : null,
+                    'image_title' => $post->title,
+                ];
+            }
+        } catch (Throwable) {
+            // Keep static SEO entries resilient if DB is unavailable during CLI generation
+        }
+
+        try {
+            if (Schema::hasTable('posts')) {
+                $moments = Moment::where('is_approved', true)->where('is_flagged', false)->latest('created_at')->take(50)->get();
+                foreach ($moments as $moment) {
+                    $entries[] = [
+                        'loc' => self::canonicalForPath('/moments/' . $moment->id),
+                        'lastmod' => ($moment->created_at ?? now())->toAtomString(),
+                        'changefreq' => 'weekly',
+                        'priority' => '0.6',
+                        'image' => $moment->image_url ? self::baseUrl() . '/' . ltrim($moment->image_url, '/') : null,
+                        'image_title' => 'CupDate Moment' . ($moment->city ? ' in ' . $moment->city : ''),
+                    ];
+                }
+            }
+        } catch (Throwable) {
+            // Ignore when DB is offline
         }
 
         return $entries;
@@ -96,6 +134,7 @@ class SeoService
             'Disallow: /reset-password',
             'Disallow: /auth/',
             'Disallow: /guest',
+            'Disallow: /live-stats',
             '',
             '# Prevent duplicate filtered/search parameter crawling',
             'Disallow: /*?filter=',

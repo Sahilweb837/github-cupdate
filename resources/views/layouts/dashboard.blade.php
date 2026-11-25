@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate App')</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -16,7 +17,7 @@
 
     <div class="mobile-app-topbar">
         <a href="{{ route('app.discover') }}" class="brand-logo">
-            <span class="brand-mark"><x-icon name="coffee" class="cup-icon-sm" /></span>
+            <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="32" height="32">
             <span class="brand-text">Cup<span>Date</span></span>
         </a>
         <div class="mobile-topbar-right">
@@ -33,7 +34,7 @@
         <aside class="app-sidebar">
             <div>
                 <a href="{{ route('home') }}" class="brand-logo app-brand">
-                    <span class="brand-mark"><x-icon name="coffee" class="cup-icon-sm" /></span>
+                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="34" height="34">
                     <span class="brand-text">Cup<span>Date</span></span>
                 </a>
 
@@ -44,8 +45,14 @@
                     <a href="{{ route('app.messages') }}" class="sidebar-link {{ request()->routeIs('app.messages') ? 'is-active' : '' }}">
                         <x-icon name="message" class="cup-icon-sm" /> Messages
                     </a>
+                    <a href="{{ route('live-video.index') }}" class="sidebar-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
+                        <x-icon name="video" class="cup-icon-sm" /> Live Video (OmeTV)
+                    </a>
                     <a href="{{ route('app.video.index') }}" class="sidebar-link {{ request()->routeIs('app.video.*') ? 'is-active' : '' }}">
-                        <x-icon name="video" class="cup-icon-sm" /> Video Call
+                        <x-icon name="video" class="cup-icon-sm" /> 1-to-1 Video Call
+                    </a>
+                    <a href="{{ route('moments.index') }}" class="sidebar-link {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">
+                        <x-icon name="heart" class="cup-icon-sm" /> Coffee Moments
                     </a>
                     <a href="{{ route('app.coffee-dates') }}" class="sidebar-link {{ request()->routeIs('app.coffee-dates') ? 'is-active' : '' }}">
                         <x-icon name="coffee" class="cup-icon-sm" /> Coffee Dates

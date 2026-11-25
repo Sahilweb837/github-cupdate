@@ -12,6 +12,9 @@
 </div>
 
 <div class="admin-stats-grid">
+    <div class="admin-stat-card"><span>Live Visitors Now</span><strong data-live-visitors>{{ $stats['active_visitors'] ?? 0 }}</strong></div>
+    <div class="admin-stat-card"><span>Members Online</span><strong data-live-members>{{ $stats['online_members'] ?? 0 }}</strong></div>
+    <div class="admin-stat-card"><span>Live Video Queue</span><strong>{{ $stats['live_video_active'] ?? 0 }}</strong></div>
     <div class="admin-stat-card"><span>Total Users</span><strong>{{ $stats['total_users'] }}</strong></div>
     <div class="admin-stat-card"><span>Active Users</span><strong>{{ $stats['active_users'] }}</strong></div>
     <div class="admin-stat-card"><span>New (7 days)</span><strong>{{ $stats['new_users'] }}</strong></div>

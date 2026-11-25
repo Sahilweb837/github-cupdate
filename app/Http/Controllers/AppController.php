@@ -14,6 +14,7 @@ use App\Models\UserBlock;
 use App\Models\UserNotification;
 use App\Models\UserReport;
 use App\Models\VideoCall;
+use App\Services\SafetyModerationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -209,7 +210,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function sendMessage(Request $request, User $partner): JsonResponse|RedirectResponse
+    public function sendMessage(Request $request, User $partner, SafetyModerationService $safety): JsonResponse|RedirectResponse
     {
         $me = $request->user();
         $isBlocked = UserBlock::where(function ($q) use ($me, $partner) {
@@ -233,9 +234,24 @@ class AppController extends Controller
             return back()->withErrors(['message' => 'Write a message or choose an image to send.']);
         }
 
+        $textCheck = $safety->screenText($data['message'] ?? '');
+        if (! $textCheck['allowed']) {
+            return $request->expectsJson()
+                ? response()->json(['error' => $textCheck['reason']], 422)
+                : back()->withErrors(['message' => $textCheck['reason']]);
+        }
+
+        $imageFlagged = false;
         $imagePath = null;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
+            $imgCheck = $safety->screenImage($file);
+            if (! $imgCheck['allowed']) {
+                return $request->expectsJson()
+                    ? response()->json(['error' => $imgCheck['reason']], 422)
+                    : back()->withErrors(['image' => $imgCheck['reason']]);
+            }
+            $imageFlagged = $imgCheck['flagged'];
             $dir = public_path('uploads/chat');
             if (! is_dir($dir)) {
                 mkdir($dir, 0755, true);
@@ -250,6 +266,7 @@ class AppController extends Controller
             'receiver_id' => $partner->id,
             'message' => $data['message'] ?? '',
             'image_path' => $imagePath,
+            'is_flagged' => $textCheck['flagged'] || $imageFlagged,
             'is_read' => false,
             'created_at' => now(),
         ]);

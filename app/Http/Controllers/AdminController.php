@@ -8,14 +8,17 @@ use App\Models\CoffeeDate;
 use App\Models\ContactMessage;
 use App\Models\InterestCategory;
 use App\Models\Message;
+use App\Models\Moment;
 use App\Models\SiteSetting;
 use App\Models\SupportTicket;
 use App\Models\User;
 use App\Models\UserReport;
+use App\Services\LiveStatsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -55,8 +58,9 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    public function dashboard(Request $request): View
+    public function dashboard(Request $request, LiveStatsService $liveStats): View
     {
+        $live = $liveStats->snapshot();
         $stats = [
             'total_users' => User::withTrashed()->count(),
             'active_users' => User::where('status', 'active')->count(),
@@ -67,6 +71,9 @@ class AdminController extends Controller
             'deleted_accounts' => User::onlyTrashed()->count(),
             'coffee_dates' => CoffeeDate::count(),
             'open_tickets' => SupportTicket::where('status', '!=', 'resolved')->count(),
+            'active_visitors' => $live['active_visitors'],
+            'online_members' => $live['online_members'],
+            'live_video_active' => $live['live_video_active'],
         ];
 
         $recentUsers = User::withTrashed()->latest('created_at')->take(8)->get();
@@ -138,8 +145,25 @@ class AdminController extends Controller
         $messages = Message::with(['sender', 'receiver'])->latest('created_at')->take(25)->get();
         $tickets = SupportTicket::latest()->take(20)->get();
         $contacts = ContactMessage::latest('created_at')->take(20)->get();
+        $moments = Schema::hasTable('posts')
+            ? Moment::with('user')->latest('created_at')->take(20)->get()
+            : collect();
 
-        return view('admin.moderation', compact('reports', 'messages', 'tickets', 'contacts'));
+        return view('admin.moderation', compact('reports', 'messages', 'tickets', 'contacts', 'moments'));
+    }
+
+    public function moderateMoment(Request $request, Moment $moment): RedirectResponse
+    {
+        $action = $request->input('action');
+        if ($action === 'approve' && Schema::hasColumn('posts', 'is_approved')) {
+            $moment->update(['is_approved' => true, 'is_flagged' => false]);
+        } elseif ($action === 'flag' && Schema::hasColumn('posts', 'is_flagged')) {
+            $moment->update(['is_flagged' => ! $moment->is_flagged]);
+        } elseif ($action === 'delete') {
+            $moment->delete();
+        }
+
+        return back()->with('success', 'Moment moderation updated.');
     }
 
     public function resolveReport(Request $request, UserReport $report): RedirectResponse

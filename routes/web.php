@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LiveVideoController;
+use App\Http\Controllers\MomentController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\VideoCallController;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +12,10 @@ use Illuminate\Support\Facades\Route;
 // Public & SEO Routes
 Route::controller(PublicController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+    Route::get('/live-stats', 'liveStats')->name('live-stats');
     Route::get('/discover', 'discover')->name('public.discover');
+    Route::get('/cities', 'cities')->name('cities');
+    Route::get('/dating-in/{slug}', 'cityLanding')->name('seo.city');
     Route::get('/how-it-works', 'howItWorks')->name('how-it-works');
     Route::get('/safety', 'safety')->name('safety');
     Route::get('/about-us', 'about')->name('about');
@@ -34,6 +39,25 @@ Route::controller(PublicController::class)->group(function () {
 
     Route::get('/sitemap.xml', 'sitemap')->name('sitemap');
     Route::get('/robots.txt', 'robots')->name('robots');
+});
+
+// OmeTV-Style Live Random Video Chat
+Route::controller(LiveVideoController::class)->prefix('live-video')->name('live-video.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/join', 'join')->middleware('throttle:20,1')->name('join');
+    Route::get('/poll', 'poll')->name('poll');
+    Route::post('/signal', 'signal')->name('signal');
+    Route::post('/chat', 'chat')->middleware('throttle:30,1')->name('chat');
+    Route::post('/leave', 'leave')->name('leave');
+    Route::post('/report', 'report')->name('report');
+});
+
+// Shareable Coffee Moments (Social Media & Website Feed)
+Route::controller(MomentController::class)->prefix('moments')->name('moments.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/', 'store')->middleware(['auth', 'throttle:10,1'])->name('store');
+    Route::get('/{moment}', 'show')->name('show');
+    Route::post('/{moment}/share', 'share')->name('share');
 });
 
 // Authentication Routes
@@ -100,6 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/moderation', [AdminController::class, 'moderation'])->middleware('admin:super_admin,moderator,support_admin')->name('moderation');
         Route::post('/reports/{report}', [AdminController::class, 'resolveReport'])->middleware('admin:super_admin,moderator')->name('reports.resolve');
         Route::post('/messages/{message}', [AdminController::class, 'moderateMessage'])->middleware('admin:super_admin,moderator')->name('messages.moderate');
+        Route::post('/moments/{moment}', [AdminController::class, 'moderateMoment'])->middleware('admin:super_admin,moderator')->name('moments.moderate');
         Route::post('/tickets/{ticket}', [AdminController::class, 'replyTicket'])->middleware('admin:super_admin,support_admin')->name('tickets.reply');
         Route::get('/content', [AdminController::class, 'content'])->middleware('admin:super_admin,content_manager')->name('content');
         Route::post('/cities', [AdminController::class, 'storeCity'])->middleware('admin:super_admin,content_manager')->name('cities.store');

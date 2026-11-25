@@ -68,6 +68,40 @@
 </div>
 
 <section class="admin-panel-card mt-24">
+    <h2 class="card-title">Coffee Moments Moderation (Anti-Nudity &amp; Anti-Spam)</h2>
+    <div class="stack-sm mt-16">
+        @forelse ($moments ?? [] as $moment)
+            <div class="moderation-item">
+                <div>
+                    <strong>{{ $moment->user?->full_name ?? 'Member' }} · {{ $moment->city ?? 'India' }}</strong>
+                    <div class="muted-small">
+                        Status: {{ ($moment->is_approved ?? true) ? 'Approved' : 'Pending Review' }}
+                        @if ($moment->is_flagged ?? false) · <strong>Flagged</strong> @endif
+                    </div>
+                    <p class="muted-small">{{ Str::limit($moment->content, 140) }}</p>
+                </div>
+                <div class="admin-action-btns">
+                    <form method="POST" action="{{ route('admin.moments.moderate', $moment) }}">
+                        @csrf <input type="hidden" name="action" value="approve">
+                        <button type="submit" class="btn btn-pink btn-xs">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.moments.moderate', $moment) }}">
+                        @csrf <input type="hidden" name="action" value="flag">
+                        <button type="submit" class="btn btn-outline btn-xs">{{ ($moment->is_flagged ?? false) ? 'Unflag' : 'Flag' }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.moments.moderate', $moment) }}">
+                        @csrf <input type="hidden" name="action" value="delete">
+                        <button type="submit" class="btn btn-outline btn-xs">Delete</button>
+                    </form>
+                </div>
+            </div>
+        @empty
+            <p class="muted-small">No moments posted yet.</p>
+        @endforelse
+    </div>
+</section>
+
+<section class="admin-panel-card mt-24">
     <h2 class="card-title">Support Tickets &amp; Contact Inquiries</h2>
     <div class="stack-sm mt-16">
         @forelse ($tickets as $ticket)
