@@ -1,118 +1,82 @@
 @extends('layouts.app')
 
-@section('title', 'How it works — Cupdate')
+@section('title', 'How CupDate Works — Meet Someone. Share a Coffee.')
+@section('description', 'Learn how CupDate turns genuine profiles, free chat, and video calls into comfortable daytime coffee dates in Himachal Pradesh.')
 
 @section('content')
-<section class="page-hero">
+<section class="page-hero section-cream">
     <div class="container centered narrow">
         <span class="eyebrow-text">HOW IT WORKS</span>
-        <h1 class="page-title">From hello to first date in four steps.</h1>
-        <p class="page-subtitle">No endless swiping. Cupdate keeps things simple and moving.</p>
+        <h1 class="page-title">From simple hello to a real coffee date.</h1>
+        <p class="page-subtitle">No endless random swiping. CupDate keeps connection thoughtful, safe, and centered around real conversation.</p>
     </div>
 </section>
 
-<section class="section-compact">
+<section class="section-white">
     <div class="container stack-lg">
         <article class="step-detail-card">
-            <div class="step-detail-copy">
+            <div>
                 <div class="step-index">01</div>
-                <h2 class="step-detail-title">Build your profile</h2>
-                <p class="step-detail-desc">Add photos, answer fun prompts and pick your interests. Verify with a quick selfie to earn the badge.</p>
+                <h2 class="step-detail-title">Create a genuine profile</h2>
+                <p class="step-detail-desc">Add your natural photo, select your Himachal city, share your coffee preference, and list real hobbies and interests.</p>
             </div>
             <div class="step-widget-panel">
-                <div class="checklist-row is-done">
-                    <span>📷 Add 3 photos</span>
-                    <span class="check-mark">✓</span>
-                </div>
-                <div class="checklist-row is-done">
-                    <span>✎ Answer 2 prompts</span>
-                    <span class="check-mark">✓</span>
-                </div>
-                <div class="checklist-row is-pending">
-                    <span>🛡 Verify yourself</span>
-                    <span class="pending-pill">Pending</span>
-                </div>
-            </div>
-        </article>
-
-        <article class="step-detail-card reverse-on-desktop">
-            <div class="step-widget-panel compat-panel">
-                <div class="compat-ring">
-                    <span class="compat-percent">94%</span>
-                    <span class="compat-label">Compatible</span>
-                </div>
-                <ul class="compat-traits">
-                    <li>❤ Both love hiking</li>
-                    <li>❤ Same life goals</li>
-                    <li>❤ Night owls</li>
-                </ul>
-            </div>
-            <div class="step-detail-copy">
-                <div class="step-index">02</div>
-                <h2 class="step-detail-title">Get smart matches</h2>
-                <p class="step-detail-desc">Every morning, receive curated picks. Your compatibility score updates as you do.</p>
+                <div class="checklist-row"><span><x-icon name="user" class="cup-icon-xs" /> Clear daylight photo</span><span class="check-mark">✓</span></div>
+                <div class="checklist-row"><span><x-icon name="map-pin" class="cup-icon-xs" /> Himachal city &amp; interests</span><span class="check-mark">✓</span></div>
+                <div class="checklist-row"><span><x-icon name="shield" class="cup-icon-xs" /> Profile verification request</span><span class="pending-pill">Trusted Badge</span></div>
             </div>
         </article>
 
         <article class="step-detail-card">
-            <div class="step-detail-copy">
+            <div class="step-widget-panel">
+                <div class="checklist-row"><span><x-icon name="compass" class="cup-icon-xs" /> Filter by Dharamshala, Kangra, Mandi, Shimla</span></div>
+                <div class="checklist-row"><span><x-icon name="sparkles" class="cup-icon-xs" /> Compatibility score from shared interests</span></div>
+            </div>
+            <div>
+                <div class="step-index">02</div>
+                <h2 class="step-detail-title">Discover people &amp; send a request</h2>
+                <p class="step-detail-desc">Browse verified profiles without pressure. Send a friend or connection request with a thoughtful note.</p>
+            </div>
+        </article>
+
+        <article class="step-detail-card">
+            <div>
                 <div class="step-index">03</div>
-                <h2 class="step-detail-title">Chat &amp; check the radar</h2>
-                <p class="step-detail-desc">Message after a mutual like, or use Radar to see who’s nearby and open to meeting today.</p>
+                <h2 class="step-detail-title">Free chat &amp; WebRTC video call</h2>
+                <p class="step-detail-desc">Talk comfortably via real-time text chat and optional one-to-one video calls before deciding to meet in person.</p>
             </div>
-            <div class="step-widget-panel chat-preview-panel">
-                <div class="chat-bubble-in">Coffee this weekend? ☕</div>
-                <div class="chat-bubble-out">Saturday at 4 works!</div>
+            <div class="step-widget-panel">
+                <div class="chat-bubble-in">Would you like to grab a cappuccino this weekend?</div>
+                <div class="chat-bubble-out">Saturday afternoon in McLeod Ganj sounds lovely!</div>
             </div>
         </article>
 
-        <article class="step-detail-card reverse-on-desktop">
-            <div class="step-widget-panel venue-panel">
-                <div class="venue-card-mini">
-                    <span class="venue-badge-icon" aria-hidden="true">☕</span>
-                    <div>
-                        <div class="venue-name">Blue Bottle Coffee</div>
-                        <div class="venue-meta">Sat, 4:00 PM · Confirmed</div>
+        <article class="step-detail-card">
+            <div class="step-widget-panel">
+                @foreach ($datePlaces->take(2) as $place)
+                    <div class="cafe-spot-card">
+                        <div class="cafe-spot-icon"><x-icon name="coffee" class="cup-icon-sm" /></div>
+                        <div>
+                            <div class="cafe-spot-name">{{ $place->name }}</div>
+                            <div class="cafe-spot-address">{{ $place->address }}</div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            <div class="step-detail-copy">
+            <div>
                 <div class="step-index">04</div>
-                <h2 class="step-detail-title">Book the date</h2>
-                <p class="step-detail-desc">Pick a venue, send an invite and share a safety check-in. We’ll remind you both.</p>
+                <h2 class="step-detail-title">Plan your coffee date</h2>
+                <p class="step-detail-desc">Pick a city, suggest a comfortable public café and preferred time, and keep your exact personal location private.</p>
             </div>
         </article>
     </div>
 </section>
 
-<section class="section-block">
-    <div class="container narrow">
-        <div class="section-heading centered">
-            <h2 class="section-title">Questions, answered</h2>
-        </div>
-
-        <div class="faq-list" data-faq-accordion>
-            @foreach ($faqs as $index => $faq)
-                <div class="faq-item {{ $index === 0 ? 'is-open' : '' }}">
-                    <button type="button" class="faq-question" aria-expanded="{{ $index === 0 ? 'true' : 'false' }}">
-                        <span>{{ $faq['q'] }}</span>
-                        <span class="faq-chevron" aria-hidden="true">⌄</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>{{ $faq['a'] }}</p>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-<section class="section-block cta-section-wrap">
-    <div class="container">
-        <div class="coral-cta-banner">
-            <h2 class="coral-cta-title">Start your first update</h2>
-            <a href="{{ route('join') }}" class="btn btn-plum">Join Cupdate free</a>
-        </div>
+<section class="section-blush">
+    <div class="container centered narrow">
+        <h2 class="section-title">Ready to meet someone genuine?</h2>
+        <p class="section-lead">Join CupDate free and explore verified people near you.</p>
+        <a href="{{ route('register') }}" class="btn btn-pink">Create Free Account</a>
     </div>
 </section>
 @endsection

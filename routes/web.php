@@ -1,29 +1,111 @@
 <?php
 
-use App\Http\Controllers\CupdateController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\VideoCallController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(CupdateController::class)->group(function () {
+// Public & SEO Routes
+Route::controller(PublicController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+    Route::get('/discover', 'discover')->name('public.discover');
     Route::get('/how-it-works', 'howItWorks')->name('how-it-works');
-    Route::get('/about', 'about')->name('about');
+    Route::get('/safety', 'safety')->name('safety');
+    Route::get('/about-us', 'about')->name('about');
+    Route::get('/about', fn () => redirect()->route('about'));
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact', 'submitContact')->name('contact.submit');
+    Route::get('/blog', 'blog')->name('blog');
+    Route::get('/blog/{slug}', 'blogShow')->name('blog.show');
 
-    Route::get('/login', 'login')->name('login');
-    Route::get('/join', 'join')->name('join');
-    Route::post('/auth', 'authenticate')->name('auth.submit');
+    Route::get('/privacy-policy', fn () => app(PublicController::class)->legal('privacy-policy'))->name('privacy');
+    Route::get('/terms-and-conditions', fn () => app(PublicController::class)->legal('terms-and-conditions'))->name('terms');
+    Route::get('/community-guidelines', fn () => app(PublicController::class)->legal('community-guidelines'))->name('guidelines');
+    Route::get('/safety-center', fn () => app(PublicController::class)->legal('safety-center'))->name('safety-center');
+
+    // Himachal Pradesh SEO Landing Pages
+    Route::get('/dating-in-himachal-pradesh', fn () => app(PublicController::class)->seoLanding('dating-in-himachal-pradesh'))->name('seo.himachal');
+    Route::get('/meet-singles-in-kangra', fn () => app(PublicController::class)->seoLanding('meet-singles-in-kangra'))->name('seo.kangra');
+    Route::get('/meet-singles-in-dharamshala', fn () => app(PublicController::class)->seoLanding('meet-singles-in-dharamshala'))->name('seo.dharamshala');
+    Route::get('/meet-singles-in-mandi', fn () => app(PublicController::class)->seoLanding('meet-singles-in-mandi'))->name('seo.mandi');
+    Route::get('/coffee-date-ideas-in-himachal-pradesh', fn () => app(PublicController::class)->seoLanding('coffee-date-ideas-in-himachal-pradesh'))->name('seo.coffee-ideas');
+
+    Route::get('/sitemap.xml', 'sitemap')->name('sitemap');
+    Route::get('/robots.txt', 'robots')->name('robots');
+});
+
+// Authentication Routes
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLogin')->name('login');
+    Route::post('/login', 'login')->name('login.submit');
+    Route::get('/register', 'showRegister')->name('register');
+    Route::get('/join', fn () => redirect()->route('register'))->name('join');
+    Route::post('/register', 'register')->name('register.submit');
+    Route::post('/guest', 'continueAsGuest')->name('auth.guest');
+    Route::get('/auth/google', 'googleRedirect')->name('auth.google');
+    Route::get('/auth/google/callback', 'googleCallback')->name('auth.google.callback');
+    Route::get('/forgot-password', 'showForgotPassword')->name('password.request');
+    Route::post('/forgot-password', 'sendResetLink')->name('password.email');
+    Route::get('/reset-password/{token}', 'showResetPassword')->name('password.reset');
+    Route::post('/reset-password', 'resetPassword')->name('password.update');
+    Route::post('/verify-email', 'verifyEmail')->middleware('auth')->name('verification.send');
     Route::post('/logout', 'logout')->name('logout');
+});
 
-    Route::get('/privacy', fn () => app(CupdateController::class)->legal('privacy'))->name('privacy');
-    Route::get('/terms', fn () => app(CupdateController::class)->legal('terms'))->name('terms');
-    Route::get('/safety', fn () => app(CupdateController::class)->legal('safety'))->name('safety');
-
-    Route::prefix('app')->name('app.')->group(function () {
+// Authenticated User App Workspace
+Route::middleware('auth')->prefix('app')->name('app.')->group(function () {
+    Route::controller(AppController::class)->group(function () {
         Route::get('/discover', 'discover')->name('discover');
-        Route::get('/radar', 'radar')->name('radar');
+        Route::post('/swipe', 'swipe')->name('swipe');
         Route::get('/messages', 'messages')->name('messages');
-        Route::get('/dates', 'dates')->name('dates');
+        Route::post('/messages/{partner}', 'sendMessage')->name('messages.send');
+        Route::get('/messages/{partner}/poll', 'pollMessages')->name('messages.poll');
+        Route::delete('/messages/{partner}', 'deleteConversation')->name('messages.delete');
+        Route::post('/block/{user}', 'blockUser')->name('block');
+        Route::post('/report/{user}', 'reportUser')->name('report');
+        Route::get('/coffee-dates', 'coffeeDates')->name('coffee-dates');
+        Route::get('/dates', fn () => redirect()->route('app.coffee-dates'))->name('dates');
+        Route::post('/coffee-dates', 'storeCoffeeDate')->name('coffee-dates.store');
+        Route::patch('/coffee-dates/{coffeeDate}', 'respondCoffeeDate')->name('coffee-dates.respond');
+        Route::get('/notifications', 'notifications')->name('notifications');
+        Route::post('/notifications/read', 'markNotificationsRead')->name('notifications.read');
         Route::get('/profile', 'profile')->name('profile');
+        Route::post('/profile', 'updateProfile')->name('profile.update');
+        Route::post('/profile/verify', 'requestVerification')->name('profile.verify');
+        Route::post('/profile/premium', 'upgradePremium')->name('profile.premium');
+        Route::delete('/profile', 'deleteAccount')->name('profile.delete');
+    });
+
+    Route::controller(VideoCallController::class)->prefix('video-call')->name('video.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/start', 'start')->name('start');
+        Route::get('/incoming', 'incoming')->name('incoming');
+        Route::post('/{call}/status', 'updateStatus')->name('status');
+        Route::post('/{call}/signal', 'sendSignal')->name('signal');
+        Route::get('/{call}/signals', 'pollSignals')->name('signals');
+    });
+});
+
+// Secure Role-Based Admin Dashboard
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
+
+    Route::middleware('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::post('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
+        Route::get('/moderation', [AdminController::class, 'moderation'])->middleware('admin:super_admin,moderator,support_admin')->name('moderation');
+        Route::post('/reports/{report}', [AdminController::class, 'resolveReport'])->middleware('admin:super_admin,moderator')->name('reports.resolve');
+        Route::post('/messages/{message}', [AdminController::class, 'moderateMessage'])->middleware('admin:super_admin,moderator')->name('messages.moderate');
+        Route::post('/tickets/{ticket}', [AdminController::class, 'replyTicket'])->middleware('admin:super_admin,support_admin')->name('tickets.reply');
+        Route::get('/content', [AdminController::class, 'content'])->middleware('admin:super_admin,content_manager')->name('content');
+        Route::post('/cities', [AdminController::class, 'storeCity'])->middleware('admin:super_admin,content_manager')->name('cities.store');
+        Route::post('/interests', [AdminController::class, 'storeInterest'])->middleware('admin:super_admin,content_manager')->name('interests.store');
+        Route::post('/blog', [AdminController::class, 'storeBlog'])->middleware('admin:super_admin,content_manager')->name('blog.store');
+        Route::get('/settings', [AdminController::class, 'settings'])->middleware('admin:super_admin,content_manager')->name('settings');
+        Route::post('/settings', [AdminController::class, 'updateSettings'])->middleware('admin:super_admin,content_manager')->name('settings.update');
     });
 });

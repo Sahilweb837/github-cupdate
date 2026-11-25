@@ -1,68 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'About — Cupdate')
+@section('title', 'About CupDate — Meet Someone. Share a Coffee.')
+@section('description', 'CupDate (cupdate.in) connects thoughtful singles and friends across Himachal Pradesh through safe chat, video calling, and coffee dates.')
 
 @section('content')
-<section class="page-hero">
+<section class="page-hero section-cream">
     <div class="container centered narrow">
-        <span class="eyebrow-text">OUR STORY</span>
-        <h1 class="page-title">We believe connection should feel like a good cup of coffee.</h1>
-        <p class="page-subtitle">
-            Warm, unhurried, and better shared. Cupdate was founded in 2021 after three friends got tired of apps built to keep you swiping instead of meeting.
-        </p>
+        <span class="eyebrow-text">ABOUT US</span>
+        <h1 class="page-title">Meet Someone. Share a Coffee. Create a Connection.</h1>
+        <p class="page-subtitle">CupDate was created for people tired of noisy, impersonal swiping apps. We focus on real profiles, respectful conversation, and meaningful coffee meetups in Himachal Pradesh.</p>
     </div>
 </section>
 
-<section class="section-compact">
-    <div class="container cards-grid-3">
-        @foreach ($metrics as $metric)
-            <div class="metric-card">
-                <div class="metric-value">{{ $metric['value'] }}</div>
-                <div class="metric-label">{{ $metric['label'] }}</div>
+<section class="section-white">
+    <div class="container editorial-grid">
+        <div>
+            <img src="{{ asset('images/hero-coffee-couple.jpg') }}" alt="Couple sharing coffee in a sunlit cafe" loading="lazy" class="editorial-photo">
+        </div>
+        <div>
+            <span class="eyebrow-text">OUR PHILOSOPHY</span>
+            <h2 class="section-title">Real connections take warmth and trust</h2>
+            <p class="section-lead">Whether you are in Shimla, Dharamshala, Kangra, Mandi, Palampur, or Manali, CupDate gives you a calm, dignified space to meet people looking for genuine relationships, friendship, and conversation.</p>
+            <div class="tag-list mt-16">
+                @foreach ($cities as $city)
+                    <span class="tag-soft">{{ $city->name }}</span>
+                @endforeach
             </div>
-        @endforeach
-    </div>
-</section>
-
-<section class="plum-values-band">
-    <div class="container">
-        <h2 class="values-heading">What we stand for</h2>
-        <div class="values-grid">
-            @foreach ($values as $value)
-                <div class="value-item">
-                    <div class="value-icon" aria-hidden="true">
-                        @if ($value['icon'] === 'user')
-                            ●
-                        @elseif ($value['icon'] === 'heart')
-                            ❤
-                        @else
-                            ☕
-                        @endif
-                    </div>
-                    <h3 class="value-title">{{ $value['title'] }}</h3>
-                    <p class="value-desc">{{ $value['description'] }}</p>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-<section class="section-block">
-    <div class="container">
-        <div class="section-heading centered">
-            <h2 class="section-title">The people behind Cupdate</h2>
-        </div>
-
-        <div class="team-grid">
-            @foreach ($team as $member)
-                <article class="team-card">
-                    <div class="team-photo-wrap">
-                        <img src="{{ asset($member['photo']) }}" alt="{{ $member['name'] }}" class="team-photo">
-                    </div>
-                    <h3 class="team-name">{{ $member['name'] }}</h3>
-                    <p class="team-role">{{ $member['role'] }}</p>
-                </article>
-            @endforeach
         </div>
     </div>
 </section>
