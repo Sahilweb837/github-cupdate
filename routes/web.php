@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CafeReviewController;
 use App\Http\Controllers\LiveVideoController;
 use App\Http\Controllers\MomentController;
 use App\Http\Controllers\PublicController;
@@ -58,6 +59,13 @@ Route::controller(MomentController::class)->prefix('moments')->name('moments.')-
     Route::post('/', 'store')->middleware(['auth', 'throttle:10,1'])->name('store');
     Route::get('/{moment}', 'show')->name('show');
     Route::post('/{moment}/share', 'share')->name('share');
+});
+
+// Café Reviews & Women-Friendly Date Spots
+Route::controller(CafeReviewController::class)->prefix('cafes')->name('cafes.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/', 'store')->middleware(['auth', 'throttle:10,1'])->name('store');
+    Route::post('/{review}/share', 'share')->name('share');
 });
 
 // Authentication Routes

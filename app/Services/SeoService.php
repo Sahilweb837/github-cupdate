@@ -47,6 +47,7 @@ class SeoService
             ['loc' => self::canonicalForPath('/discover'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/live-video'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.95'],
             ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
+            ['loc' => self::canonicalForPath('/cafes'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/cities'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/how-it-works'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => self::canonicalForPath('/safety'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],

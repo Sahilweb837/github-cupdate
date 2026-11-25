@@ -12,8 +12,8 @@
         <a href="{{ route('live-video.index') }}" class="btn btn-coffee btn-xs">
             <x-icon name="video" class="cup-icon-xs" /> CupTV Live
         </a>
-        <a href="{{ route('moments.index') }}" class="btn btn-outline btn-xs">
-            <x-icon name="heart" class="cup-icon-xs" /> Moments
+        <a href="{{ route('cafes.index') }}" class="btn btn-outline btn-xs">
+            <x-icon name="coffee" class="cup-icon-xs" /> Café Reviews
         </a>
     </div>
 </div>
@@ -25,6 +25,10 @@
         </div>
         <div class="threads-list-scroll" id="threadsList">
             @forelse ($partners as $partner)
+                @php
+                    $lastMsg = $lastMessages->get($partner->id);
+                    $unread = (int) $unreadCounts->get($partner->id, 0);
+                @endphp
                 <a href="{{ route('app.messages', ['with' => $partner->id]) }}"
                    data-thread-name="{{ strtolower($partner->full_name . ' ' . $partner->city) }}"
                    class="thread-item {{ $activePartner && $activePartner->id === $partner->id ? 'is-active' : '' }}">
@@ -36,13 +40,22 @@
                     </div>
                     <div class="thread-meta">
                         <div class="thread-name">
-                            {{ $partner->firstName() }}
-                            @if ($partner->is_verified)
-                                <span class="mini-verified" title="Verified">✓</span>
+                            <span>
+                                {{ $partner->firstName() }}
+                                @if ($partner->is_verified)
+                                    <span class="mini-verified" title="Verified">✓</span>
+                                @endif
+                            </span>
+                            @if ($unread > 0)
+                                <span class="unread-badge">{{ $unread }}</span>
                             @endif
                         </div>
                         <div class="thread-preview">
-                            {{ $partner->is_online ? 'Online · ' : '' }}{{ $partner->city }}
+                            @if ($lastMsg)
+                                {{ $lastMsg->image_path && !$lastMsg->message ? '📷 Photo' : \Illuminate\Support\Str::limit($lastMsg->message, 34) }}
+                            @else
+                                {{ $partner->is_online ? 'Online · ' : '' }}{{ $partner->city }}
+                            @endif
                         </div>
                     </div>
                 </a>
@@ -97,6 +110,8 @@
                 <span>Anti-spam &amp; no-nudity protection active. Keep chats respectful.</span>
             </div>
 
+            <div id="chatErrorBanner" class="chat-toast" hidden></div>
+
             <div class="chat-messages-scroll"
                  id="liveChatFeed"
                  data-poll-url="{{ route('app.messages.poll', $activePartner) }}"
@@ -105,7 +120,7 @@
                     <div class="chat-msg {{ $msg->sender_id === $me->id ? 'is-me' : 'is-them' }}">
                         <div class="chat-msg-bubble">
                             @if ($msg->image_path)
-                                <img src="{{ asset($msg->image_path) }}" alt="Shared photo" class="chat-shared-img">
+                                <img src="{{ asset($msg->image_path) }}" alt="Shared photo" class="chat-shared-img js-chat-zoom">
                             @endif
                             @if ($msg->message)
                                 <p>{{ $msg->message }}</p>
@@ -119,7 +134,7 @@
                         </span>
                     </div>
                 @empty
-                    <div class="chat-empty-note">Say hello to {{ $activePartner->firstName() }} and suggest a coffee chat!</div>
+                    <div class="chat-empty-note" id="chatEmptyNote">Say hello to {{ $activePartner->firstName() }} and suggest a coffee chat!</div>
                 @endforelse
             </div>
 
@@ -129,14 +144,20 @@
                 <button type="button" class="icebreaker-chip js-icebreaker" data-msg="What is your favorite café in {{ $activePartner->city }}?">📍 Favorite café?</button>
             </div>
 
+            <div id="chatImagePreviewBar" class="chat-img-preview" hidden>
+                <img id="chatImagePreviewEl" src="" alt="Selected photo">
+                <span id="chatImageFileName" class="muted-small"></span>
+                <button type="button" id="clearChatImageBtn" class="btn btn-outline btn-xs">Remove</button>
+            </div>
+
             <form method="POST" action="{{ route('app.messages.send', $activePartner) }}" enctype="multipart/form-data" class="chat-composer" id="liveChatForm">
                 @csrf
                 <label class="attach-btn" title="Attach moderated image">
-                    <input type="file" name="image" accept="image/jpeg,image/png,image/webp" hidden>
+                    <input type="file" name="image" id="chatImageInput" accept="image/jpeg,image/png,image/webp" hidden>
                     <span>+ Photo</span>
                 </label>
-                <input type="text" name="message" id="chatTextInput" placeholder="Write a respectful message...">
-                <button type="submit" class="btn btn-pink btn-sm">Send</button>
+                <input type="text" name="message" id="chatTextInput" placeholder="Write a respectful message..." autocomplete="off">
+                <button type="submit" id="chatSendBtn" class="btn btn-pink btn-sm">Send</button>
             </form>
 
             <details class="report-inline-box">
@@ -157,5 +178,12 @@
             </div>
         @endif
     </section>
+</div>
+
+<div id="chatPhotoLightbox" class="cup-modal-backdrop" hidden>
+    <div class="cup-modal-card">
+        <button type="button" class="cup-modal-close" id="closeChatLightbox" aria-label="Close">×</button>
+        <img id="chatLightboxImg" src="" alt="Shared chat photo" style="max-width:100%;border-radius:14px;">
+    </div>
 </div>
 @endsection

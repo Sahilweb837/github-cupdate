@@ -13,23 +13,25 @@ class LiveAndSeoFeaturesTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_over_100_indian_and_global_seo_cities_are_registered_and_render(): void
+    public function test_over_200_indian_and_global_seo_cities_are_registered_and_render(): void
     {
         $cities = SeoCities::all();
-        $this->assertGreaterThanOrEqual(100, count($cities));
+        $this->assertGreaterThanOrEqual(200, count($cities));
 
-        $this->get('/')->assertStatus(200)->assertSee('Free Forever Access');
-        $this->get('/cities')->assertStatus(200)->assertSee('Free Dating in New Delhi');
+        $this->get('/')->assertStatus(200)->assertSee('Free Forever Access')->assertSee('Explore Cities');
+        $this->get('/cities')->assertStatus(200)->assertSee('Free Dating in New Delhi')->assertSee('Free Dating in McLeod Ganj');
         $this->get('/dating-in/shimla')->assertStatus(200)->assertSee('Shimla');
+        $this->get('/dating-in/mcleod-ganj')->assertStatus(200)->assertSee('McLeod Ganj');
         $this->get('/dating-in/bengaluru')->assertStatus(200)->assertSee('Bengaluru');
         $this->get('/dating-in/india')->assertStatus(200)->assertSee('India');
-        $this->get('/sitemap.xml')->assertStatus(200)->assertSee('/dating-in/mumbai');
+        $this->get('/sitemap.xml')->assertStatus(200)->assertSee('/dating-in/mumbai')->assertSee('/cafes');
     }
 
-    public function test_live_video_moments_and_real_live_stats_endpoints_work(): void
+    public function test_cuptv_live_video_moments_and_real_live_stats_endpoints_work(): void
     {
-        $this->get('/live-video')->assertStatus(200)->assertSee('Start Live Match');
+        $this->get('/live-video')->assertStatus(200)->assertSee('CupTV')->assertSee('Start Live Match');
         $this->get('/moments')->assertStatus(200)->assertSee('Share Coffee Moments');
+        $this->get('/cafes')->assertStatus(200)->assertSee('Women-Friendly Café Reviews');
 
         $stats = $this->getJson('/live-stats')->assertStatus(200)->json();
         $this->assertArrayHasKey('active_visitors', $stats);
@@ -45,18 +47,14 @@ class LiveAndSeoFeaturesTest extends TestCase
         $this->assertNotEmpty($join['queue_id']);
     }
 
-    public function test_safety_moderation_blocks_nudity_and_spam_and_allows_clean_moments(): void
+    public function test_messages_cafe_reviews_and_safety_moderation_work_end_to_end(): void
     {
         $safety = app(SafetyModerationService::class);
-        $blocked = $safety->screenText('send nude pics now http://a.com http://b.com');
-        $this->assertFalse($blocked['allowed']);
+        $this->assertFalse($safety->screenText('send nude pics now http://a.com http://b.com')['allowed']);
+        $this->assertTrue($safety->screenText('Enjoying an iced latte at Mall Road in Shimla!')['allowed']);
 
-        $clean = $safety->screenText('Enjoying an iced latte at Mall Road in Shimla!');
-        $this->assertTrue($clean['allowed']);
-        $this->assertFalse($clean['flagged']);
-
-        $user = User::create([
-            'email' => 'member@cupdate.in',
+        $sender = User::create([
+            'email' => 'aarav@cupdate.in',
             'password_hash' => Hash::make('Secret123!'),
             'full_name' => 'Aarav Sharma',
             'dob' => '1999-05-10',
@@ -67,13 +65,62 @@ class LiveAndSeoFeaturesTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->actingAs($user)
+        $partner = User::create([
+            'email' => 'meera@cupdate.in',
+            'password_hash' => Hash::make('Secret123!'),
+            'full_name' => 'Meera Thakur',
+            'dob' => '2000-08-14',
+            'gender' => 'female',
+            'preference' => 'everyone',
+            'city' => 'Dharamshala',
+            'state' => 'Himachal Pradesh',
+            'status' => 'active',
+        ]);
+
+        // Messaging UI opens, sends JSON message, and polls cleanly
+        $this->actingAs($sender)
+            ->get('/app/messages?with=' . $partner->id)
+            ->assertStatus(200)
+            ->assertSee('Meera');
+
+        $sendRes = $this->actingAs($sender)
+            ->postJson('/app/messages/' . $partner->id, [
+                'message' => 'Hi Meera, want to grab coffee in Dharamshala?',
+            ])
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue($sendRes['ok']);
+        $this->assertSame('Hi Meera, want to grab coffee in Dharamshala?', $sendRes['message']['body']);
+
+        $pollRes = $this->actingAs($partner)
+            ->getJson('/app/messages/' . $sender->id . '/poll?after=0')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertCount(1, $pollRes['messages']);
+
+        // Café review submission & spam rejection
+        $this->actingAs($partner)
+            ->post('/cafes', [
+                'cafe_name' => 'Illiterati Books & Cafe',
+                'city' => 'Dharamshala',
+                'rating' => 5,
+                'safety_tag' => 'Women-Friendly & Safe',
+                'review_text' => 'Bright sunlit balcony, kind staff, and peaceful vibe for a daytime coffee.',
+            ])
+            ->assertRedirect('/cafes');
+
+        $this->get('/cafes')->assertStatus(200)->assertSee('Illiterati Books & Cafe');
+
+        // Moments moderation
+        $this->actingAs($partner)
             ->post('/moments', [
                 'content' => 'Send nude pics on onlyfans right now',
             ])
             ->assertSessionHasErrors('content');
 
-        $this->actingAs($user)
+        $this->actingAs($partner)
             ->post('/moments', [
                 'content' => 'Afternoon cappuccino overlooking Dharamshala hills!',
                 'city' => 'Dharamshala',

@@ -79,8 +79,8 @@
                 <a href="{{ route('public.discover') }}" class="nav-link {{ request()->routeIs('public.discover') ? 'is-active' : '' }}">Discover</a>
                 <a href="{{ route('live-video.index') }}" class="nav-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">CupTV Video</a>
                 <a href="{{ route('moments.index') }}" class="nav-link {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">Moments</a>
-                <a href="{{ route('cities') }}" class="nav-link {{ request()->routeIs('cities', 'seo.city') ? 'is-active' : '' }}">100+ Cities</a>
-                <a href="{{ route('safety') }}" class="nav-link {{ request()->routeIs('safety') ? 'is-active' : '' }}">Safety</a>
+                <a href="{{ route('cafes.index') }}" class="nav-link {{ request()->routeIs('cafes.*') ? 'is-active' : '' }}">Cafés</a>
+                <a href="{{ route('cities') }}" class="nav-link {{ request()->routeIs('cities', 'seo.city') ? 'is-active' : '' }}">Cities</a>
             </nav>
 
             <div class="header-actions">
@@ -127,9 +127,9 @@
                 <ul class="footer-list">
                     <li><a href="{{ route('live-video.index') }}">CupTV Free Live Video</a></li>
                     <li><a href="{{ route('moments.index') }}">Coffee Moments &amp; Social Share</a></li>
+                    <li><a href="{{ route('cafes.index') }}">Women-Friendly Café Reviews</a></li>
                     <li><a href="{{ route('public.discover') }}">Discover Free Profiles</a></li>
-                    <li><a href="{{ route('cities') }}">All 100+ Indian &amp; World Cities</a></li>
-                    <li><a href="{{ route('blog') }}">Dating &amp; Café Blog</a></li>
+                    <li><a href="{{ route('cities') }}">Explore 200+ Indian &amp; World Cities</a></li>
                 </ul>
             </div>
 

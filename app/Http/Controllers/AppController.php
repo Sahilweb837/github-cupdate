@@ -201,12 +201,35 @@ class AppController extends Controller
             ->take(5)
             ->get();
 
+        $lastMessages = collect();
+        $unreadCounts = collect();
+        if ($partners->isNotEmpty()) {
+            $ids = $partners->pluck('id')->all();
+            $recentMsgs = Message::where(function ($q) use ($me, $ids) {
+                $q->where('sender_id', $me->id)->whereIn('receiver_id', $ids)->where('deleted_by_sender', false);
+            })->orWhere(function ($q) use ($me, $ids) {
+                $q->whereIn('sender_id', $ids)->where('receiver_id', $me->id)->where('deleted_by_receiver', false);
+            })->latest('created_at')->get();
+
+            foreach ($recentMsgs as $m) {
+                $pid = $m->sender_id === $me->id ? $m->receiver_id : $m->sender_id;
+                if (! $lastMessages->has($pid)) {
+                    $lastMessages->put($pid, $m);
+                }
+                if ($m->receiver_id === $me->id && ! $m->is_read) {
+                    $unreadCounts->put($pid, ($unreadCounts->get($pid, 0)) + 1);
+                }
+            }
+        }
+
         return view('app.messages', [
             'me' => $me,
             'partners' => $partners,
             'activePartner' => $activePartner,
             'thread' => $thread,
             'recentCalls' => $recentCalls,
+            'lastMessages' => $lastMessages,
+            'unreadCounts' => $unreadCounts,
         ]);
     }
 
@@ -231,7 +254,9 @@ class AppController extends Controller
         ]);
 
         if (blank($data['message'] ?? null) && ! $request->hasFile('image')) {
-            return back()->withErrors(['message' => 'Write a message or choose an image to send.']);
+            return $request->expectsJson()
+                ? response()->json(['error' => 'Write a message or choose an image to send.'], 422)
+                : back()->withErrors(['message' => 'Write a message or choose an image to send.']);
         }
 
         $textCheck = $safety->screenText($data['message'] ?? '');
@@ -328,6 +353,7 @@ class AppController extends Controller
         return response()->json([
             'messages' => $newMessages,
             'partner_online' => (bool) $partner->is_online,
+            'partner_status' => $partner->is_online ? 'Online now' : 'Last seen ' . ($partner->last_active?->diffForHumans() ?? 'recently'),
         ]);
     }
 

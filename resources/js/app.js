@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pollUrl = chatFeed.getAttribute('data-poll-url');
 
         const appendMessage = (m) => {
+            document.getElementById('chatEmptyNote')?.remove();
             const wrap = document.createElement('div');
             wrap.className = `chat-msg ${m.is_me ? 'is-me' : 'is-them'}`;
             const bubble = document.createElement('div');
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (m.image_url) {
                 const img = document.createElement('img');
                 img.src = m.image_url;
-                img.className = 'chat-shared-img';
+                img.className = 'chat-shared-img js-chat-zoom';
                 img.alt = 'Shared photo';
                 bubble.appendChild(img);
             }
@@ -115,42 +116,105 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const time = document.createElement('span');
             time.className = 'chat-msg-time';
-            time.textContent = m.time || 'Just now';
+            time.textContent = `${m.time || 'Just now'}${m.is_me ? ' · Sent ✓' : ''}`;
             wrap.append(bubble, time);
             chatFeed.appendChild(wrap);
             chatFeed.scrollTop = chatFeed.scrollHeight;
         };
 
+        const chatImageInput = document.getElementById('chatImageInput');
+        const previewBar = document.getElementById('chatImagePreviewBar');
+        const previewImg = document.getElementById('chatImagePreviewEl');
+        const previewName = document.getElementById('chatImageFileName');
+        const clearImgBtn = document.getElementById('clearChatImageBtn');
+        const errBanner = document.getElementById('chatErrorBanner');
+        const sendBtn = document.getElementById('chatSendBtn');
+
+        const showChatError = (msg) => {
+            if (!errBanner) return;
+            errBanner.textContent = msg;
+            errBanner.hidden = false;
+            setTimeout(() => { errBanner.hidden = true; }, 4500);
+        };
+
+        chatImageInput?.addEventListener('change', () => {
+            const file = chatImageInput.files?.[0];
+            if (!file) {
+                if (previewBar) previewBar.hidden = true;
+                return;
+            }
+            if (previewImg) previewImg.src = URL.createObjectURL(file);
+            if (previewName) previewName.textContent = file.name;
+            if (previewBar) previewBar.hidden = false;
+        });
+
+        clearImgBtn?.addEventListener('click', () => {
+            if (chatImageInput) chatImageInput.value = '';
+            if (previewBar) previewBar.hidden = true;
+        });
+
         chatForm.addEventListener('submit', async (e) => {
-            const fileInput = chatForm.querySelector('input[type="file"]');
-            if (fileInput && fileInput.files.length > 0) return; // normal multipart submit for images
             e.preventDefault();
             const input = document.getElementById('chatTextInput');
             const text = input.value.trim();
-            if (!text) return;
+            const hasFile = chatImageInput && chatImageInput.files.length > 0;
+            if (!text && !hasFile) return;
 
-            input.value = '';
+            if (sendBtn) sendBtn.disabled = true;
             try {
-                const res = await fetch(chatForm.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrf,
-                    },
-                    body: JSON.stringify({ message: text }),
-                });
+                let res;
+                if (hasFile) {
+                    const fd = new FormData();
+                    if (text) fd.append('message', text);
+                    fd.append('image', chatImageInput.files[0]);
+                    res = await fetch(chatForm.action, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
+                        body: fd,
+                    });
+                } else {
+                    res = await fetch(chatForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrf,
+                        },
+                        body: JSON.stringify({ message: text }),
+                    });
+                }
                 const data = await res.json();
                 if (res.ok && data.ok) {
+                    input.value = '';
+                    if (chatImageInput) chatImageInput.value = '';
+                    if (previewBar) previewBar.hidden = true;
                     lastId = Math.max(lastId, Number(data.message.id));
                     appendMessage({ ...data.message, is_me: true });
                 } else if (data.error) {
-                    alert(data.error);
+                    showChatError(data.error);
+                } else if (data.errors) {
+                    const firstErr = Object.values(data.errors).flat()[0];
+                    if (firstErr) showChatError(String(firstErr));
                 }
             } catch {
-                // fallback
+                showChatError('Could not send message. Please check your connection.');
+            } finally {
+                if (sendBtn) sendBtn.disabled = false;
             }
         });
+
+        // Photo lightbox for shared images
+        const lightbox = document.getElementById('chatPhotoLightbox');
+        const lightboxImg = document.getElementById('chatLightboxImg');
+        chatFeed.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target instanceof HTMLImageElement && target.classList.contains('js-chat-zoom') && lightbox && lightboxImg) {
+                lightboxImg.src = target.src;
+                lightbox.hidden = false;
+            }
+        });
+        document.getElementById('closeChatLightbox')?.addEventListener('click', () => { if (lightbox) lightbox.hidden = true; });
+        lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.hidden = true; });
 
         setInterval(async () => {
             if (!pollUrl) return;
@@ -158,6 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await fetch(`${pollUrl}?after=${lastId}`, { headers: { 'Accept': 'application/json' } });
                 if (!res.ok) return;
                 const data = await res.json();
+                const statusEl = document.getElementById('partnerOnlineStatus');
+                if (statusEl && data.partner_status) statusEl.textContent = data.partner_status;
                 (data.messages || []).forEach((m) => {
                     lastId = Math.max(lastId, Number(m.id));
                     if (!m.is_me) appendMessage(m);
@@ -165,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch {
                 // ignore network hiccup
             }
-        }, 3500);
+        }, 3000);
     }
 
     // 7. Incoming Call Toast across App Pages

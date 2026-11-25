@@ -152,7 +152,7 @@
             @foreach (['new-delhi' => 'Delhi', 'mumbai' => 'Mumbai', 'bengaluru' => 'Bengaluru', 'shimla' => 'Shimla', 'dharamshala' => 'Dharamshala', 'chandigarh' => 'Chandigarh', 'pune' => 'Pune', 'jaipur' => 'Jaipur'] as $cSlug => $cLabel)
                 <a href="{{ route('seo.city', $cSlug) }}" class="filter-chip">{{ $cLabel }}</a>
             @endforeach
-            <a href="{{ route('cities') }}" class="filter-chip is-active">All 100+ Cities →</a>
+            <a href="{{ route('cities') }}" class="filter-chip is-active">Explore Cities →</a>
         </div>
 
         <div class="skeleton-grid-wrap mt-20" data-skeleton-container>
@@ -225,8 +225,11 @@
                 <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-coffee">
                     Plan Free Coffee Date
                 </a>
+                <a href="{{ route('cafes.index') }}" class="btn btn-pink">
+                    Read &amp; Write Café Reviews
+                </a>
                 <a href="{{ route('live-video.index') }}" class="btn btn-outline">
-                    Try Live Video Now
+                    Try CupTV Now
                 </a>
             </div>
         </div>
@@ -251,22 +254,25 @@
 </section>
 
 <section class="section-white">
-    <div class="container">
-        <div class="discover-header-row">
-            <div>
-                <span class="eyebrow-text">100+ INDIA &amp; GLOBAL SEO GUIDES</span>
-                <h2 class="section-title">Free coffee dating in your city &amp; country</h2>
-            </div>
-            <a href="{{ route('cities') }}" class="text-link">View all {{ $totalSeoCities }}+ cities →</a>
+    <div class="container editorial-grid">
+        <div class="editorial-media">
+            <img src="{{ asset('images/cupdate-scene.svg') }}" alt="CupDate free coffee dates, CupTV live video, and verified cafe reviews" loading="lazy" decoding="async" class="scene-illustration">
         </div>
-
-        <div class="cities-seo-grid mt-20">
-            @foreach ($seoCitiesPreview as $seoCity)
-                <a href="{{ route('seo.city', $seoCity['slug']) }}" class="city-seo-card">
-                    <strong>Dating in {{ $seoCity['name'] }}</strong>
-                    <span>{{ $seoCity['state'] }}, {{ $seoCity['country'] }}</span>
-                </a>
-            @endforeach
+        <div class="editorial-copy">
+            <span class="eyebrow-text">MOBILE-FIRST · CAFE REVIEWS · EXPLORE CITIES</span>
+            <h2 class="section-title">Girls &amp; members share café reviews, moments, and free live video</h2>
+            <p class="section-lead">Browse women-friendly café reviews before meeting, share your favorite coffee moments on social media, and explore dating guides across {{ $totalSeoCities }}+ Indian &amp; global cities.</p>
+            <div class="explore-cities-banner">
+                <div>
+                    <strong>{{ $totalSeoCities }}+ Cities &amp; Countries Covered</strong>
+                    <span>Clean, dedicated SEO guides without homepage clutter</span>
+                </div>
+                <a href="{{ route('cities') }}" class="btn btn-pink btn-sm">Explore Cities →</a>
+            </div>
+            <div class="hero-actions mt-16">
+                <a href="{{ route('cafes.index') }}" class="btn btn-coffee btn-sm">Explore Café Reviews</a>
+                <a href="{{ route('moments.index') }}" class="btn btn-outline btn-sm">Share Coffee Moments</a>
+            </div>
         </div>
     </div>
 </section>
