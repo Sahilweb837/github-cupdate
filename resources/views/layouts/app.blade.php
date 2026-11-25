@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#D96B89">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
         $canonicalUrl = trim($__env->yieldContent('canonical')) ?: \App\Services\SeoService::canonicalForRequest(request());
@@ -13,6 +15,7 @@
     <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate (cupdate.in) is a 100% free coffee dating, live video chat, and safe social connection platform across 100+ Indian cities and worldwide.'))">
     <meta name="robots" content="{{ $robotsContent }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <meta property="og:site_name" content="CupDate">
     <meta property="og:type" content="@yield('og_type', 'website')">
@@ -164,5 +167,28 @@
             </div>
         </div>
     </footer>
+
+    <nav class="mobile-bottom-nav public-mobile-nav" aria-label="Mobile Quick Navigation">
+        <a href="{{ route('home') }}" class="bottom-nav-item {{ request()->routeIs('home') ? 'is-active' : '' }}">
+            <x-icon name="coffee" class="cup-icon-sm" />
+            <span>Home</span>
+        </a>
+        <a href="{{ route('public.discover') }}" class="bottom-nav-item {{ request()->routeIs('public.discover') ? 'is-active' : '' }}">
+            <x-icon name="compass" class="cup-icon-sm" />
+            <span>Discover</span>
+        </a>
+        <a href="{{ route('live-video.index') }}" class="bottom-nav-item {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
+            <x-icon name="video" class="cup-icon-sm" />
+            <span>Live Cam</span>
+        </a>
+        <a href="{{ route('moments.index') }}" class="bottom-nav-item {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">
+            <x-icon name="heart" class="cup-icon-sm" />
+            <span>Moments</span>
+        </a>
+        <a href="{{ auth()->check() ? (auth()->user()->isAdmin() ? route('admin.dashboard') : route('app.discover')) : route('register') }}" class="bottom-nav-item {{ request()->routeIs('register', 'login', 'app.*') ? 'is-active' : '' }}">
+            <x-icon name="user" class="cup-icon-sm" />
+            <span>{{ auth()->check() ? 'App' : 'Join Free' }}</span>
+        </a>
+    </nav>
 </body>
 </html>

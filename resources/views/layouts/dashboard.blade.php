@@ -3,9 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#D96B89">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate App')</title>
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,13 +121,13 @@
             <x-icon name="message" class="cup-icon-sm" />
             <span>Chat</span>
         </a>
-        <a href="{{ route('app.video.index') }}" class="bottom-nav-item {{ request()->routeIs('app.video.*') ? 'is-active' : '' }}">
+        <a href="{{ route('live-video.index') }}" class="bottom-nav-item {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
             <x-icon name="video" class="cup-icon-sm" />
-            <span>Video</span>
+            <span>Live Cam</span>
         </a>
-        <a href="{{ route('app.coffee-dates') }}" class="bottom-nav-item {{ request()->routeIs('app.coffee-dates') ? 'is-active' : '' }}">
-            <x-icon name="coffee" class="cup-icon-sm" />
-            <span>Dates</span>
+        <a href="{{ route('moments.index') }}" class="bottom-nav-item {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">
+            <x-icon name="heart" class="cup-icon-sm" />
+            <span>Moments</span>
         </a>
         <a href="{{ route('app.profile') }}" class="bottom-nav-item {{ request()->routeIs('app.profile') ? 'is-active' : '' }}">
             <x-icon name="user" class="cup-icon-sm" />

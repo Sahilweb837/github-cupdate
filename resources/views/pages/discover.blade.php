@@ -41,7 +41,18 @@
             <div class="alert-info">{{ session('info') }}</div>
         @endif
 
-        <div class="profiles-grid">
+        <div class="skeleton-grid-wrap" data-skeleton-container>
+            <div class="skeleton-overlay" data-skeleton-loader aria-hidden="true">
+                @for ($i = 0; $i < 3; $i++)
+                    <div class="skeleton-card">
+                        <div class="skeleton-box skeleton-img"></div>
+                        <div class="skeleton-box skeleton-line w-60"></div>
+                        <div class="skeleton-box skeleton-line w-85"></div>
+                    </div>
+                @endfor
+            </div>
+
+            <div class="profiles-grid" data-skeleton-content>
             @forelse ($profiles as $person)
                 <article class="profile-card-public">
                     <div class="profile-card-img-wrap">
@@ -76,6 +87,7 @@
                     <a href="{{ route('public.discover') }}" class="btn btn-outline btn-sm">Reset Filters</a>
                 </div>
             @endforelse
+            </div>
         </div>
 
         <div class="pagination-wrap">{{ $profiles->links() }}</div>

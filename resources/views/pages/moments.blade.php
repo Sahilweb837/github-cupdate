@@ -63,7 +63,25 @@
         </div>
 
         <div class="moments-feed-col">
-            <div class="moments-grid">
+            <div class="filter-bar mb-16" role="region" aria-label="Filter Moments by Vibe">
+                <a href="{{ route('moments.index') }}" class="filter-chip {{ empty($activeMood) ? 'is-active' : '' }}">All Moments</a>
+                @foreach (['Coffee Vibes', 'Girls Coffee Club', 'First Meetup', 'Mountain Cafe', 'City Sunset'] as $moodOpt)
+                    <a href="{{ route('moments.index', ['mood' => $moodOpt]) }}" class="filter-chip {{ ($activeMood ?? '') === $moodOpt ? 'is-active' : '' }}">{{ $moodOpt }}</a>
+                @endforeach
+            </div>
+
+            <div class="skeleton-grid-wrap" data-skeleton-container>
+                <div class="skeleton-overlay skeleton-overlay-2" data-skeleton-loader aria-hidden="true">
+                    @for ($i = 0; $i < 2; $i++)
+                        <div class="skeleton-card">
+                            <div class="skeleton-box skeleton-img"></div>
+                            <div class="skeleton-box skeleton-line w-60"></div>
+                            <div class="skeleton-box skeleton-line w-85"></div>
+                        </div>
+                    @endfor
+                </div>
+
+                <div class="moments-grid" data-skeleton-content>
                 @forelse ($moments as $moment)
                     @php
                         $shareUrl = route('moments.show', $moment);
@@ -102,6 +120,7 @@
                         <p class="muted-small">Be the first to share a safe coffee moment and invite friends from social media!</p>
                     </div>
                 @endforelse
+                </div>
             </div>
 
             <div class="pagination-wrap">{{ $moments->links() }}</div>

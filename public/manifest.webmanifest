@@ -1,0 +1,17 @@
+{
+  "name": "CupDate — Free Coffee & Live Video Dating",
+  "short_name": "CupDate",
+  "description": "World's warmest 100% free coffee dating, OmeTV-style live video, and shareable moments across 100+ Indian cities & worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#D96B89",
+  "icons": [
+    {
+      "src": "/images/cupdate-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

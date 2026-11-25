@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class="messages-shell">
+<div class="messages-shell {{ $activePartner && request()->has('with') ? 'has-active-chat' : '' }}" id="messagesShell">
     <aside class="threads-pane">
         <div class="threads-search-wrap">
             <input type="search" id="threadsSearchInput" placeholder="Search conversations..." aria-label="Search conversations">
@@ -55,6 +55,7 @@
     <section class="chat-pane">
         @if ($activePartner)
             <div class="chat-pane-header">
+                <button type="button" id="mobileBackToThreads" class="btn btn-outline btn-xs mobile-only-btn">← Chats</button>
                 <div class="thread-avatar-wrap">
                     <img src="{{ $activePartner->avatarUrl() }}" alt="{{ $activePartner->firstName() }}" class="thread-avatar">
                     @if ($activePartner->is_online)

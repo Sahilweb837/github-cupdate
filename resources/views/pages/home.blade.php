@@ -148,8 +148,26 @@
             </form>
         </div>
 
-        <div class="profiles-grid mt-20">
-            @forelse ($featuredUsers as $person)
+        <div class="mobile-quick-cities" aria-label="Popular City Guides">
+            @foreach (['new-delhi' => 'Delhi', 'mumbai' => 'Mumbai', 'bengaluru' => 'Bengaluru', 'shimla' => 'Shimla', 'dharamshala' => 'Dharamshala', 'chandigarh' => 'Chandigarh', 'pune' => 'Pune', 'jaipur' => 'Jaipur'] as $cSlug => $cLabel)
+                <a href="{{ route('seo.city', $cSlug) }}" class="filter-chip">{{ $cLabel }}</a>
+            @endforeach
+            <a href="{{ route('cities') }}" class="filter-chip is-active">All 100+ Cities →</a>
+        </div>
+
+        <div class="skeleton-grid-wrap mt-20" data-skeleton-container>
+            <div class="skeleton-overlay" data-skeleton-loader aria-hidden="true">
+                @for ($i = 0; $i < 3; $i++)
+                    <div class="skeleton-card">
+                        <div class="skeleton-box skeleton-img"></div>
+                        <div class="skeleton-box skeleton-line w-60"></div>
+                        <div class="skeleton-box skeleton-line w-85"></div>
+                    </div>
+                @endfor
+            </div>
+
+            <div class="profiles-grid" data-skeleton-content>
+                @forelse ($featuredUsers as $person)
                 <article class="profile-card-public js-profile-preview"
                          data-name="{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif"
                          data-city="{{ $person->city }}, {{ $person->state }}"
@@ -192,6 +210,7 @@
                     <a href="{{ route('register') }}" class="btn btn-pink btn-sm">Create Free Account</a>
                 </div>
             @endforelse
+            </div>
         </div>
     </div>
 </section>

@@ -27,11 +27,18 @@ class MomentController extends Controller
             }
         }
 
+        if ($mood = $request->query('mood')) {
+            if (Schema::hasColumn('posts', 'mood')) {
+                $query->where('mood', $mood);
+            }
+        }
+
         $moments = $query->paginate(12)->withQueryString();
 
         return view('pages.moments', [
             'moments' => $moments,
             'activeCity' => $request->query('city'),
+            'activeMood' => $request->query('mood'),
         ]);
     }
 

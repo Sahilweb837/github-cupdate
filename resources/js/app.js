@@ -11,12 +11,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. Cute skeleton loader reveal
+    // 2. Fast skeleton loader reveal + per-image shimmer fade-in
     document.querySelectorAll('[data-skeleton-container]').forEach((wrap) => {
         const loader = wrap.querySelector('[data-skeleton-loader]');
         if (!loader) return;
-        setTimeout(() => loader.classList.add('is-hidden'), 220);
+        requestAnimationFrame(() => {
+            setTimeout(() => loader.classList.add('is-hidden'), 110);
+        });
     });
+
+    document.querySelectorAll('.profile-card-img-wrap img, .moment-img-wrap img').forEach((img) => {
+        if (img.complete) {
+            img.classList.add('is-loaded');
+        } else {
+            img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+            img.addEventListener('error', () => img.classList.add('is-loaded'), { once: true });
+        }
+    });
+
+    // Mobile messages back-to-threads toggle
+    const msgShell = document.getElementById('messagesShell');
+    const backToThreads = document.getElementById('mobileBackToThreads');
+    if (msgShell && backToThreads) {
+        backToThreads.addEventListener('click', () => {
+            msgShell.classList.remove('has-active-chat');
+        });
+    }
 
     // 3. Mobile menu toggle
     const navToggle = document.getElementById('navToggle');
