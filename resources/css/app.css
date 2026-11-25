@@ -1048,3 +1048,8 @@ html, body { -webkit-tap-highlight-color: transparent; }
 }
 .chat-img-preview img { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; }
 .js-chat-zoom { cursor: zoom-in; }
+
+/* Admin Analytics Location Bars & Soft Badges */
+.admin-progress-track { width: 100%; height: 6px; background: var(--blush); border-radius: 999px; margin-top: 5px; overflow: hidden; }
+.admin-progress-bar { height: 100%; background: var(--pink-dark); border-radius: 999px; }
+.admin-badge-soft { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; background: var(--blush); color: var(--coffee-dark); font-size: 0.74rem; font-weight: 700; }

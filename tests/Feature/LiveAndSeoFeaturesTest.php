@@ -130,4 +130,36 @@ class LiveAndSeoFeaturesTest extends TestCase
 
         $this->get('/moments')->assertStatus(200)->assertSee('Dharamshala hills!');
     }
+
+    public function test_admin_dashboard_tracks_and_displays_real_visitor_locations(): void
+    {
+        $this->withHeaders([
+            'CF-IPCountry' => 'IN',
+            'X-Geo-City' => 'Dharamshala',
+            'X-Geo-Region' => 'Himachal Pradesh',
+            'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Mobile',
+        ])->get('/')->assertStatus(200);
+
+        $admin = User::create([
+            'email' => 'admin-analytics@cupdate.in',
+            'password_hash' => Hash::make('Secret123!'),
+            'full_name' => 'CupDate Super Admin',
+            'dob' => '1995-05-10',
+            'gender' => 'other',
+            'preference' => 'everyone',
+            'city' => 'Shimla',
+            'state' => 'Himachal Pradesh',
+            'is_admin' => true,
+            'role' => 'super_admin',
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($admin)
+            ->get('/admin')
+            ->assertStatus(200)
+            ->assertSee('Where Visitors Come From')
+            ->assertSee('Dharamshala')
+            ->assertSee('Himachal Pradesh')
+            ->assertSee('Mobile');
+    }
 }

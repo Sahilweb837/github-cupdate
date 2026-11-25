@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\CafeReview;
 use App\Models\City;
 use App\Models\CoffeeDate;
 use App\Models\ContactMessage;
@@ -17,6 +18,7 @@ use App\Services\LiveStatsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -61,6 +63,8 @@ class AdminController extends Controller
     public function dashboard(Request $request, LiveStatsService $liveStats): View
     {
         $live = $liveStats->snapshot();
+        $analytics = $liveStats->adminAnalytics();
+
         $stats = [
             'total_users' => User::withTrashed()->count(),
             'active_users' => User::where('status', 'active')->count(),
@@ -74,12 +78,23 @@ class AdminController extends Controller
             'active_visitors' => $live['active_visitors'],
             'online_members' => $live['online_members'],
             'live_video_active' => $live['live_video_active'],
+            'today_visits' => $analytics['today_visits'],
+            'today_unique' => $analytics['today_unique'],
+            'total_visits' => $analytics['total_visits'],
+            'total_unique' => $analytics['total_unique'],
         ];
+
+        $usersByLocation = User::where('is_admin', false)
+            ->select('city', 'state', 'country', DB::raw('COUNT(*) as total'))
+            ->groupBy('city', 'state', 'country')
+            ->orderByDesc('total')
+            ->take(10)
+            ->get();
 
         $recentUsers = User::withTrashed()->latest('created_at')->take(8)->get();
         $recentReports = UserReport::with(['reporter', 'reportedUser'])->latest('created_at')->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentReports'));
+        return view('admin.dashboard', compact('stats', 'analytics', 'usersByLocation', 'recentUsers', 'recentReports'));
     }
 
     public function users(Request $request): View
@@ -148,8 +163,25 @@ class AdminController extends Controller
         $moments = Schema::hasTable('posts')
             ? Moment::with('user')->latest('created_at')->take(20)->get()
             : collect();
+        $cafeReviews = Schema::hasTable('cafe_reviews')
+            ? CafeReview::with('user')->latest('created_at')->take(20)->get()
+            : collect();
 
-        return view('admin.moderation', compact('reports', 'messages', 'tickets', 'contacts', 'moments'));
+        return view('admin.moderation', compact('reports', 'messages', 'tickets', 'contacts', 'moments', 'cafeReviews'));
+    }
+
+    public function moderateCafeReview(Request $request, CafeReview $review): RedirectResponse
+    {
+        $action = $request->input('action');
+        if ($action === 'approve') {
+            $review->update(['is_approved' => true, 'is_flagged' => false]);
+        } elseif ($action === 'flag') {
+            $review->update(['is_flagged' => ! $review->is_flagged]);
+        } elseif ($action === 'delete') {
+            $review->delete();
+        }
+
+        return back()->with('success', 'Café review moderation updated.');
     }
 
     public function moderateMoment(Request $request, Moment $moment): RedirectResponse

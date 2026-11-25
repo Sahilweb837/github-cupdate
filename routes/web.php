@@ -133,6 +133,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/reports/{report}', [AdminController::class, 'resolveReport'])->middleware('admin:super_admin,moderator')->name('reports.resolve');
         Route::post('/messages/{message}', [AdminController::class, 'moderateMessage'])->middleware('admin:super_admin,moderator')->name('messages.moderate');
         Route::post('/moments/{moment}', [AdminController::class, 'moderateMoment'])->middleware('admin:super_admin,moderator')->name('moments.moderate');
+        Route::post('/cafes/{review}', [AdminController::class, 'moderateCafeReview'])->middleware('admin:super_admin,moderator')->name('cafes.moderate');
         Route::post('/tickets/{ticket}', [AdminController::class, 'replyTicket'])->middleware('admin:super_admin,support_admin')->name('tickets.reply');
         Route::get('/content', [AdminController::class, 'content'])->middleware('admin:super_admin,content_manager')->name('content');
         Route::post('/cities', [AdminController::class, 'storeCity'])->middleware('admin:super_admin,content_manager')->name('cities.store');

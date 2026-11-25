@@ -13,12 +13,13 @@ class TrackLiveVisitor
 
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->isMethod('GET') && ! $request->is('live-stats') && ! $request->ajax()) {
+        if ($request->isMethod('GET') && ! $request->is('live-stats') && ! $request->is('admin*') && ! $request->ajax()) {
             $visitorId = $request->hasSession()
                 ? $request->session()->getId()
                 : sha1(($request->ip() ?? '') . '|' . ($request->userAgent() ?? ''));
 
             $this->liveStats->recordVisitor($visitorId);
+            $this->liveStats->recordVisitDetail($request, $visitorId);
         }
 
         return $next($request);

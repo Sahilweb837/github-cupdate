@@ -102,6 +102,37 @@
 </section>
 
 <section class="admin-panel-card mt-24">
+    <h2 class="card-title">Café Reviews Moderation</h2>
+    <div class="stack-sm mt-16">
+        @forelse ($cafeReviews ?? [] as $rev)
+            <div class="moderation-item">
+                <div>
+                    <strong>{{ $rev->cafe_name }} ({{ $rev->city }}) · ★ {{ $rev->rating }}/5</strong>
+                    <div class="muted-small">By {{ $rev->user?->full_name ?? 'Member' }} · {{ $rev->safety_tag }}</div>
+                    <p class="muted-small">{{ Str::limit($rev->review_text, 140) }}</p>
+                </div>
+                <div class="admin-action-btns">
+                    <form method="POST" action="{{ route('admin.cafes.moderate', $rev) }}">
+                        @csrf <input type="hidden" name="action" value="approve">
+                        <button type="submit" class="btn btn-pink btn-xs">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.cafes.moderate', $rev) }}">
+                        @csrf <input type="hidden" name="action" value="flag">
+                        <button type="submit" class="btn btn-outline btn-xs">{{ $rev->is_flagged ? 'Unflag' : 'Flag' }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.cafes.moderate', $rev) }}">
+                        @csrf <input type="hidden" name="action" value="delete">
+                        <button type="submit" class="btn btn-outline btn-xs">Delete</button>
+                    </form>
+                </div>
+            </div>
+        @empty
+            <p class="muted-small">No café reviews yet.</p>
+        @endforelse
+    </div>
+</section>
+
+<section class="admin-panel-card mt-24">
     <h2 class="card-title">Support Tickets &amp; Contact Inquiries</h2>
     <div class="stack-sm mt-16">
         @forelse ($tickets as $ticket)
