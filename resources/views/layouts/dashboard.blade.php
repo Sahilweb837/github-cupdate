@@ -49,7 +49,7 @@
                         <x-icon name="message" class="cup-icon-sm" /> Messages
                     </a>
                     <a href="{{ route('live-video.index') }}" class="sidebar-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
-                        <x-icon name="video" class="cup-icon-sm" /> Live Video (OmeTV)
+                        <x-icon name="video" class="cup-icon-sm" /> CupTV Live Video
                     </a>
                     <a href="{{ route('app.video.index') }}" class="sidebar-link {{ request()->routeIs('app.video.*') ? 'is-active' : '' }}">
                         <x-icon name="video" class="cup-icon-sm" /> 1-to-1 Video Call
@@ -123,7 +123,7 @@
         </a>
         <a href="{{ route('live-video.index') }}" class="bottom-nav-item {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
             <x-icon name="video" class="cup-icon-sm" />
-            <span>Live Cam</span>
+            <span>CupTV</span>
         </a>
         <a href="{{ route('moments.index') }}" class="bottom-nav-item {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">
             <x-icon name="heart" class="cup-icon-sm" />

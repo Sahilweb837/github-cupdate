@@ -11,16 +11,16 @@
         $robotsContent = trim($__env->yieldContent('robots')) ?: (request()->hasAny(['filter', 'sort', 'q', 'city', 'interest']) ? 'noindex, follow' : 'index, follow, max-image-preview:large');
         $liveSnapshot = app(\App\Services\LiveStatsService::class)->snapshot();
     @endphp
-    <title>@yield('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — World’s Best Free Coffee & Live Video Dating Website'))</title>
-    <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate (cupdate.in) is a 100% free coffee dating, live video chat, and safe social connection platform across 100+ Indian cities and worldwide.'))">
+    <title>@yield('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — World’s Best Free Video Chat & Coffee Dating Website'))</title>
+    <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate (cupdate.in) is the world’s best 100% free coffee dating, CupTV live video chat, and safe social connection website across 100+ Indian cities and worldwide.'))">
     <meta name="robots" content="{{ $robotsContent }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <meta property="og:site_name" content="CupDate">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('title', 'CupDate — Free Coffee & Live Video Dating Website')">
-    <meta property="og:description" content="@yield('description', 'Meet genuine people across India & the world, chat free, enjoy OmeTV-style live video, and share coffee moments.')">
+    <meta property="og:title" content="@yield('title', 'CupDate — World’s Best Free CupTV Video & Coffee Dating')">
+    <meta property="og:description" content="@yield('description', 'Meet genuine people across India & the world, chat free, enjoy CupTV live video, and share coffee moments.')">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="@yield('og_image', asset('images/hero-coffee-couple.jpg'))">
     <meta name="twitter:card" content="summary_large_image">
@@ -52,16 +52,16 @@
         <div class="container top-promo-inner">
             <div class="top-promo-left">
                 <span class="free-badge-pill">100% FREE FOREVER · NO PAID SUBSCRIPTION</span>
-                <span class="top-promo-text">Free Chat, OmeTV-Style Live Video &amp; Coffee Dates across 100+ Indian Cities &amp; Global</span>
+                <span class="top-promo-text">Free Chat, CupTV Live Video &amp; Coffee Dates across 100+ Indian Cities &amp; Global</span>
             </div>
             <div class="top-promo-right">
                 <span class="live-visitor-pill" title="Real-time active visitors right now">
                     <span class="online-dot"></span>
-                    <strong data-live-visitors>{{ $liveSnapshot['active_visitors'] }}</strong> live visitors ·
+                    <strong data-live-visitors>{{ $liveSnapshot['active_visitors'] }}</strong> live ·
                     <strong data-live-members>{{ $liveSnapshot['online_members'] }}</strong> online
                 </span>
                 @guest
-                    <a href="{{ route('register') }}" class="top-join-btn">Join Now Free →</a>
+                    <a href="{{ route('register') }}" class="top-join-btn">Join Free →</a>
                 @endguest
             </div>
         </div>
@@ -77,7 +77,7 @@
             <nav class="site-nav" id="siteNav" aria-label="Primary Navigation">
                 <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
                 <a href="{{ route('public.discover') }}" class="nav-link {{ request()->routeIs('public.discover') ? 'is-active' : '' }}">Discover</a>
-                <a href="{{ route('live-video.index') }}" class="nav-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">Live Video</a>
+                <a href="{{ route('live-video.index') }}" class="nav-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">CupTV Video</a>
                 <a href="{{ route('moments.index') }}" class="nav-link {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">Moments</a>
                 <a href="{{ route('cities') }}" class="nav-link {{ request()->routeIs('cities', 'seo.city') ? 'is-active' : '' }}">100+ Cities</a>
                 <a href="{{ route('safety') }}" class="nav-link {{ request()->routeIs('safety') ? 'is-active' : '' }}">Safety</a>
@@ -125,7 +125,7 @@
             <div>
                 <h3 class="footer-heading">Free Features</h3>
                 <ul class="footer-list">
-                    <li><a href="{{ route('live-video.index') }}">Live Video (Like OmeTV)</a></li>
+                    <li><a href="{{ route('live-video.index') }}">CupTV Free Live Video</a></li>
                     <li><a href="{{ route('moments.index') }}">Coffee Moments &amp; Social Share</a></li>
                     <li><a href="{{ route('public.discover') }}">Discover Free Profiles</a></li>
                     <li><a href="{{ route('cities') }}">All 100+ Indian &amp; World Cities</a></li>
@@ -179,7 +179,7 @@
         </a>
         <a href="{{ route('live-video.index') }}" class="bottom-nav-item {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">
             <x-icon name="video" class="cup-icon-sm" />
-            <span>Live Cam</span>
+            <span>CupTV</span>
         </a>
         <a href="{{ route('moments.index') }}" class="bottom-nav-item {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">
             <x-icon name="heart" class="cup-icon-sm" />

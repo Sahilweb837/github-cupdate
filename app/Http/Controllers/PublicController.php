@@ -64,8 +64,8 @@ class PublicController extends Controller
         }
 
         $faqs = [
-            ['q' => 'Is CupDate a 100% free coffee and social dating website?', 'a' => 'Yes. CupDate (cupdate.in) is completely free — creating a profile, discovering members across 100+ Indian & global cities, messaging, sharing Coffee Moments, and joining OmeTV-style live video chats cost nothing.'],
-            ['q' => 'How does CupDate Live Video (like OmeTV) work?', 'a' => 'Open the Live Video page, choose your preference and region, and connect face-to-face via encrypted WebRTC with real online members. Tap Next anytime or use one-click safety reporting.'],
+            ['q' => 'Is CupDate a 100% free coffee and CupTV live video dating website?', 'a' => 'Yes. CupDate (cupdate.in) is the world’s best free coffee & video dating website — creating a profile, discovering members across 100+ Indian & global cities, messaging, sharing Coffee Moments, and joining CupTV live video chats cost nothing.'],
+            ['q' => 'How does CupTV Live Video work?', 'a' => 'Open CupTV Live Video, choose your preference and region, and connect face-to-face via encrypted WebRTC with real online members. Tap Next anytime or use one-click safety reporting.'],
             ['q' => 'Can girls and members share coffee moments on social media?', 'a' => 'Yes. Members can post verified Coffee Moments and share them cleanly to WhatsApp, Instagram, X, or Facebook with built-in anti-nudity and anti-spam safety screening.'],
             ['q' => 'How can I find people nearby across India and the world?', 'a' => 'Use the Discover filters or explore our 100+ city & country pages from Himachal Pradesh, Delhi, Mumbai, Bengaluru, and Pune to global hubs without exposing your exact street location.'],
             ['q' => 'How does CupDate prevent nudity, spam, and fake profiles?', 'a' => 'Every message, photo upload, and Coffee Moment passes through automated anti-spam and anti-nudity screening plus human moderator review, verification badges, and instant block/report tools.'],
@@ -84,8 +84,8 @@ class PublicController extends Controller
             'activeCity' => $cityFilter,
             'activeInterest' => $interestFilter,
             'faqs' => $faqs,
-            'headline' => SiteSetting::getValue('homepage_headline', 'World’s Warmest Free Coffee & Live Video Dating Website.'),
-            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Meet genuine people across 100+ Indian cities & worldwide. Free chat, OmeTV-style live video, shareable coffee moments, and zero paid paywalls.'),
+            'headline' => SiteSetting::getValue('homepage_headline', 'World’s Best Free Coffee & CupTV Video Dating Website.'),
+            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Meet genuine people across 100+ Indian cities & worldwide. Free chat, CupTV live video, shareable coffee moments, and zero paid paywalls.'),
             'coffeeHeading' => SiteSetting::getValue('coffee_section_heading', 'Less Swiping. More Meaningful Coffee Dates — 100% Free.'),
         ]);
     }
@@ -133,22 +133,22 @@ class PublicController extends Controller
             ->all();
 
         $page = [
-            'title' => "Free Coffee Dating & Singles in {$cityName}, {$countryName} | CupDate",
-            'h1' => "Free Coffee Dating & Live Video in {$cityName}",
-            'description' => "Meet verified singles in {$cityName} ({$stateName}, {$countryName}) for free coffee dates, respectful chat, and OmeTV-style live video on CupDate — 100% free forever.",
+            'title' => "Free Coffee Dating, CupTV Live Video & Singles in {$cityName}, {$countryName} | CupDate",
+            'h1' => "Free Coffee Dating & CupTV Video in {$cityName}",
+            'description' => "Meet verified singles in {$cityName} ({$stateName}, {$countryName}) for free coffee dates, respectful chat, and CupTV live video on CupDate — world’s best free video & coffee dating site.",
             'city' => $city['slug'] === 'india' ? null : $cityName,
             'state' => $stateName,
             'country' => $countryName,
-            'intro' => "{$city['vibe']} across {$city['spot']}. CupDate connects genuine people in {$cityName} with 100% free messaging, free live video chat, and strict anti-nudity & anti-spam moderation.",
+            'intro' => "{$city['vibe']} across {$city['spot']}. CupDate connects genuine people in {$cityName} with 100% free messaging, free CupTV live video chat, and strict anti-nudity & anti-spam moderation.",
             'highlights' => [
                 "100% free dating & social discovery in {$cityName} — no paid subscription required",
-                'Real-time OmeTV-style live video & 1-to-1 encrypted calls',
+                'Real-time CupTV live video & 1-to-1 encrypted calls',
                 'Share Coffee Moments on WhatsApp, Instagram, and X with safety screening',
                 'Strict anti-nudity, anti-spam & profile verification protection',
             ],
             'ideas' => [
                 "Daytime coffee meetup around {$city['spot']}",
-                "Start with a 5-minute CupDate Live Video hello in {$cityName}",
+                "Start with a 5-minute CupTV Live Video hello in {$cityName}",
                 'Share your favorite local café moment to spark real conversations',
             ],
         ];

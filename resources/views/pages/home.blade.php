@@ -42,7 +42,7 @@
             <div class="free-offer-banner">
                 <div>
                     <strong>Free Forever Access ($0)</strong>
-                    <span>Chat, OmeTV-style Live Video &amp; Moments — no paid paywall</span>
+                    <span>Free Chat, CupTV Live Video &amp; Moments — no paid paywall</span>
                 </div>
                 <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink btn-sm">
                     {{ auth()->check() ? 'Open Free App' : 'Claim Free Access' }}
@@ -54,7 +54,7 @@
                     Join Now — 100% Free
                 </a>
                 <a href="{{ route('live-video.index') }}" class="btn btn-coffee">
-                    <x-icon name="video" class="cup-icon-xs" /> Start Live Video
+                    <x-icon name="video" class="cup-icon-xs" /> Start CupTV Live Video
                 </a>
                 <a href="{{ route('moments.index') }}" class="btn btn-outline">
                     Share Moments
@@ -64,7 +64,7 @@
             <div class="trust-pills" aria-label="Platform Trust Highlights">
                 <span><x-icon name="shield" class="cup-icon-xs" /> Anti-Nudity &amp; Anti-Spam</span>
                 <span><x-icon name="message" class="cup-icon-xs" /> Free Chat</span>
-                <span><x-icon name="video" class="cup-icon-xs" /> OmeTV Live Video</span>
+                <span><x-icon name="video" class="cup-icon-xs" /> CupTV Free Video</span>
                 <span><x-icon name="heart" class="cup-icon-xs" /> <strong data-live-visitors>{{ $liveStats['active_visitors'] }}</strong> Live Now</span>
             </div>
         </div>
@@ -95,9 +95,9 @@
         <div class="cards-grid-3">
             <article class="minimal-card">
                 <div class="card-icon-soft"><x-icon name="video" class="cup-icon-md" /></div>
-                <h3 class="card-title">1. OmeTV-Style Live Video</h3>
-                <p class="card-desc">Match face-to-face in real time with verified members &amp; safe guests across India and worldwide — tap Next anytime.</p>
-                <a href="{{ route('live-video.index') }}" class="text-link mt-8">Open Live Video →</a>
+                <h3 class="card-title">1. CupTV Free Live Video</h3>
+                <p class="card-desc">World’s best free live video chat — match face-to-face in real time across India &amp; worldwide and tap Next anytime.</p>
+                <a href="{{ route('live-video.index') }}" class="text-link mt-8">Open CupTV Live →</a>
             </article>
             <article class="minimal-card">
                 <div class="card-icon-soft"><x-icon name="heart" class="cup-icon-md" /></div>
@@ -220,7 +220,7 @@
         <div>
             <span class="eyebrow-text">BEST FREE COFFEE DATING IN THE WORLD</span>
             <h2 class="section-title">{{ $coffeeHeading }}</h2>
-            <p class="section-lead">Meet over real coffee, connect on free OmeTV-style live video, or share your coffee moments with friends — always 100% free.</p>
+            <p class="section-lead">Meet over real coffee, connect on free CupTV live video, or share your coffee moments with friends — always 100% free.</p>
             <div class="hero-actions mt-16">
                 <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-coffee">
                     Plan Free Coffee Date

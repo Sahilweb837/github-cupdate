@@ -10,7 +10,7 @@
     </div>
     <div class="chat-header-tools">
         <a href="{{ route('live-video.index') }}" class="btn btn-coffee btn-xs">
-            <x-icon name="video" class="cup-icon-xs" /> Live Video Match
+            <x-icon name="video" class="cup-icon-xs" /> CupTV Live
         </a>
         <a href="{{ route('moments.index') }}" class="btn btn-outline btn-xs">
             <x-icon name="heart" class="cup-icon-xs" /> Moments

@@ -25,7 +25,7 @@
             "name": "Is {{ addslashes($page['city'] ?? 'CupDate') }} coffee dating really 100% free?",
             "acceptedAnswer": {
                 "@@type": "Answer",
-                "text": "Yes. Messaging, discovering verified singles, OmeTV-style live video, and sharing coffee moments are 100% free on CupDate without paid subscriptions."
+                "text": "Yes. Messaging, discovering verified singles, CupTV live video, and sharing coffee moments are 100% free on CupDate without paid subscriptions."
             }
         },
         {
@@ -49,7 +49,7 @@
         <p class="page-subtitle left">{{ $page['intro'] }}</p>
         <div class="hero-actions mt-24">
             <a href="{{ route('register') }}" class="btn btn-pink">Join Now Free</a>
-            <a href="{{ route('live-video.index') }}" class="btn btn-coffee">Try Live Video (OmeTV)</a>
+            <a href="{{ route('live-video.index') }}" class="btn btn-coffee">Try CupTV Free Video</a>
             <a href="{{ route('public.discover', ['city' => $page['city']]) }}" class="btn btn-outline">Browse Profiles</a>
         </div>
     </div>

@@ -1,16 +1,35 @@
 @extends('layouts.app')
 
-@section('title', 'Free Random Live Video Chat (Like OmeTV) — India & Global | CupDate')
-@section('description', 'Meet real people face-to-face on CupDate Free Live Video Chat — an OmeTV-style, safe, moderated 1-to-1 random video dating & friendship cam with zero paid paywalls.')
+@section('title', 'CupTV — World’s Best Free Live Video Chat & Coffee Dating | CupDate')
+@section('description', 'Join CupTV on CupDate — the world’s best 100% free, safe, moderated 1-to-1 live video chat across 100+ Indian cities & worldwide with zero paid paywalls.')
+
+@push('head')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "WebApplication",
+    "name": "CupTV Free Live Video Chat",
+    "url": "{{ route('live-video.index') }}",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "Web, Android, iOS",
+    "offers": {
+        "@@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+    },
+    "description": "World’s best 100% free live video chat and coffee dating cam across 100+ Indian cities and worldwide with anti-nudity and anti-spam safety."
+}
+</script>
+@endpush
 
 @section('content')
 <section class="page-hero section-cream">
     <div class="container">
         <div class="live-hero-head">
             <div>
-                <span class="eyebrow-pill"><span class="online-dot"></span> LIVE VIDEO CAM · 100% FREE</span>
-                <h1 class="page-title left mt-12">Meet Someone Face-to-Face on Live Video</h1>
-                <p class="page-subtitle left">Instant OmeTV-style 1-to-1 video chat with verified members and safe guests across 100+ Indian cities &amp; worldwide. Strict zero-nudity &amp; anti-spam rules.</p>
+                <span class="eyebrow-pill"><span class="online-dot"></span> CUPTV LIVE VIDEO · 100% FREE WORLDWIDE</span>
+                <h1 class="page-title left mt-12">CupTV: World’s Best Free Live Video Chat</h1>
+                <p class="page-subtitle left">Instant 1-to-1 live video matching with verified members &amp; safe guests across 100+ Indian cities and worldwide. Zero paid paywalls, strict zero-nudity &amp; anti-spam rules.</p>
             </div>
             <div class="live-stats-card">
                 <div class="live-stat-row">

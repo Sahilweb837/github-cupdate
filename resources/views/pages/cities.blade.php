@@ -21,7 +21,7 @@
     <div class="container">
         <span class="eyebrow-pill">ALL INDIA &amp; WORLDWIDE · {{ $totalCities }}+ PAGES</span>
         <h1 class="page-title left mt-12">Free Coffee Dating Across 100+ Indian Cities &amp; the World</h1>
-        <p class="page-subtitle left">Every city page features verified local singles, coffee date ideas, OmeTV-style live video, and 100% free messaging without paid paywalls.</p>
+        <p class="page-subtitle left">Every city page features verified local singles, coffee date ideas, CupTV free live video, and 100% free messaging without paid paywalls.</p>
         <div class="mt-20">
             <input type="search" id="cityDirectorySearch" class="city-search-input" placeholder="Search any city or state (e.g. Delhi, Mumbai, Shimla, Bengaluru, Dubai)...">
         </div>

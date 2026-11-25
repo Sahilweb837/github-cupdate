@@ -816,7 +816,8 @@ button, input, select, textarea { font: inherit; }
 
 /* Brand Logo, Free Promo Strip, Live Visitors, OmeTV Live Video, Moments & 100+ Cities SEO */
 .brand-logo-img { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; display: block; }
-.top-promo-bar { background: var(--coffee-dark); color: var(--white); font-size: 0.78rem; padding: 7px 0; }
+.top-promo-bar { position: sticky; top: 0; z-index: 60; background: var(--coffee-dark); color: var(--white); font-size: 0.78rem; padding: 7px 0; }
+.site-header { top: 33px; }
 .top-promo-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .top-promo-left, .top-promo-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .free-badge-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--pink-dark); color: var(--white); font-weight: 700; font-size: 0.7rem; padding: 3px 10px; border-radius: var(--radius-pill); letter-spacing: 0.03em; }
@@ -908,7 +909,13 @@ button, input, select, textarea { font: inherit; }
 }
 @media (max-width: 640px) {
     .cities-seo-grid { grid-template-columns: 1fr; }
+    .top-promo-bar { padding: 6px 0; font-size: 0.72rem; }
+    .top-promo-inner { gap: 6px; }
     .top-promo-text { display: none; }
+    .free-badge-pill { font-size: 0.65rem; padding: 2px 8px; }
+    .site-header { top: 31px; }
+    .header-inner { height: 60px; }
+    .site-nav { top: 60px; }
 }
 
 /* Mobile-First Polish, Fast Image Shimmer Skeleton & Public Mobile Bottom Bar */
