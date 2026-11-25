@@ -18,7 +18,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
@@ -51,9 +50,9 @@ class PublicController extends Controller
         };
 
         $featuredUsers = $query->take(6)->get();
-        $cities = Cache::remember('cupdate:home:cities', 60, fn () => City::where('is_active', true)->orderBy('sort_order')->get());
-        $interests = Cache::remember('cupdate:home:interests', 60, fn () => InterestCategory::where('is_active', true)->orderBy('name')->get());
-        $datePlaces = Cache::remember('cupdate:home:places', 60, fn () => DatePlace::orderByDesc('rating')->take(4)->get());
+        $cities = City::where('is_active', true)->orderBy('sort_order')->get();
+        $interests = InterestCategory::where('is_active', true)->orderBy('name')->get();
+        $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
 
         $recentMoments = collect();
         if (Schema::hasTable('posts')) {

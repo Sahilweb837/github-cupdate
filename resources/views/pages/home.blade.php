@@ -134,13 +134,15 @@
                 <select name="interest" onchange="this.form.submit()" aria-label="Filter by Interest">
                     <option value="">All Interests</option>
                     @foreach ($interests as $interest)
-                        <option value="{{ $interest->name }}" @selected($activeInterest === $interest->name)>{{ $interest->name }}</option>
+                        @php $interestName = is_object($interest) ? $interest->name : (is_array($interest) ? ($interest['name'] ?? '') : (string) $interest); @endphp
+                        <option value="{{ $interestName }}" @selected($activeInterest === $interestName)>{{ $interestName }}</option>
                     @endforeach
                 </select>
                 <select name="city" onchange="this.form.submit()" aria-label="Filter by City">
                     <option value="">All Cities</option>
                     @foreach ($cities as $city)
-                        <option value="{{ $city->name }}" @selected($activeCity === $city->name)>{{ $city->name }}</option>
+                        @php $cityName = is_object($city) ? $city->name : (is_array($city) ? ($city['name'] ?? '') : (string) $city); @endphp
+                        <option value="{{ $cityName }}" @selected($activeCity === $cityName)>{{ $cityName }}</option>
                     @endforeach
                 </select>
             </form>
@@ -211,13 +213,18 @@
         </div>
         <div class="cafe-places-stack">
             @foreach ($datePlaces as $place)
+                @php
+                    $placeName = is_object($place) ? $place->name : (is_array($place) ? ($place['name'] ?? '') : (string) $place);
+                    $placeAddress = is_object($place) ? $place->address : (is_array($place) ? ($place['address'] ?? '') : '');
+                    $placeRating = is_object($place) ? $place->rating : (is_array($place) ? ($place['rating'] ?? 4.8) : 4.8);
+                @endphp
                 <div class="cafe-spot-card">
                     <div class="cafe-spot-icon"><x-icon name="coffee" class="cup-icon-sm" /></div>
                     <div>
-                        <div class="cafe-spot-name">{{ $place->name }}</div>
-                        <div class="cafe-spot-address">{{ $place->address }}</div>
+                        <div class="cafe-spot-name">{{ $placeName }}</div>
+                        <div class="cafe-spot-address">{{ $placeAddress }}</div>
                     </div>
-                    <span class="cafe-rating">★ {{ number_format((float) $place->rating, 1) }}</span>
+                    <span class="cafe-rating">★ {{ number_format((float) $placeRating, 1) }}</span>
                 </div>
             @endforeach
         </div>
