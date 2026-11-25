@@ -4,14 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @php
+        $canonicalUrl = trim($__env->yieldContent('canonical')) ?: \App\Services\SeoService::canonicalForRequest(request());
+        $robotsContent = trim($__env->yieldContent('robots')) ?: (request()->hasAny(['filter', 'sort', 'q', 'city', 'interest']) ? 'noindex, follow' : 'index, follow, max-image-preview:large');
+    @endphp
     <title>@yield('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — Meet Someone. Share a Coffee. Create a Connection.'))</title>
     <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate is a genuine, safe dating and social connection platform in Himachal Pradesh for friendship, chat, video calls, and coffee dates.'))">
-    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <meta name="robots" content="{{ $robotsContent }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
     <meta property="og:site_name" content="CupDate">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('title', 'CupDate — Meet Someone. Share a Coffee. Create a Connection.')">
     <meta property="og:description" content="@yield('description', 'Meet genuine people around you in Himachal Pradesh, chat safely, video call, and share coffee dates.')">
-    <meta property="og:url" content="@yield('canonical', url()->current())">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="@yield('og_image', asset('images/hero-coffee-couple.jpg'))">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', 'CupDate')">

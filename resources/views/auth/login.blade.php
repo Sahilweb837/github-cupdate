@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Login to CupDate')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 <section class="auth-section section-cream">

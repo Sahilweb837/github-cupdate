@@ -14,7 +14,7 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/how-it-works', 'howItWorks')->name('how-it-works');
     Route::get('/safety', 'safety')->name('safety');
     Route::get('/about-us', 'about')->name('about');
-    Route::get('/about', fn () => redirect()->route('about'));
+    Route::permanentRedirect('/about', '/about-us');
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact', 'submitContact')->name('contact.submit');
     Route::get('/blog', 'blog')->name('blog');

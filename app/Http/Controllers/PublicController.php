@@ -269,36 +269,15 @@ class PublicController extends Controller
         ]);
     }
 
-    public function sitemap(): Response
+    public function sitemap(\App\Services\SeoService $seo): Response
     {
-        $urls = [
-            url('/'),
-            url('/discover'),
-            url('/how-it-works'),
-            url('/safety'),
-            url('/about-us'),
-            url('/contact'),
-            url('/blog'),
-            url('/dating-in-himachal-pradesh'),
-            url('/meet-singles-in-kangra'),
-            url('/meet-singles-in-dharamshala'),
-            url('/meet-singles-in-mandi'),
-            url('/coffee-date-ideas-in-himachal-pradesh'),
-        ];
-
-        foreach (BlogPost::where('is_published', true)->pluck('slug') as $slug) {
-            $urls[] = url('/blog/' . $slug);
-        }
-
-        $xml = view('pages.sitemap', ['urls' => $urls])->render();
-
-        return response($xml, 200)->header('Content-Type', 'application/xml');
+        return response($seo->renderSitemapXml(), 200)
+            ->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 
-    public function robots(): Response
+    public function robots(\App\Services\SeoService $seo): Response
     {
-        $content = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /app\nSitemap: " . url('/sitemap.xml') . "\n";
-
-        return response($content, 200)->header('Content-Type', 'text/plain');
+        return response($seo->renderRobotsTxt(), 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 }

@@ -236,7 +236,9 @@ class AdminController extends Controller
             'published_at' => now(),
         ]);
 
-        return back()->with('success', 'Blog article published.');
+        app(\App\Services\SeoService::class)->writeStaticFiles();
+
+        return back()->with('success', 'Blog article published and sitemap.xml updated.');
     }
 
     public function settings(): View

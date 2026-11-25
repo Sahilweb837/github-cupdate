@@ -1,10 +1,18 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-@foreach ($urls as $url)
+{!! '<' . '?xml version="1.0" encoding="UTF-8"?' . '>' !!}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+@foreach ($entries as $entry)
     <url>
-        <loc>{{ $url }}</loc>
-        <changefreq>weekly</changefreq>
-        <priority>{{ $url === url('/') ? '1.0' : '0.8' }}</priority>
+        <loc>{{ $entry['loc'] }}</loc>
+        <lastmod>{{ $entry['lastmod'] }}</lastmod>
+        <changefreq>{{ $entry['changefreq'] }}</changefreq>
+        <priority>{{ $entry['priority'] }}</priority>
+@if (!empty($entry['image']))
+        <image:image>
+            <image:loc>{{ $entry['image'] }}</image:loc>
+            <image:title>{{ $entry['image_title'] ?? 'CupDate' }}</image:title>
+        </image:image>
+@endif
     </url>
 @endforeach
 </urlset>
