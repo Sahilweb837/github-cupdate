@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'How CupDate Works — Meet Someone. Share a Coffee.')
+@section('title', 'How CupDate Works | Meet Someone. Share a Coffee.')
 @section('description', 'Learn how CupDate turns genuine profiles, free chat, and video calls into comfortable daytime coffee dates in Himachal Pradesh.')
 
 @section('content')
@@ -21,8 +21,8 @@
                 <p class="step-detail-desc">Add your natural photo, select your Himachal city, share your coffee preference, and list real hobbies and interests.</p>
             </div>
             <div class="step-widget-panel">
-                <div class="checklist-row"><span><x-icon name="user" class="cup-icon-xs" /> Clear daylight photo</span><span class="check-mark">✓</span></div>
-                <div class="checklist-row"><span><x-icon name="map-pin" class="cup-icon-xs" /> Himachal city &amp; interests</span><span class="check-mark">✓</span></div>
+                <div class="checklist-row"><span><x-icon name="user" class="cup-icon-xs" /> Clear daylight photo</span><span class="check-mark">Yes</span></div>
+                <div class="checklist-row"><span><x-icon name="map-pin" class="cup-icon-xs" /> Himachal city &amp; interests</span><span class="check-mark">Yes</span></div>
                 <div class="checklist-row"><span><x-icon name="shield" class="cup-icon-xs" /> Profile verification request</span><span class="pending-pill">Trusted Badge</span></div>
             </div>
         </article>

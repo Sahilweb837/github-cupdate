@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Safety Center — Your Safety Comes First | CupDate')
+@section('title', 'Safety Center | Your Safety Comes First | CupDate')
 @section('description', 'Learn how CupDate protects members with profile verification, secure authentication, report & block tools, privacy settings, and active moderation.')
 
 @section('content')
@@ -8,7 +8,7 @@
     <div class="container centered narrow">
         <span class="eyebrow-text">SAFETY CENTER</span>
         <h1 class="page-title">Your Safety Comes First.</h1>
-        <p class="page-subtitle">CupDate is built for genuine, respectful relationships and friendships—with zero tolerance for fake profiles, adult content, or harassment.</p>
+        <p class="page-subtitle">CupDate is built for genuine, respectful relationships and friendships-with zero tolerance for fake profiles, adult content, or harassment.</p>
     </div>
 </section>
 
@@ -22,7 +22,7 @@
         <article class="minimal-card">
             <div class="card-icon-soft"><x-icon name="lock" class="cup-icon-md" /></div>
             <h2 class="card-title">Privacy &amp; Location Safety</h2>
-            <p class="card-desc">Only your selected city is displayed—never your street address or live coordinates without explicit personal consent.</p>
+            <p class="card-desc">Only your selected city is displayed-never your street address or live coordinates without explicit personal consent.</p>
         </article>
         <article class="minimal-card">
             <div class="card-icon-soft"><x-icon name="user" class="cup-icon-md" /></div>

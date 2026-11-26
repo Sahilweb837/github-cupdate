@@ -10,10 +10,10 @@
     --ink: #302B2B;
     --ink-muted: #77717A;
     --border: #ECE4E6;
-    --radius-sm: 10px;
-    --radius-md: 16px;
-    --radius-lg: 22px;
-    --radius-pill: 9999px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 8px;
     --shadow-sm: 0 4px 16px rgba(56, 40, 32, 0.05);
     --shadow-md: 0 12px 28px rgba(56, 40, 32, 0.09);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -21,7 +21,6 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 body.cupdate-body {
     margin: 0;
     font-family: var(--font-sans);
@@ -61,7 +60,7 @@ button, input, select, textarea { font: inherit; }
     left: 0;
     height: 3px;
     width: 0%;
-    background: linear-gradient(90deg, var(--pink), var(--pink-dark));
+    background: var(--pink-dark);
     z-index: 999;
     transition: width 0.25s ease, opacity 0.2s ease;
     opacity: 0;
@@ -133,17 +132,17 @@ button, input, select, textarea { font: inherit; }
     align-items: center;
     justify-content: center;
     gap: 8px;
-    border-radius: var(--radius-pill);
+    border-radius: 8px;
     padding: 11px 22px;
     font-size: 0.9rem;
     font-weight: 600;
     border: 1px solid transparent;
     cursor: pointer;
     min-height: 42px;
-    transition: transform 0.15s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+    transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
-.btn:hover { transform: translateY(-1px); }
-.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn:hover { background-color: rgba(0, 0, 0, 0.04); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .btn-sm { padding: 8px 16px; font-size: 0.84rem; min-height: 36px; }
 .btn-xs { padding: 6px 12px; font-size: 0.78rem; min-height: 32px; }
 .btn-full { width: 100%; }
@@ -159,7 +158,7 @@ button, input, select, textarea { font: inherit; }
 
 /* Hero */
 .hero-section {
-    background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+    background: var(--cream);
     padding: 48px 0 64px;
 }
 
@@ -388,16 +387,13 @@ button, input, select, textarea { font: inherit; }
     gap: 12px;
 }
 .skeleton-box {
-    border-radius: 10px;
-    background: linear-gradient(90deg, var(--blush) 25%, #ffe6ec 50%, var(--blush) 75%);
-    background-size: 200% 100%;
-    animation: cupdateShimmer 1.3s infinite linear;
+    border-radius: 8px;
+    background: var(--blush);
 }
 .skeleton-img { height: 180px; }
 .skeleton-line { height: 14px; }
 .w-60 { width: 60%; }
 .w-85 { width: 85%; }
-@keyframes cupdateShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
 /* Editorial & Coffee Feature */
 .editorial-grid, .coffee-feature-grid, .contact-layout, .auth-grid {
@@ -668,7 +664,7 @@ button, input, select, textarea { font: inherit; }
 .notif-body p { margin: 2px 0 0; font-size: 0.84rem; color: var(--ink-muted); }
 
 .profile-banner {
-    background: linear-gradient(120deg, var(--coffee-dark) 0%, var(--coffee) 65%, var(--pink-dark) 100%);
+    background: var(--coffee-dark);
     color: var(--white);
     border-radius: var(--radius-lg);
     padding: 24px;
@@ -853,8 +849,8 @@ button, input, select, textarea { font: inherit; }
 .cities-groups-stack { display: flex; flex-direction: column; gap: 28px; }
 .city-group-title { font-size: 1.1rem; color: var(--coffee-dark); margin: 0 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
 .cities-seo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.city-seo-card { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--white); transition: transform 0.15s ease, border-color 0.15s ease; }
-.city-seo-card:hover { transform: translateY(-2px); border-color: var(--pink-dark); }
+.city-seo-card { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--white); transition: border-color 0.15s ease; }
+.city-seo-card:hover { border-color: var(--pink-dark); }
 .city-seo-card strong { font-size: 0.9rem; color: var(--coffee-dark); }
 .city-seo-card span { font-size: 0.77rem; color: var(--ink-muted); }
 
@@ -925,9 +921,7 @@ html, body { -webkit-tap-highlight-color: transparent; }
 .skeleton-overlay-2 { grid-template-columns: repeat(2, 1fr); }
 
 .profile-card-img-wrap, .moment-img-wrap {
-    background: linear-gradient(90deg, var(--blush) 25%, #ffe6ec 50%, var(--blush) 75%);
-    background-size: 200% 100%;
-    animation: cupdateShimmer 1.2s infinite linear;
+    background: var(--blush);
 }
 .profile-card-img-wrap img, .moment-img-wrap img {
     opacity: 0;

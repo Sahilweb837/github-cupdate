@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Data\SeoCities;
 use App\Models\User;
 use App\Services\SafetyModerationService;
+use App\Support\SqlSafe;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -209,5 +210,61 @@ class LiveAndSeoFeaturesTest extends TestCase
             ->assertSee('PerplexityBot');
 
         $this->assertFileExists(public_path('llms.txt'));
+    }
+
+    public function test_security_headers_online_users_by_city_favicon_and_design_rules(): void
+    {
+        $this->assertFileExists(public_path('favicon.ico'));
+        $this->assertGreaterThan(100, filesize(public_path('favicon.ico')));
+
+        $this->assertSame('abc\\%\\_def\\\\', SqlSafe::escapeLike('  abc%_def\\  '));
+
+        User::create([
+            'email' => 'online-shimla@cupdate.in',
+            'password_hash' => Hash::make('Secret123!'),
+            'full_name' => 'Kavita Thakur',
+            'dob' => '1999-03-15',
+            'gender' => 'female',
+            'preference' => 'everyone',
+            'city' => 'Shimla',
+            'state' => 'Himachal Pradesh',
+            'country' => 'India',
+            'is_online' => true,
+            'last_active' => now(),
+            'status' => 'active',
+        ]);
+
+        $admin = User::create([
+            'email' => 'admin-security@cupdate.in',
+            'password_hash' => Hash::make('Secret123!'),
+            'full_name' => 'Security Admin',
+            'dob' => '1994-01-10',
+            'gender' => 'other',
+            'preference' => 'everyone',
+            'city' => 'Shimla',
+            'state' => 'Himachal Pradesh',
+            'is_admin' => true,
+            'role' => 'super_admin',
+            'status' => 'active',
+        ]);
+
+        foreach (['/', '/privacy-policy', '/terms-and-conditions', '/discover', '/live-video'] as $path) {
+            $resp = $this->get($path);
+            $resp->assertStatus(200)
+                ->assertHeader('X-Frame-Options', 'SAMEORIGIN')
+                ->assertHeader('X-Content-Type-Options', 'nosniff')
+                ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+            $html = $resp->getContent();
+            $this->assertStringNotContainsString("\u{2014}", $html);
+            $this->assertStringNotContainsString('Made with AI', $html);
+        }
+
+        $this->actingAs($admin)
+            ->get('/admin')
+            ->assertStatus(200)
+            ->assertSee('Online Users Right Now by City')
+            ->assertSee('Shimla')
+            ->assertSee('1 online');
     }
 }

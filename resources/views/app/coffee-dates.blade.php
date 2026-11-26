@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Coffee Dates — CupDate')
+@section('title', 'Coffee Dates | CupDate')
 
 @section('content')
 <div class="app-header-row">
@@ -50,7 +50,7 @@
 
     <div class="date-invite-card">
         <h2 class="card-title">Suggest a Coffee Date</h2>
-        <p class="muted-small mb-12">Your exact location is never shared—only the public city &amp; café you choose.</p>
+        <p class="muted-small mb-12">Your exact location is never shared-only the public city &amp; café you choose.</p>
 
         <form method="POST" action="{{ route('app.coffee-dates.store') }}" class="cupdate-form">
             @csrf

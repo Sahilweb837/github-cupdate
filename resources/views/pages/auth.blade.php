@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', ($mode === 'join' ? 'Join free' : 'Log in') . ' — Cupdate')
+@section('title', ($mode === 'join' ? 'Join free' : 'Log in') . ' - Cupdate')
 
 @section('content')
 <section class="auth-section">
     <div class="container auth-grid">
         <div class="auth-copy">
-            <span class="eyebrow-pill">☕ Coffee first, chemistry next</span>
+            <span class="eyebrow-pill">Coffee first, chemistry next</span>
             <h1 class="hero-title">
                 {{ $mode === 'join' ? 'Create your' : 'Welcome back to' }}<br>
                 <em class="accent-italic">Cupdate</em> {{ $mode === 'join' ? 'profile.' : 'today.' }}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Moment;
 use App\Services\SafetyModerationService;
+use App\Support\SqlSafe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -79,7 +80,7 @@ class MomentController extends Controller
             if (! is_dir($dir)) {
                 mkdir($dir, 0755, true);
             }
-            $filename = 'moment_' . $request->user()->id . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $filename = 'moment_' . $request->user()->id . '_' . Str::random(10) . '.' . SqlSafe::safeImageExtension($file);
             $file->move($dir, $filename);
             $imageUrl = 'uploads/moments/' . $filename;
         }
@@ -97,7 +98,7 @@ class MomentController extends Controller
             $payload['city'] = $data['city'] ?: $request->user()->city;
         }
         if (Schema::hasColumn('posts', 'mood')) {
-            $payload['mood'] = $data['mood'] ?: 'Coffee Vibes';
+            $payload['mood'] = $data['mood'] ?: 'Coffee Chat';
         }
         if (Schema::hasColumn('posts', 'is_flagged')) {
             $payload['is_flagged'] = $isFlagged;

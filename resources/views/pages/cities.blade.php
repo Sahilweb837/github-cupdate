@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Free Coffee Dating in ' . $totalCities . '+ Indian Cities & Global Hubs | CupDate')
-@section('description', 'Explore CupDate free coffee dating, CupTV live video chat, and verified connections across ' . $totalCities . '+ Indian cities and global countries — 100% free forever.')
+@section('description', 'Explore CupDate free coffee dating, CupTV live video chat, and verified connections across ' . $totalCities . '+ Indian cities and global countries - 100% free forever.')
 
 @push('head')
 <script type="application/ld+json">

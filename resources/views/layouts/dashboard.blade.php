@@ -9,6 +9,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate App')</title>
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

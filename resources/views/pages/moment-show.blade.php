@@ -26,7 +26,7 @@
 
             @php
                 $shareUrl = route('moments.show', $moment);
-                $shareText = \Illuminate\Support\Str::limit($moment->content, 110) . ' — CupDate (cupdate.in)';
+                $shareText = \Illuminate\Support\Str::limit($moment->content, 110) . ' - CupDate (cupdate.in)';
             @endphp
             <div class="social-share-bar mt-16" data-share-endpoint="{{ route('moments.share', $moment) }}">
                 <a href="https://wa.me/?text={{ urlencode($shareText . ' ' . $shareUrl) }}" target="_blank" rel="noopener" class="share-pill js-share-track">Share on WhatsApp</a>

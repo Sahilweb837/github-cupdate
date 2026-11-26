@@ -22,7 +22,7 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/about-us', 'about')->name('about');
     Route::permanentRedirect('/about', '/about-us');
     Route::get('/contact', 'contact')->name('contact');
-    Route::post('/contact', 'submitContact')->name('contact.submit');
+    Route::post('/contact', 'submitContact')->middleware('throttle:10,1')->name('contact.submit');
     Route::get('/blog', 'blog')->name('blog');
     Route::get('/blog/{slug}', 'blogShow')->name('blog.show');
 
@@ -98,17 +98,17 @@ Route::controller(CafeReviewController::class)->prefix('cafes')->name('cafes.')-
 // Authentication Routes
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
-    Route::post('/login', 'login')->name('login.submit');
+    Route::post('/login', 'login')->middleware('throttle:15,1')->name('login.submit');
     Route::get('/register', 'showRegister')->name('register');
     Route::get('/join', fn () => redirect()->route('register'))->name('join');
-    Route::post('/register', 'register')->name('register.submit');
-    Route::post('/guest', 'continueAsGuest')->name('auth.guest');
+    Route::post('/register', 'register')->middleware('throttle:10,1')->name('register.submit');
+    Route::post('/guest', 'continueAsGuest')->middleware('throttle:20,1')->name('auth.guest');
     Route::get('/auth/google', 'googleRedirect')->name('auth.google');
     Route::get('/auth/google/callback', 'googleCallback')->name('auth.google.callback');
     Route::get('/forgot-password', 'showForgotPassword')->name('password.request');
-    Route::post('/forgot-password', 'sendResetLink')->name('password.email');
+    Route::post('/forgot-password', 'sendResetLink')->middleware('throttle:10,1')->name('password.email');
     Route::get('/reset-password/{token}', 'showResetPassword')->name('password.reset');
-    Route::post('/reset-password', 'resetPassword')->name('password.update');
+    Route::post('/reset-password', 'resetPassword')->middleware('throttle:10,1')->name('password.update');
     Route::post('/verify-email', 'verifyEmail')->middleware('auth')->name('verification.send');
     Route::post('/logout', 'logout')->name('logout');
 });
@@ -150,7 +150,7 @@ Route::middleware('auth')->prefix('app')->name('app.')->group(function () {
 // Secure Role-Based Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
+    Route::post('/login', [AdminController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
 
     Route::middleware('admin')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');

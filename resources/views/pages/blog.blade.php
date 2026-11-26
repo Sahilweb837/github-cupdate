@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'CupDate Journal — Best Himachal, Delhi & India Dating Guides')
+@section('title', 'CupDate Journal | Best Himachal, Delhi & India Dating Guides')
 @section('description', 'Read CupDate SEO guides for Himachal Pradesh, Delhi NCR, Pune, Haryana, women’s dating safety in India, first-date coffee tips, and MBTI compatibility.')
 
 @section('content')

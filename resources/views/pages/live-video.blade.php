@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'CupTV — World’s Best Free Live Video Chat & Coffee Dating | CupDate')
-@section('description', 'Join CupTV on CupDate — the world’s best 100% free, safe, moderated 1-to-1 live video chat across 100+ Indian cities & worldwide with zero paid paywalls.')
+@section('title', 'CupTV | World’s Best Free Live Video Chat & Coffee Dating | CupDate')
+@section('description', 'Join CupTV on CupDate - the world’s best 100% free, safe, moderated 1-to-1 live video chat across 100+ Indian cities & worldwide with zero paid paywalls.')
 
 @push('head')
 <script type="application/ld+json">
@@ -125,7 +125,7 @@
                     <div class="ometv-join-box mt-12">
                         <strong>Want to save matches &amp; schedule coffee dates?</strong>
                         <p class="muted-small">Join CupDate free forever in 20 seconds.</p>
-                        <a href="{{ route('register') }}" class="btn btn-pink btn-xs btn-full mt-8">Join Now — 100% Free</a>
+                        <a href="{{ route('register') }}" class="btn btn-pink btn-xs btn-full mt-8">Join Now - 100% Free</a>
                     </div>
                 @endguest
             </aside>

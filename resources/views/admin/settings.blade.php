@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'SEO, Ads & Platform Settings — CupDate Admin')
+@section('title', 'SEO, Ads & Platform Settings | CupDate Admin')
 
 @section('content')
 <div class="app-header-row">

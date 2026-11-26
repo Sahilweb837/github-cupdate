@@ -71,7 +71,7 @@ class LiveVideoController extends Controller
 
     public function poll(Request $request): JsonResponse
     {
-        $queueId = (int) $request->query('queue_id', $request->session()->get('live_queue_id', 0));
+        $queueId = $this->resolveOwnedQueueId($request, (int) $request->query('queue_id', 0));
         $entry = $queueId ? VideoQueue::find($queueId) : null;
 
         if (! $entry) {
@@ -118,7 +118,7 @@ class LiveVideoController extends Controller
 
     public function signal(Request $request): JsonResponse
     {
-        $queueId = (int) $request->input('queue_id', $request->session()->get('live_queue_id', 0));
+        $queueId = $this->resolveOwnedQueueId($request, (int) $request->input('queue_id', 0));
         $match = $queueId ? Cache::get("cupdate:vq_match:{$queueId}") : null;
 
         if (! $match || empty($match['room_id'])) {
@@ -146,7 +146,7 @@ class LiveVideoController extends Controller
 
     public function chat(Request $request, SafetyModerationService $safety): JsonResponse
     {
-        $queueId = (int) $request->input('queue_id', $request->session()->get('live_queue_id', 0));
+        $queueId = $this->resolveOwnedQueueId($request, (int) $request->input('queue_id', 0));
         $match = $queueId ? Cache::get("cupdate:vq_match:{$queueId}") : null;
 
         if (! $match || empty($match['room_id'])) {
@@ -181,7 +181,7 @@ class LiveVideoController extends Controller
 
     public function leave(Request $request): JsonResponse
     {
-        $queueId = (int) $request->input('queue_id', $request->session()->get('live_queue_id', 0));
+        $queueId = $this->resolveOwnedQueueId($request, (int) $request->input('queue_id', 0));
         if ($queueId) {
             $this->cleanupEntry($queueId);
             $request->session()->forget('live_queue_id');
@@ -192,7 +192,7 @@ class LiveVideoController extends Controller
 
     public function report(Request $request): JsonResponse
     {
-        $queueId = (int) $request->input('queue_id', $request->session()->get('live_queue_id', 0));
+        $queueId = $this->resolveOwnedQueueId($request, (int) $request->input('queue_id', 0));
         $match = $queueId ? Cache::get("cupdate:vq_match:{$queueId}") : null;
 
         $data = $request->validate([
@@ -215,6 +215,16 @@ class LiveVideoController extends Controller
         }
 
         return response()->json(['ok' => true, 'message' => 'Reported and disconnected safely.']);
+    }
+
+    private function resolveOwnedQueueId(Request $request, int $requestedId = 0): int
+    {
+        $sessionId = (int) $request->session()->get('live_queue_id', 0);
+        if ($sessionId > 0 && $requestedId > 0 && $sessionId !== $requestedId) {
+            return 0;
+        }
+
+        return $sessionId ?: $requestedId;
     }
 
     private function attemptMatch(VideoQueue $entry): ?array

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Discover Genuine People — CupDate')
+@section('title', 'Discover Genuine People | CupDate')
 @section('description', 'Explore verified profiles across Shimla, Dharamshala, Kangra, Mandi, and Himachal Pradesh on CupDate.')
 
 @section('content')

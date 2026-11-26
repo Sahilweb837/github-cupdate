@@ -1,49 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img" aria-label="CupDate Safe Coffee Date, CupTV Video, and Verified Cafe Reviews Illustration">
-  <defs>
-    <linearGradient id="sceneBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF8F0"/>
-      <stop offset="100%" stop-color="#FFF0F3"/>
-    </linearGradient>
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F4A6B8"/>
-      <stop offset="100%" stop-color="#D96B89"/>
-    </linearGradient>
-  </defs>
-  <rect width="640" height="420" rx="28" fill="url(#sceneBg)"/>
-  <circle cx="540" cy="80" r="64" fill="#FFE2E9" opacity="0.7"/>
-  <circle cx="95" cy="340" r="78" fill="#F8E7D8" opacity="0.75"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img" aria-label="CupDate Safe Coffee Date, CupTV Video, and Community Cafe Reviews">
+  <rect width="640" height="420" rx="18" fill="#FFF8F0"/>
+  <circle cx="540" cy="80" r="64" fill="#FFE2E9" opacity="0.65"/>
+  <circle cx="95" cy="340" r="78" fill="#F8E7D8" opacity="0.7"/>
 
-  <!-- Left card: Verified Cafe Review -->
-  <rect x="34" y="48" width="265" height="154" rx="20" fill="#FFFFFF" stroke="#ECE4E6" stroke-width="2"/>
-  <rect x="54" y="68" width="44" height="44" rx="14" fill="#FFF0F3"/>
+  <!-- Left card: Community Cafe Review -->
+  <rect x="34" y="48" width="265" height="154" rx="14" fill="#FFFFFF" stroke="#ECE4E6" stroke-width="2"/>
+  <rect x="54" y="68" width="44" height="44" rx="10" fill="#FFF0F3"/>
   <path d="M68 85 H82 V94 C82 98 79 101 75 101 C71 101 68 98 68 94 Z" fill="#6F4E37"/>
-  <text x="110" y="86" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#382820">Women-Safe Café</text>
-  <text x="110" y="106" font-family="Inter, sans-serif" font-size="12" fill="#77717A">★★★★★ 4.9 · Daylight &amp; Cozy</text>
+  <text x="110" y="86" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#382820">Women-Safe Cafe</text>
+  <text x="110" y="106" font-family="Inter, sans-serif" font-size="12" fill="#77717A">Daylight seating and seating reviews</text>
   <rect x="54" y="128" width="225" height="10" rx="5" fill="#F7ECEF"/>
   <rect x="54" y="148" width="185" height="10" rx="5" fill="#F7ECEF"/>
-  <rect x="54" y="170" width="112" height="20" rx="10" fill="#FFF0F3"/>
-  <text x="72" y="184" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#D96B89">Verified Review ✓</text>
+  <rect x="54" y="170" width="128" height="22" rx="6" fill="#FFF0F3"/>
+  <text x="68" y="185" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#D96B89">Member Cafe Notes</text>
 
   <!-- Center Phone / CupTV Card -->
-  <rect x="220" y="110" width="205" height="262" rx="26" fill="#382820"/>
-  <rect x="232" y="124" width="181" height="234" rx="18" fill="#FFFFFF"/>
-  <rect x="246" y="138" width="153" height="108" rx="14" fill="#2A1E19"/>
-  <circle cx="322" cy="184" r="24" fill="url(#accentGrad)"/>
+  <rect x="220" y="110" width="205" height="262" rx="18" fill="#382820"/>
+  <rect x="232" y="124" width="181" height="234" rx="12" fill="#FFFFFF"/>
+  <rect x="246" y="138" width="153" height="108" rx="10" fill="#2A1E19"/>
+  <circle cx="322" cy="184" r="24" fill="#D96B89"/>
   <polygon points="316,174 334,184 316,194" fill="#FFFFFF"/>
-  <rect x="256" y="148" width="70" height="20" rx="10" fill="#1EA86A"/>
-  <text x="268" y="162" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">CupTV LIVE</text>
-  <text x="248" y="272" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#382820">100% Free Forever</text>
-  <text x="248" y="292" font-family="Inter, sans-serif" font-size="11.5" fill="#77717A">Chat · Video · Moments</text>
-  <rect x="248" y="310" width="150" height="32" rx="16" fill="url(#accentGrad)"/>
-  <text x="285" y="330" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Join Free →</text>
+  <rect x="256" y="148" width="76" height="20" rx="6" fill="#1EA86A"/>
+  <text x="266" y="162" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">CupTV LIVE</text>
+  <text x="248" y="272" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#382820">100% Free Access</text>
+  <text x="248" y="292" font-family="Inter, sans-serif" font-size="11.5" fill="#77717A">Chat, Video and Moments</text>
+  <rect x="248" y="310" width="150" height="32" rx="8" fill="#D96B89"/>
+  <text x="292" y="330" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Join Free</text>
 
   <!-- Right card: Share Moments & Anti-Spam -->
-  <rect x="360" y="44" width="246" height="142" rx="20" fill="#FFFFFF" stroke="#ECE4E6" stroke-width="2"/>
-  <circle cx="394" cy="82" r="18" fill="#FFF0F3"/>
-  <path d="M394 90 C388 85 384 81 384 77 C384 74 386 72 389 72 C391 72 393 73.5 394 75 C395 73.5 397 72 399 72 C402 72 404 74 404 77 C404 81 400 85 394 90 Z" fill="#D96B89"/>
+  <rect x="360" y="44" width="246" height="142" rx="14" fill="#FFFFFF" stroke="#ECE4E6" stroke-width="2"/>
+  <rect x="378" y="64" width="34" height="34" rx="8" fill="#FFF0F3"/>
+  <path d="M395 88 C389 83 385 79 385 75 C385 72 387 70 390 70 C392 70 394 71.5 395 73 C396 71.5 398 70 400 70 C403 70 405 72 405 75 C405 79 401 83 395 88 Z" fill="#D96B89"/>
   <text x="422" y="79" font-family="Inter, sans-serif" font-size="13.5" font-weight="700" fill="#382820">Share Coffee Moments</text>
-  <text x="422" y="98" font-family="Inter, sans-serif" font-size="11.5" fill="#77717A">WhatsApp · Instagram · X</text>
-  <rect x="380" y="118" width="206" height="46" rx="12" fill="#FFF8F0"/>
-  <text x="394" y="138" font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#382820">🛡 Anti-Nudity &amp; Anti-Spam</text>
-  <text x="394" y="154" font-family="Inter, sans-serif" font-size="11" fill="#77717A">Zero fake data · 200+ Cities</text>
+  <text x="422" y="98" font-family="Inter, sans-serif" font-size="11.5" fill="#77717A">WhatsApp, X and Facebook</text>
+  <rect x="380" y="118" width="206" height="46" rx="8" fill="#FFF8F0"/>
+  <text x="394" y="138" font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#382820">Anti-Nudity and Anti-Spam</text>
+  <text x="394" y="154" font-family="Inter, sans-serif" font-size="11" fill="#77717A">Moderated uploads, 200+ Cities</text>
 </svg>

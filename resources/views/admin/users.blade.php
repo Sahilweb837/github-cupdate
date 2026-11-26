@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Registered Users — CupDate Admin')
+@section('title', 'Registered Users | CupDate Admin')
 
 @section('content')
 <div class="app-header-row">
@@ -67,7 +67,7 @@
                                 {{ $user->deleted_at ? 'Deleted' : ucfirst($user->status) }}
                             </span>
                         </td>
-                        <td>{{ $user->is_verified ? 'Verified ✓' : ucfirst($user->verification_status ?? 'unverified') }}</td>
+                        <td>{{ $user->is_verified ? 'Verified' : ucfirst($user->verification_status ?? 'unverified') }}</td>
                         <td>
                             <div class="admin-action-btns">
                                 <form method="POST" action="{{ route('admin.users.update', $user->id) }}">

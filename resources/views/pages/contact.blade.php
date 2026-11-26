@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contact CupDate — Support & Feedback')
+@section('title', 'Contact CupDate | Support & Feedback')
 @section('description', 'Reach the CupDate team for account help, safety reports, café partnerships, or general feedback.')
 
 @section('content')

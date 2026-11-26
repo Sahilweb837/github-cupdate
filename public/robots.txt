@@ -1,4 +1,4 @@
-# CupDate (cupdate.in) — Search Engine & AI Discovery Robots Rules
+# CupDate (cupdate.in) - Search Engine & AI Discovery Robots Rules
 User-agent: *
 Allow: /
 Allow: /llms.txt

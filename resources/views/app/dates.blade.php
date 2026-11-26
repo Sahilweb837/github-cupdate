@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Dates — Cupdate')
+@section('title', 'Dates | Cupdate')
 
 @section('content')
 <div class="app-header-row">
@@ -46,7 +46,7 @@
                 <label for="dateWhen">Day &amp; time</label>
                 <input id="dateWhen" name="when" type="text" value="Sun, Nov 29 · 11:00 AM" required>
             </div>
-            <button type="submit" class="btn btn-coral btn-full">Send coffee invite ☕</button>
+            <button type="submit" class="btn btn-coral btn-full">Send coffee invite</button>
         </form>
     </div>
 </div>

@@ -11,16 +11,17 @@
         $robotsContent = trim($__env->yieldContent('robots')) ?: (request()->hasAny(['filter', 'sort', 'q', 'city', 'interest']) ? 'noindex, follow' : 'index, follow, max-image-preview:large');
         $liveSnapshot = app(\App\Services\LiveStatsService::class)->snapshot();
     @endphp
-    <title>@yield('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — World’s Best Free Video Chat & Coffee Dating Website'))</title>
-    <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate (cupdate.in) is the world’s best 100% free coffee dating, CupTV live video chat, and safe social connection website across 100+ Indian cities and worldwide.'))">
+    <title>@yield('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate | Free Coffee Dating and CupTV Live Video'))</title>
+    <meta name="description" content="@yield('description', \App\Models\SiteSetting::getValue('seo_default_description', 'CupDate (cupdate.in) is a 100% free coffee dating, CupTV live video chat, and safe social connection website across 200+ Indian cities and worldwide.'))">
     <meta name="robots" content="{{ $robotsContent }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
     <meta property="og:site_name" content="CupDate">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('title', 'CupDate — World’s Best Free CupTV Video & Coffee Dating')">
-    <meta property="og:description" content="@yield('description', 'Meet genuine people across India & the world, chat free, enjoy CupTV live video, and share coffee moments.')">
+    <meta property="og:title" content="@yield('title', 'CupDate | Free CupTV Video and Coffee Dating')">
+    <meta property="og:description" content="@yield('description', 'Meet verified people across India and global cities, chat free, use CupTV live video, and read cafe reviews.')">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="@yield('og_image', asset('images/hero-coffee-couple.jpg'))">
     <meta name="twitter:card" content="summary_large_image">
@@ -118,8 +119,8 @@
                     <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate Logo" class="brand-logo-img" width="34" height="34">
                     <span class="brand-text">CupDate</span>
                 </a>
-                <p class="footer-tagline">World’s Warmest Free Coffee &amp; Live Video Dating Website.</p>
-                <p class="footer-sub">100% free dating, live video chat, and shareable coffee moments across 100+ Indian cities &amp; worldwide — zero paid paywalls, strict no-nudity &amp; anti-spam protection.</p>
+                <p class="footer-tagline">Free Coffee Dating and CupTV Live Video Across 200+ Cities.</p>
+                <p class="footer-sub">100% free messaging, CupTV live video chat, and community cafe reviews - zero paid paywalls, strict no-nudity &amp; anti-spam moderation.</p>
             </div>
 
             <div>
@@ -157,7 +158,7 @@
         </div>
 
         <div class="container footer-bottom">
-            <p>&copy; 2026 CupDate (cupdate.in). 100% Free Forever — Safe, Clean &amp; Moderated.</p>
+            <p>&copy; 2026 CupDate (cupdate.in). 100% Free Forever | Safe, Clean &amp; Moderated.</p>
             <div class="footer-socials" aria-label="Social Media">
                 <a href="{{ route('moments.index') }}">Share Moments</a>
                 <span>·</span>

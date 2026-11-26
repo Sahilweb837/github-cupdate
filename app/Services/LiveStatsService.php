@@ -245,6 +245,28 @@ class LiveStatsService
     }
 
     /**
+     * Real-time online and recently active non-admin members grouped by city.
+     */
+    public function onlineUsersByCity(int $limit = 12): \Illuminate\Support\Collection
+    {
+        try {
+            return User::where('status', 'active')
+                ->where('is_admin', false)
+                ->where(function ($q) {
+                    $q->where('is_online', true)
+                        ->orWhere('last_active', '>=', now()->subMinutes(10));
+                })
+                ->select('city', 'state', 'country', DB::raw('COUNT(*) as online_total'))
+                ->groupBy('city', 'state', 'country')
+                ->orderByDesc('online_total')
+                ->take($limit)
+                ->get();
+        } catch (Throwable) {
+            return collect();
+        }
+    }
+
+    /**
      * Resolve location from edge/proxy headers first, then cached 24h IP lookup for public IPs.
      *
      * @return array{city: string, region: string, country: string}

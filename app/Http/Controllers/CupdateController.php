@@ -15,7 +15,7 @@ class CupdateController extends Controller
                 ['value' => '2.4M', 'label' => 'Active members'],
                 ['value' => '310k', 'label' => 'Matches made'],
                 ['value' => '92%', 'label' => 'Verified profiles'],
-                ['value' => '4.8 ★', 'label' => 'App rating'],
+                ['value' => '4.8', 'label' => 'App rating'],
             ],
             'features' => [
                 [
@@ -66,7 +66,7 @@ class CupdateController extends Controller
                 ],
                 [
                     'q' => '2. How does Radar work?',
-                    'a' => 'Radar shows opt-in members within your chosen café radius. Your exact location is never shared—only approximate neighborhood proximity.',
+                    'a' => 'Radar shows opt-in members within your chosen café radius. Your exact location is never shared-only approximate neighborhood proximity.',
                 ],
                 [
                     'q' => '3. How do you keep me safe?',
@@ -238,7 +238,7 @@ class CupdateController extends Controller
                     'messages' => [
                         ['from' => 'them', 'text' => 'Hey Sofia! Saw you also love pour-over mornings.', 'time' => '10:14 AM'],
                         ['from' => 'me', 'text' => 'Always! Have you tried the new single-origin at Blue Bottle?', 'time' => '10:18 AM'],
-                        ['from' => 'them', 'text' => 'Not yet—coffee this weekend? ☕', 'time' => '10:21 AM'],
+                        ['from' => 'them', 'text' => 'Not yet-coffee this weekend?', 'time' => '10:21 AM'],
                         ['from' => 'me', 'text' => 'Saturday at 4 works!', 'time' => '10:24 AM'],
                     ],
                 ],

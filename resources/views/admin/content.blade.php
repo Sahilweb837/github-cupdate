@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Content & Taxonomy — CupDate Admin')
+@section('title', 'Content & Taxonomy | CupDate Admin')
 
 @section('content')
 <div class="app-header-row">

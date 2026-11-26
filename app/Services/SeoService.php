@@ -44,7 +44,7 @@ class SeoService
         $today = now()->toAtomString();
 
         $entries = [
-            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate — World’s Best Free Coffee & CupTV Live Video Dating Website'],
+            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate Free Coffee & CupTV Live Video Dating Website'],
             ['loc' => self::canonicalForPath('/discover'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/live-video'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.95'],
             ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
@@ -165,7 +165,7 @@ class SeoService
         ];
 
         $lines = [
-            '# CupDate (cupdate.in) — Search Engine & AI Discovery Robots Rules',
+            '# CupDate (cupdate.in) - Search Engine & AI Discovery Robots Rules',
             'User-agent: *',
             'Allow: /',
             'Allow: /llms.txt',

@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Video Calling — CupDate')
+@section('title', 'Video Calling | CupDate')
 
 @section('content')
 <div class="app-header-row">

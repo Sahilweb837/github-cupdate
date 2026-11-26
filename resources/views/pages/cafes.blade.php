@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Best Dating Cafés & Member Café Reviews — Safe & Women-Friendly | CupDate')
+@section('title', 'Best Dating Cafés & Member Café Reviews | Safe & Women-Friendly | CupDate')
 @section('description', 'Read honest café reviews by girls and members across India & worldwide, discover women-friendly coffee date spots, and share your own café review on CupDate.')
 
 @push('head')
@@ -21,7 +21,7 @@
     <div class="container">
         <span class="eyebrow-pill"><x-icon name="coffee" class="cup-icon-xs" /> VERIFIED CAFÉ REVIEWS</span>
         <h1 class="page-title left mt-12">Women-Friendly Café Reviews &amp; Date Spots</h1>
-        <p class="page-subtitle left">Girls and members review real cafés for safety, daylight seating, ambience, and coffee quality — and share top spots on social media.</p>
+        <p class="page-subtitle left">Girls and members review real cafés for safety, daylight seating, ambience, and coffee quality - and share top spots on social media.</p>
     </div>
 </section>
 
@@ -58,11 +58,11 @@
                         <div class="form-group">
                             <label for="cafe_rating">Rating</label>
                             <select id="cafe_rating" name="rating">
-                                <option value="5">★★★★★ (5/5)</option>
-                                <option value="4">★★★★☆ (4/5)</option>
-                                <option value="3">★★★☆☆ (3/5)</option>
-                                <option value="2">★★☆☆☆ (2/5)</option>
-                                <option value="1">★☆☆☆☆ (1/5)</option>
+                                <option value="5">5/5 (5/5)</option>
+                                <option value="4">4/5 (4/5)</option>
+                                <option value="3">3/5 (3/5)</option>
+                                <option value="2">2/5 (2/5)</option>
+                                <option value="1">1/5 (1/5)</option>
                             </select>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                             <div class="cafe-spot-name">{{ $place->name }}</div>
                             <div class="cafe-spot-address">{{ $place->address }}</div>
                         </div>
-                        <span class="cafe-rating">★ {{ number_format((float) $place->rating, 1) }}</span>
+                        <span class="cafe-rating">Rating {{ number_format((float) $place->rating, 1) }}</span>
                     </div>
                 @endforeach
             </div>
@@ -113,7 +113,7 @@
             <div class="moments-grid">
                 @forelse ($reviews as $review)
                     @php
-                        $shareText = "{$review->cafe_name} ({$review->city}) — {$review->rating}/5★: " . \Illuminate\Support\Str::limit($review->review_text, 90) . ' via CupDate';
+                        $shareText = "{$review->cafe_name} ({$review->city}) - {$review->rating}/5: " . \Illuminate\Support\Str::limit($review->review_text, 90) . ' via CupDate';
                         $shareUrl = route('cafes.index', ['city' => $review->city]);
                     @endphp
                     <article class="moment-card">
@@ -121,7 +121,7 @@
                             <img src="{{ $review->user?->avatarUrl() ?? asset('images/cafe-blue-bottle.jpg') }}" alt="{{ $review->user?->firstName() ?? 'Member' }}" class="thread-avatar">
                             <div>
                                 <strong>{{ $review->cafe_name }}</strong>
-                                <div class="muted-small">{{ $review->city }} · By {{ $review->user?->firstName() ?? 'Member' }} · ★ {{ $review->rating }}/5</div>
+                                <div class="muted-small">{{ $review->city }} · By {{ $review->user?->firstName() ?? 'Member' }} · Rating: {{ $review->rating }}/5</div>
                             </div>
                         </div>
                         <span class="tag-soft">{{ $review->safety_tag }}</span>

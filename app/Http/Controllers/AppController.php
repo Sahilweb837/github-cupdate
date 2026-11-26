@@ -15,11 +15,13 @@ use App\Models\UserNotification;
 use App\Models\UserReport;
 use App\Models\VideoCall;
 use App\Services\SafetyModerationService;
+use App\Support\SqlSafe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AppController extends Controller
@@ -43,13 +45,14 @@ class AppController extends Controller
             $query->where('city', $city);
         }
         if ($interest = $request->query('interest')) {
-            $query->where('interests', 'like', '%' . $interest . '%');
+            $query->where('interests', 'like', '%' . SqlSafe::escapeLike((string) $interest) . '%');
         }
         if ($search = $request->query('q')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('city', 'like', "%{$search}%")
-                    ->orWhere('bio', 'like', "%{$search}%");
+            $safe = SqlSafe::escapeLike((string) $search);
+            $query->where(function ($q) use ($safe) {
+                $q->where('full_name', 'like', "%{$safe}%")
+                    ->orWhere('city', 'like', "%{$safe}%")
+                    ->orWhere('bio', 'like', "%{$safe}%");
             });
         }
 
@@ -281,7 +284,7 @@ class AppController extends Controller
             if (! is_dir($dir)) {
                 mkdir($dir, 0755, true);
             }
-            $filename = 'chat_' . $me->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $filename = 'chat_' . $me->id . '_' . Str::random(10) . '.' . SqlSafe::safeImageExtension($file);
             $file->move($dir, $filename);
             $imagePath = 'uploads/chat/' . $filename;
         }
@@ -409,6 +412,7 @@ class AppController extends Controller
             ->where('status', 'active')
             ->where('is_admin', false)
             ->orderBy('full_name')
+            ->take(100)
             ->get();
 
         return view('app.coffee-dates', [
@@ -527,7 +531,7 @@ class AppController extends Controller
             if (! is_dir($dir)) {
                 mkdir($dir, 0755, true);
             }
-            $filename = 'avatar_' . $me->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $filename = 'avatar_' . $me->id . '_' . Str::random(10) . '.' . SqlSafe::safeImageExtension($file);
             $file->move($dir, $filename);
             $avatarPath = 'uploads/avatars/' . $filename;
         }

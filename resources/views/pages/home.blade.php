@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate — World’s Best Free Coffee & Live Video Dating Website'))
+@section('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate | Free Coffee Dating and CupTV Live Video'))
 
 @push('preload')
 <link rel="preload" as="image" href="{{ asset('images/hero-coffee-couple.jpg') }}" fetchpriority="high">
@@ -33,7 +33,7 @@
         <div class="hero-copy">
             <div class="eyebrow-pill">
                 <x-icon name="coffee" class="cup-icon-xs" />
-                <span>WORLD’S #1 FREE COFFEE &amp; LIVE VIDEO DATING</span>
+                <span>100% FREE COFFEE DATES &amp; CUPTV LIVE VIDEO</span>
             </div>
 
             <h1 class="hero-title">{{ $headline }}</h1>
@@ -42,7 +42,7 @@
             <div class="free-offer-banner">
                 <div>
                     <strong>Free Forever Access ($0)</strong>
-                    <span>Free Chat, CupTV Live Video &amp; Moments — no paid paywall</span>
+                    <span>Free Chat, CupTV Live Video &amp; Moments - no paid paywall</span>
                 </div>
                 <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink btn-sm">
                     {{ auth()->check() ? 'Open Free App' : 'Claim Free Access' }}
@@ -51,7 +51,7 @@
 
             <div class="hero-actions mt-16">
                 <a href="{{ auth()->check() ? route('app.discover') : route('register') }}" class="btn btn-pink">
-                    Join Now — 100% Free
+                    Join Now - 100% Free
                 </a>
                 <a href="{{ route('live-video.index') }}" class="btn btn-coffee">
                     <x-icon name="video" class="cup-icon-xs" /> Start CupTV Live Video
@@ -89,15 +89,15 @@
     <div class="container">
         <div class="section-heading centered">
             <span class="eyebrow-text">BUILT FOR REAL CONNECTIONS</span>
-            <h2 class="section-title">Everything free — live video, coffee dates &amp; moments</h2>
+            <h2 class="section-title">Everything free: live video, coffee dates &amp; moments</h2>
         </div>
 
         <div class="cards-grid-3">
             <article class="minimal-card">
                 <div class="card-icon-soft"><x-icon name="video" class="cup-icon-md" /></div>
                 <h3 class="card-title">1. CupTV Free Live Video</h3>
-                <p class="card-desc">World’s best free live video chat — match face-to-face in real time across India &amp; worldwide and tap Next anytime.</p>
-                <a href="{{ route('live-video.index') }}" class="text-link mt-8">Open CupTV Live →</a>
+                <p class="card-desc">Free live video chat to meet verified members face-to-face across India and worldwide, with one-tap Next and instant report.</p>
+                <a href="{{ route('live-video.index') }}" class="text-link mt-8">Open CupTV Live</a>
             </article>
             <article class="minimal-card">
                 <div class="card-icon-soft"><x-icon name="heart" class="cup-icon-md" /></div>
@@ -218,9 +218,9 @@
 <section class="section-cream">
     <div class="container coffee-feature-grid">
         <div>
-            <span class="eyebrow-text">BEST FREE COFFEE DATING IN THE WORLD</span>
+            <span class="eyebrow-text">FREE COFFEE DATING COMMUNITY</span>
             <h2 class="section-title">{{ $coffeeHeading }}</h2>
-            <p class="section-lead">Meet over real coffee, connect on free CupTV live video, or share your coffee moments with friends — always 100% free.</p>
+            <p class="section-lead">Meet over real coffee, connect on free CupTV live video, or share your coffee moments with friends - always 100% free.</p>
             <div class="hero-actions mt-16">
                 <a href="{{ auth()->check() ? route('app.coffee-dates') : route('register') }}" class="btn btn-coffee">
                     Plan Free Coffee Date
@@ -246,7 +246,7 @@
                         <div class="cafe-spot-name">{{ $placeName }}</div>
                         <div class="cafe-spot-address">{{ $placeAddress }}</div>
                     </div>
-                    <span class="cafe-rating">★ {{ number_format((float) $placeRating, 1) }}</span>
+                    <span class="cafe-rating">{{ number_format((float) $placeRating, 1) }} / 5</span>
                 </div>
             @endforeach
         </div>

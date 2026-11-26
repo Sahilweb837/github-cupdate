@@ -91,10 +91,12 @@ class AdminController extends Controller
             ->take(10)
             ->get();
 
+        $onlineUsersByCity = $liveStats->onlineUsersByCity(12);
+
         $recentUsers = User::withTrashed()->latest('created_at')->take(8)->get();
         $recentReports = UserReport::with(['reporter', 'reportedUser'])->latest('created_at')->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'analytics', 'usersByLocation', 'recentUsers', 'recentReports'));
+        return view('admin.dashboard', compact('stats', 'analytics', 'usersByLocation', 'onlineUsersByCity', 'recentUsers', 'recentReports'));
     }
 
     public function users(Request $request): View
@@ -102,10 +104,11 @@ class AdminController extends Controller
         $query = User::withTrashed();
 
         if ($search = $request->query('q')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('city', 'like', "%{$search}%");
+            $safe = \App\Support\SqlSafe::escapeLike((string) $search);
+            $query->where(function ($q) use ($safe) {
+                $q->where('full_name', 'like', "%{$safe}%")
+                    ->orWhere('email', 'like', "%{$safe}%")
+                    ->orWhere('city', 'like', "%{$safe}%");
             });
         }
 
@@ -305,14 +308,28 @@ class AdminController extends Controller
 
     public function updateSettings(Request $request): RedirectResponse
     {
-        $fields = $request->except('_token');
+        $allowedKeys = [
+            'homepage_headline',
+            'homepage_subheadline',
+            'coffee_section_heading',
+            'seo_default_title',
+            'seo_default_description',
+            'ads_enabled',
+            'platform_video_calls',
+            'ads_slot_html',
+        ];
+
+        $fields = $request->only($allowedKeys);
         foreach ($fields as $key => $value) {
+            if (in_array($key, ['ads_enabled', 'platform_video_calls'], true)) {
+                $value = ((string) $value) === '1' ? '1' : '0';
+            }
             SiteSetting::updateOrCreate(
                 ['key' => $key],
-                ['value' => (string) $value]
+                ['value' => (string) ($value ?? '')]
             );
         }
 
-        return back()->with('success', 'Platform, SEO, homepage, and advertisement settings saved to MySQL.');
+        return back()->with('success', 'Platform, SEO, homepage, and advertisement settings saved to database.');
     }
 }

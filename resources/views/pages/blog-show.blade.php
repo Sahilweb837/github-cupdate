@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $post->meta_title ?: $post->title . ' — CupDate')
+@section('title', $post->meta_title ?: $post->title . ' - CupDate')
 @section('description', $post->meta_description ?: $post->excerpt)
 @section('og_type', 'article')
 @section('og_image', asset($post->cover_image ?: 'images/cafe-blue-bottle.jpg'))

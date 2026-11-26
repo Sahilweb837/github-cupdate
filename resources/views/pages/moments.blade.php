@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Coffee Moments — Share Stories & Photos on Social Media | CupDate')
+@section('title', 'Coffee Moments | Share Stories & Photos on Social Media | CupDate')
 @section('description', 'Share verified coffee dates, mountain cafe stories, and moments on CupDate and across WhatsApp, Instagram, X, and Facebook with zero nudity or spam.')
 
 @section('content')
@@ -8,7 +8,7 @@
     <div class="container">
         <span class="eyebrow-pill"><x-icon name="heart" class="cup-icon-xs" /> SAFE &amp; VERIFIED MOMENTS</span>
         <h1 class="page-title left mt-12">Share Coffee Moments With the World</h1>
-        <p class="page-subtitle left">Post your café stories, mountain views, and safe meetup moments — and share them directly to WhatsApp, Instagram, X, or Facebook. Every post is screened against nudity and spam.</p>
+        <p class="page-subtitle left">Post your café stories, mountain views, and safe meetup moments - and share them directly to WhatsApp, Instagram, X, or Facebook. Every post is screened against nudity and spam.</p>
     </div>
 </section>
 
@@ -57,7 +57,7 @@
             @else
                 <div class="mt-16">
                     <p class="muted-small">Create a free account in seconds to share your coffee moments safely.</p>
-                    <a href="{{ route('register') }}" class="btn btn-pink btn-full mt-12">Join Now — 100% Free</a>
+                    <a href="{{ route('register') }}" class="btn btn-pink btn-full mt-12">Join Now - 100% Free</a>
                 </div>
             @endauth
         </div>
@@ -85,7 +85,7 @@
                 @forelse ($moments as $moment)
                     @php
                         $shareUrl = route('moments.show', $moment);
-                        $shareText = \Illuminate\Support\Str::limit($moment->content, 110) . ' — via CupDate (cupdate.in)';
+                        $shareText = \Illuminate\Support\Str::limit($moment->content, 110) . ' - via CupDate (cupdate.in)';
                     @endphp
                     <article class="moment-card">
                         <div class="moment-head">

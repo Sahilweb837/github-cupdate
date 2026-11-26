@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrackLiveVisitor;
 use App\Http\Middleware\UpdateLastActive;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminMiddleware::class,
         ]);
         $middleware->web(append: [
+            SecurityHeaders::class,
             UpdateLastActive::class,
             TrackLiveVisitor::class,
         ]);

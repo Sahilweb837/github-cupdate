@@ -24,18 +24,18 @@ class SeoGuides
         $items = [
             'best-himachal-dating-website' => [
                 'slug' => 'best-himachal-dating-website',
-                'title' => 'Best Himachal Dating Website 2026 — Shimla, Dharamshala, Kangra & Mandi | CupDate',
+                'title' => 'Best Himachal Dating Website 2026 - Shimla, Dharamshala, Kangra & Mandi | CupDate',
                 'h1' => 'Best Free Himachal Pradesh Dating & Coffee Meetup Website',
                 'description' => 'Discover why CupDate (cupdate.in) is Himachal Pradesh’s best 100% free dating, friendship, and CupTV live video website across Shimla, Dharamshala, Kangra, Mandi, Manali, and Palampur.',
                 'category' => 'Himachal Pradesh SEO Guide',
                 'image' => 'images/hero-coffee-couple.jpg',
                 'paragraphs' => [
-                    'Finding genuine people in Himachal Pradesh shouldn’t require expensive subscriptions or fake swipe decks. CupDate connects verified locals, students, remote creators, and travelers across Shimla, Dharamshala, McLeod Ganj, Kangra, Mandi, Manali, Palampur, Solan, Kullu, Hamirpur, and Una — completely free.',
+                    'Finding genuine people in Himachal Pradesh shouldn’t require expensive subscriptions or fake swipe decks. CupDate connects verified locals, students, remote creators, and travelers across Shimla, Dharamshala, McLeod Ganj, Kangra, Mandi, Manali, Palampur, Solan, Kullu, Hamirpur, and Una - completely free.',
                     'Unlike generic apps, CupDate focuses on real conversations first: free 1-to-1 encrypted chat, instant CupTV live video matching, women-friendly café reviews, and shareable Coffee Moments protected by automated anti-nudity and anti-spam moderation.',
                     'Whether you want a quiet afternoon cappuccino along Shimla’s Mall Road, a bookshop meetup in McLeod Ganj, or a riverside coffee in Mandi, CupDate helps you connect safely before meeting in person.',
                 ],
                 'checklist' => [
-                    '100% free chat, CupTV live video & coffee date planning — zero paid paywalls',
+                    '100% free chat, CupTV live video & coffee date planning - zero paid paywalls',
                     'Dedicated local guides for 15+ Himachal towns including Shimla, Kangra, Dharamshala, Mandi & Manali',
                     'Verified member badges, anti-nudity screening & instant block/report tools',
                     'Women-reviewed safe daytime cafés across Himachal Pradesh',
@@ -47,13 +47,13 @@ class SeoGuides
             ],
             'best-delhi-dating-website' => [
                 'slug' => 'best-delhi-dating-website',
-                'title' => 'Best Free Delhi & NCR Dating Website — New Delhi, Noida & Gurugram | CupDate',
+                'title' => 'Best Free Delhi & NCR Dating Website - New Delhi, Noida & Gurugram | CupDate',
                 'h1' => 'Best Free Dating & Coffee Meetup Website in Delhi NCR',
                 'description' => 'Meet verified singles in New Delhi, Noida, Gurugram, Faridabad, and Ghaziabad for free coffee dates, respectful chat, and CupTV live video on CupDate.',
                 'category' => 'Delhi NCR Guide',
                 'image' => 'images/cafe-blue-bottle.jpg',
                 'paragraphs' => [
-                    'Delhi NCR is one of India’s liveliest cities for specialty coffee, book cafés, and creative meetups — from Connaught Place, Khan Market, and Hauz Khas Village to CyberHub in Gurugram and Sector 18 in Noida.',
+                    'Delhi NCR is one of India’s liveliest cities for specialty coffee, book cafés, and creative meetups - from Connaught Place, Khan Market, and Hauz Khas Village to CyberHub in Gurugram and Sector 18 in Noida.',
                     'CupDate gives Delhi NCR singles a refreshing alternative to paywalled dating apps: every member gets free messaging, CupTV live video face-to-face intros, and access to women-reviewed safe cafés before stepping out.',
                     'Every profile, chat message, and Coffee Moment goes through automated anti-spam and anti-nudity screening so your Delhi dating experience stays respectful and authentic.',
                 ],
@@ -70,14 +70,14 @@ class SeoGuides
             ],
             'dating-pune' => [
                 'slug' => 'dating-pune',
-                'title' => 'Dating in Pune — Best Free Coffee Dates & Local Singles | CupDate',
+                'title' => 'Dating in Pune - Best Free Coffee Dates & Local Singles | CupDate',
                 'h1' => 'Dating in Pune: Cozy Cafés, Real Conversations & Free Live Video',
                 'description' => 'Meet genuine singles in Pune across Koregaon Park, FC Road, Baner, Viman Nagar, and Kothrud for free coffee dates and safe CupTV video chats.',
                 'category' => 'City Dating Guide',
                 'image' => 'images/cafe-blue-bottle.jpg',
                 'paragraphs' => [
                     'Pune’s leafy lanes in Koregaon Park, bustling student cafés on FC Road, and modern roasteries in Baner and Viman Nagar make it one of India’s best cities for relaxed coffee dating.',
-                    'On CupDate, Pune members connect around shared hobbies — trekking to Sinhagad, live acoustic nights, books, tech, and specialty brews — with 100% free chat and CupTV video calls.',
+                    'On CupDate, Pune members connect around shared hobbies - trekking to Sinhagad, live acoustic nights, books, tech, and specialty brews - with 100% free chat and CupTV video calls.',
                 ],
                 'checklist' => [
                     'Browse verified Pune profiles by neighborhood and shared interests',
@@ -90,7 +90,7 @@ class SeoGuides
             ],
             'haryana-dating-guide' => [
                 'slug' => 'haryana-dating-guide',
-                'title' => 'Haryana Dating Guide — Gurugram, Chandigarh, Panchkula, Rohtak & Karnal | CupDate',
+                'title' => 'Haryana Dating Guide - Gurugram, Chandigarh, Panchkula, Rohtak & Karnal | CupDate',
                 'h1' => 'Complete Haryana Dating & Safe Coffee Meetup Guide',
                 'description' => 'Connect safely with verified singles across Gurugram, Faridabad, Panchkula, Ambala, Karnal, Panipat, Rohtak, Hisar, and Sonipat on CupDate.',
                 'category' => 'State Dating Guide',
@@ -110,7 +110,7 @@ class SeoGuides
             ],
             'women-dating-safety-guide-india' => [
                 'slug' => 'women-dating-safety-guide-india',
-                'title' => 'Women’s Dating Safety Guide in India — Safe First Dates & Online Privacy | CupDate',
+                'title' => 'Women’s Dating Safety Guide in India - Safe First Dates & Online Privacy | CupDate',
                 'h1' => 'Women’s Dating Safety Guide in India',
                 'description' => 'Essential online and in-person safety tips for women dating in India: verifying profiles, avoiding scams, picking safe cafés, and protecting personal privacy.',
                 'category' => 'Safety Guide',
@@ -131,13 +131,13 @@ class SeoGuides
             ],
             'how-to-impress-on-a-first-date' => [
                 'slug' => 'how-to-impress-on-a-first-date',
-                'title' => 'How to Impress on a First Coffee Date — Thoughtful Conversation Tips | CupDate',
+                'title' => 'How to Impress on a First Coffee Date - Thoughtful Conversation Tips | CupDate',
                 'h1' => 'How to Make a Great Impression on Your First Coffee Date',
                 'description' => 'Practical, authentic tips for a relaxed and memorable first coffee date: listening well, picking the right café, keeping conversation natural, and being respectful.',
                 'category' => 'Dating Tips',
                 'image' => 'images/cafe-blue-bottle.jpg',
                 'paragraphs' => [
-                    'Great first dates aren’t about flashy gestures — they’re about showing up on time, choosing a comfortable café where you can actually hear each other, and being genuinely curious about the other person.',
+                    'Great first dates aren’t about flashy gestures - they’re about showing up on time, choosing a comfortable café where you can actually hear each other, and being genuinely curious about the other person.',
                     'Put your phone face-down, ask open-ended questions about their favorite travel memory or weekend routine, and keep the first coffee date relaxed at 45–60 minutes so there’s zero pressure.',
                 ],
                 'checklist' => [
@@ -146,7 +146,7 @@ class SeoGuides
                     'Respect boundaries and let the conversation flow naturally',
                 ],
                 'faqs' => [
-                    ['q' => 'Why is a coffee date ideal for a first meetup?', 'a' => 'Coffee dates are daytime, public, affordable, and low-pressure — making it easy for both people to relax and talk openly.'],
+                    ['q' => 'Why is a coffee date ideal for a first meetup?', 'a' => 'Coffee dates are daytime, public, affordable, and low-pressure - making it easy for both people to relax and talk openly.'],
                 ],
             ],
             'how-to-report-suspicious-profile' => [
@@ -177,7 +177,7 @@ class SeoGuides
                 'category' => 'Compatibility Guide',
                 'image' => 'images/cafe-blue-bottle.jpg',
                 'paragraphs' => [
-                    'Understanding communication styles — whether someone recharges in quiet one-on-one café chats (I) or lively group conversations (E) — helps turn awkward small talk into effortless chemistry.',
+                    'Understanding communication styles - whether someone recharges in quiet one-on-one café chats (I) or lively group conversations (E) - helps turn awkward small talk into effortless chemistry.',
                     'CupDate combines city proximity, shared hobbies, coffee preferences, and personality cues to help you spark better conversations.',
                 ],
                 'checklist' => [
@@ -186,7 +186,7 @@ class SeoGuides
                     'Remember compatibility grows through kindness and curiosity, not labels',
                 ],
                 'faqs' => [
-                    ['q' => 'Does MBTI decide who I can match with on CupDate?', 'a' => 'No — it’s simply a fun conversation starter alongside shared cities, interests, and real-time chat.'],
+                    ['q' => 'Does MBTI decide who I can match with on CupDate?', 'a' => 'No - it’s simply a fun conversation starter alongside shared cities, interests, and real-time chat.'],
                 ],
             ],
             'tips-red-flags' => [
@@ -211,13 +211,13 @@ class SeoGuides
             ],
             'faq' => [
                 'slug' => 'faq',
-                'title' => 'Frequently Asked Questions (FAQ) — Free Coffee & CupTV Dating | CupDate',
+                'title' => 'Frequently Asked Questions (FAQ) - Free Coffee & CupTV Dating | CupDate',
                 'h1' => 'CupDate Frequently Asked Questions',
                 'description' => 'Answers to common questions about CupDate: 100% free access, CupTV live video chat, women-friendly café reviews, 200+ cities, and anti-nudity safety.',
                 'category' => 'Help & FAQ',
                 'image' => 'images/cafe-blue-bottle.jpg',
                 'paragraphs' => [
-                    'CupDate (cupdate.in) is built to be the world’s warmest 100% free coffee dating and CupTV live video community — with zero hidden paywalls, real active visitor transparency, and dedicated safety protection.',
+                    'CupDate (cupdate.in) is built to be the world’s warmest 100% free coffee dating and CupTV live video community - with zero hidden paywalls, real active visitor transparency, and dedicated safety protection.',
                 ],
                 'checklist' => [
                     '100% Free Forever: signup, messaging, CupTV live video, Moments & Café Reviews',
@@ -263,7 +263,7 @@ class SeoGuides
                 'checklist' => [
                     'City, state, and interest-based discovery across 200+ Indian cities',
                     'Verified profiles and respectful long-form conversations',
-                    '100% free — no pricey matrimonial paywalls',
+                    '100% free - no pricey matrimonial paywalls',
                 ],
                 'faqs' => [
                     ['q' => 'Is CupDate good for serious relationships in India?', 'a' => 'Yes. CupDate prioritizes genuine profiles, calm conversations, and public café introductions rather than superficial swiping.'],

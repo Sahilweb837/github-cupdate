@@ -1,23 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CupDate Logo">
-  <defs>
-    <linearGradient id="cupBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF0F3"/>
-      <stop offset="100%" stop-color="#FFE1E8"/>
-    </linearGradient>
-    <linearGradient id="cupPink" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F4A6B8"/>
-      <stop offset="100%" stop-color="#D96B89"/>
-    </linearGradient>
-  </defs>
-  <rect width="120" height="120" rx="28" fill="url(#cupBg)"/>
-  <!-- Heart steam -->
-  <path d="M60 44 C51 35 42 29 42 22 C42 17 46 14 50.5 14 C54.5 14 57.8 16.5 60 20 C62.2 16.5 65.5 14 69.5 14 C74 14 78 17 78 22 C78 29 69 35 60 44 Z" fill="url(#cupPink)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="CupDate Logo">
+  <rect width="64" height="64" rx="14" fill="#382820"/>
   <!-- Coffee cup body -->
-  <path d="M31 50 H83 V69 C83 82.8 71.8 94 58 94 H56 C42.2 94 31 82.8 31 69 Z" fill="#382820"/>
+  <path d="M16 26 H42 V37 C42 44.5 36.2 50 29 50 C21.8 50 16 44.5 16 37 Z" fill="#FFF8F0"/>
   <!-- Cup handle -->
-  <path d="M83 56 H89.5 C95.3 56 100 60.7 100 66.5 C100 72.3 95.3 77 89.5 77 H83" fill="none" stroke="#382820" stroke-width="6.5" stroke-linecap="round"/>
-  <!-- Cup heart accent -->
-  <path d="M57 76.5 C51.5 72 47.5 68.7 47.5 64.8 C47.5 62.2 49.6 60.2 52.1 60.2 C54 60.2 55.8 61.3 57 63 C58.2 61.3 60 60.2 61.9 60.2 C64.4 60.2 66.5 62.2 66.5 64.8 C66.5 68.7 62.5 72 57 76.5 Z" fill="#F4A6B8"/>
+  <path d="M42 29 H45.5 C48.8 29 51 31.2 51 34.2 C51 37.2 48.8 39.5 45.5 39.5 H42" fill="none" stroke="#FFF8F0" stroke-width="3.6" stroke-linecap="round"/>
   <!-- Saucer -->
-  <rect x="26" y="98" width="62" height="6" rx="3" fill="#6F4E37"/>
+  <rect x="14" y="52" width="32" height="3.2" rx="1.6" fill="#F4A6B8"/>
+  <!-- Warm heart rising above cup -->
+  <path d="M29 21.5 C24.5 18 21.5 15.2 21.5 12.2 C21.5 9.8 23.4 8 25.7 8 C27.2 8 28.4 8.8 29 9.9 C29.6 8.8 30.8 8 32.3 8 C34.6 8 36.5 9.8 36.5 12.2 C36.5 15.2 33.5 18 29 21.5 Z" fill="#D96B89"/>
 </svg>

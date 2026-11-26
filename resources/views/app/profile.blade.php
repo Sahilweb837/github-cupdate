@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'My Profile — CupDate')
+@section('title', 'My Profile | CupDate')
 
 @section('content')
 <div class="profile-banner">
@@ -9,8 +9,8 @@
         <h1 class="profile-banner-name">{{ $me->full_name }}</h1>
         <p class="profile-banner-city">
             {{ $me->city }}, {{ $me->state }} ·
-            {{ $me->is_verified ? 'Verified Profile ✓' : 'Verification: ' . ucfirst($me->verification_status) }}
-            @if ($me->is_premium) · CupDate Plus ★ @endif
+            {{ $me->is_verified ? 'Verified Profile' : 'Verification: ' . ucfirst($me->verification_status) }}
+            @if ($me->is_premium) · CupDate Plus @endif
         </p>
     </div>
 </div>
@@ -105,7 +105,7 @@
     <div class="stack-sm">
         <div class="profile-card">
             <h2 class="card-title">Verification &amp; Security</h2>
-            <p class="muted-small mt-8">Email status: {{ $me->email_verified_at ? 'Verified ✓' : 'Not verified yet' }}</p>
+            <p class="muted-small mt-8">Email status: {{ $me->email_verified_at ? 'Verified' : 'Not verified yet' }}</p>
             @if (! $me->email_verified_at)
                 <form method="POST" action="{{ route('verification.send') }}" class="mt-12">
                     @csrf

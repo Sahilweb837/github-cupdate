@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'About CupDate — Meet Someone. Share a Coffee.')
+@section('title', 'About CupDate | Meet Someone. Share a Coffee.')
 @section('description', 'CupDate (cupdate.in) connects thoughtful singles and friends across Himachal Pradesh through safe chat, video calling, and coffee dates.')
 
 @section('content')

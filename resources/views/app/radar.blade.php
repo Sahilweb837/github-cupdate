@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Live Radar — Cupdate')
+@section('title', 'Live Radar | Cupdate')
 
 @section('content')
 <div class="app-header-row">
@@ -41,7 +41,7 @@
                     <div class="nearby-name">{{ $person['name'] }} · <span>{{ $person['match'] }}%</span></div>
                     <div class="nearby-spot">{{ $person['spot'] }} · {{ $person['distance'] }}</div>
                 </div>
-                <button type="button" class="btn btn-coral btn-xs" data-wave-btn>Wave ☕</button>
+                <button type="button" class="btn btn-coral btn-xs" data-wave-btn>Wave</button>
             </div>
         @endforeach
     </div>

@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Discover — CupDate')
+@section('title', 'Discover | CupDate')
 
 @section('content')
 <div class="app-header-row">
@@ -54,7 +54,10 @@
             <article class="profile-card-public" data-discover-card="{{ $person->id }}">
                 <div class="profile-card-img-wrap">
                     <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }}" loading="lazy">
-                    <span class="compat-badge">{{ $me->compatibilityWith($person) }}% match</span>
+                    @php $sharedCount = count(array_intersect($me->interestsList(), $person->interestsList())); @endphp
+                    @if ($sharedCount > 0)
+                        <span class="compat-badge">{{ $sharedCount }} shared {{ Str::plural('interest', $sharedCount) }}</span>
+                    @endif
                     @if ($person->is_online)
                         <span class="online-pill"><span class="online-dot"></span> Online</span>
                     @endif
@@ -78,7 +81,7 @@
                             {{ $acted === 'dislike' ? 'Passed' : 'Pass' }}
                         </button>
                         <button type="button" class="btn btn-pink btn-xs" data-swipe-btn data-target="{{ $person->id }}" data-action="request" @disabled($acted && $acted !== 'dislike')>
-                            {{ $acted && $acted !== 'dislike' ? 'Requested ✓' : 'Send Request' }}
+                            {{ $acted && $acted !== 'dislike' ? 'Requested' : 'Send Request' }}
                         </button>
                         <a href="{{ route('app.messages', ['with' => $person->id]) }}" class="btn btn-blush btn-xs">Chat</a>
                     </div>

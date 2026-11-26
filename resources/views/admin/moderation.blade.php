@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Moderation & Support — CupDate Admin')
+@section('title', 'Moderation & Support | CupDate Admin')
 
 @section('content')
 <div class="app-header-row">
@@ -107,7 +107,7 @@
         @forelse ($cafeReviews ?? [] as $rev)
             <div class="moderation-item">
                 <div>
-                    <strong>{{ $rev->cafe_name }} ({{ $rev->city }}) · ★ {{ $rev->rating }}/5</strong>
+                    <strong>{{ $rev->cafe_name }} ({{ $rev->city }}) · Rating: {{ $rev->rating }}/5</strong>
                     <div class="muted-small">By {{ $rev->user?->full_name ?? 'Member' }} · {{ $rev->safety_tag }}</div>
                     <p class="muted-small">{{ Str::limit($rev->review_text, 140) }}</p>
                 </div>

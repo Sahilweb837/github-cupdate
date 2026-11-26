@@ -15,6 +15,7 @@ use App\Models\SupportTicket;
 use App\Models\User;
 use App\Services\LiveStatsService;
 use App\Services\SafetyModerationService;
+use App\Support\SqlSafe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class PublicController extends Controller
         }
 
         if ($interestFilter) {
-            $query->where('interests', 'like', '%' . $interestFilter . '%');
+            $query->where('interests', 'like', '%' . SqlSafe::escapeLike((string) $interestFilter) . '%');
         }
 
         match ($filter) {
@@ -70,10 +71,10 @@ class PublicController extends Controller
         }
 
         $faqs = [
-            ['q' => 'Is CupDate a 100% free coffee and CupTV live video dating website?', 'a' => 'Yes. CupDate (cupdate.in) is the world’s best free coffee & video dating website — creating a profile, discovering members across 100+ Indian & global cities, messaging, sharing Coffee Moments, and joining CupTV live video chats cost nothing.'],
+            ['q' => 'Is CupDate a 100% free coffee and CupTV live video dating website?', 'a' => 'Yes. CupDate (cupdate.in) is free to join and use - creating a profile, discovering members across 200+ Indian & global cities, messaging, sharing Coffee Moments, and joining CupTV live video chats cost nothing.'],
             ['q' => 'How does CupTV Live Video work?', 'a' => 'Open CupTV Live Video, choose your preference and region, and connect face-to-face via encrypted WebRTC with real online members. Tap Next anytime or use one-click safety reporting.'],
             ['q' => 'Can girls and members share coffee moments on social media?', 'a' => 'Yes. Members can post verified Coffee Moments and share them cleanly to WhatsApp, Instagram, X, or Facebook with built-in anti-nudity and anti-spam safety screening.'],
-            ['q' => 'How can I find people nearby across India and the world?', 'a' => 'Use the Discover filters or explore our 100+ city & country pages from Himachal Pradesh, Delhi, Mumbai, Bengaluru, and Pune to global hubs without exposing your exact street location.'],
+            ['q' => 'How can I find people nearby across India and the world?', 'a' => 'Use the Discover filters or explore our 200+ city & country pages from Himachal Pradesh, Delhi, Mumbai, Bengaluru, and Pune to global hubs without exposing your exact street location.'],
             ['q' => 'How does CupDate prevent nudity, spam, and fake profiles?', 'a' => 'Every message, photo upload, and Coffee Moment passes through automated anti-spam and anti-nudity screening plus human moderator review, verification badges, and instant block/report tools.'],
         ];
 
@@ -90,9 +91,9 @@ class PublicController extends Controller
             'activeCity' => $cityFilter,
             'activeInterest' => $interestFilter,
             'faqs' => $faqs,
-            'headline' => SiteSetting::getValue('homepage_headline', 'World’s Best Free Coffee & CupTV Video Dating Website.'),
-            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Meet genuine people across 100+ Indian cities & worldwide. Free chat, CupTV live video, shareable coffee moments, and zero paid paywalls.'),
-            'coffeeHeading' => SiteSetting::getValue('coffee_section_heading', 'Less Swiping. More Meaningful Coffee Dates — 100% Free.'),
+            'headline' => SiteSetting::getValue('homepage_headline', 'Meet Local People Over Coffee and Free Live Video.'),
+            'subheadline' => SiteSetting::getValue('homepage_subheadline', 'Verified profiles across India and global cities, free 1-to-1 messaging, CupTV live video chat, and community cafe reviews without paywalls.'),
+            'coffeeHeading' => SiteSetting::getValue('coffee_section_heading', 'Less Swiping. More Real Coffee Dates - 100% Free.'),
         ]);
     }
 
@@ -124,9 +125,11 @@ class PublicController extends Controller
             ->where('is_admin', false);
 
         if ($countryName === 'India' && $slug !== 'india') {
-            $membersQuery->where(function ($q) use ($cityName, $stateName) {
-                $q->where('city', 'like', "%{$cityName}%")
-                    ->orWhere('state', 'like', "%{$stateName}%");
+            $safeCity = SqlSafe::escapeLike((string) $cityName);
+            $safeState = SqlSafe::escapeLike((string) $stateName);
+            $membersQuery->where(function ($q) use ($safeCity, $safeState) {
+                $q->where('city', 'like', "%{$safeCity}%")
+                    ->orWhere('state', 'like', "%{$safeState}%");
             });
         }
 
@@ -141,13 +144,13 @@ class PublicController extends Controller
         $page = [
             'title' => "Free Coffee Dating, CupTV Live Video & Singles in {$cityName}, {$countryName} | CupDate",
             'h1' => "Free Coffee Dating & CupTV Video in {$cityName}",
-            'description' => "Meet verified singles in {$cityName} ({$stateName}, {$countryName}) for free coffee dates, respectful chat, and CupTV live video on CupDate — world’s best free video & coffee dating site.",
+            'description' => "Meet verified singles in {$cityName} ({$stateName}, {$countryName}) for free coffee dates, respectful chat, and CupTV live video on CupDate.",
             'city' => $city['slug'] === 'india' ? null : $cityName,
             'state' => $stateName,
             'country' => $countryName,
             'intro' => "{$city['vibe']} across {$city['spot']}. CupDate connects genuine people in {$cityName} with 100% free messaging, free CupTV live video chat, and strict anti-nudity & anti-spam moderation.",
             'highlights' => [
-                "100% free dating & social discovery in {$cityName} — no paid subscription required",
+                "100% free dating & social discovery in {$cityName} - no paid subscription required",
                 'Real-time CupTV live video & 1-to-1 encrypted calls',
                 'Share Coffee Moments on WhatsApp, Instagram, and X with safety screening',
                 'Strict anti-nudity, anti-spam & profile verification protection',
@@ -180,13 +183,14 @@ class PublicController extends Controller
             $query->where('city', $city);
         }
         if ($interest = $request->query('interest')) {
-            $query->where('interests', 'like', '%' . $interest . '%');
+            $query->where('interests', 'like', '%' . SqlSafe::escapeLike((string) $interest) . '%');
         }
         if ($search = $request->query('q')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('city', 'like', "%{$search}%")
-                    ->orWhere('bio', 'like', "%{$search}%");
+            $safe = SqlSafe::escapeLike((string) $search);
+            $query->where(function ($q) use ($safe) {
+                $q->where('full_name', 'like', "%{$safe}%")
+                    ->orWhere('city', 'like', "%{$safe}%")
+                    ->orWhere('bio', 'like', "%{$safe}%");
             });
         }
 
@@ -342,7 +346,7 @@ class PublicController extends Controller
     {
         $pages = [
             'dating-in-himachal-pradesh' => [
-                'title' => 'Dating in Himachal Pradesh — Genuine Connections & Coffee Dates | CupDate',
+                'title' => 'Dating in Himachal Pradesh | Genuine Connections & Coffee Dates | CupDate',
                 'h1' => 'Dating in Himachal Pradesh Built on Real Conversations',
                 'description' => 'Meet verified singles and make genuine friends across Shimla, Dharamshala, Kangra, Mandi, Palampur, and Manali on CupDate.',
                 'city' => null,
@@ -351,7 +355,7 @@ class PublicController extends Controller
                 'ideas' => ['Afternoon pour-over along Mall Road, Shimla', 'Bookshop coffee in McLeod Ganj, Dharamshala', 'Tea-garden bakery meetup in Palampur'],
             ],
             'meet-singles-in-kangra' => [
-                'title' => 'Meet Singles in Kangra — Safe Friendship & Coffee Dates | CupDate',
+                'title' => 'Meet Singles in Kangra | Safe Friendship & Coffee Dates | CupDate',
                 'h1' => 'Meet Genuine Singles in Kangra Valley',
                 'description' => 'Connect with respectful, verified people in Kangra, Baijnath, and Palampur for friendship, meaningful relationships, and coffee dates.',
                 'city' => 'Kangra',
@@ -369,7 +373,7 @@ class PublicController extends Controller
                 'ideas' => ['Open-air balcony coffee at Illiterati Books & Cafe', 'Morning cappuccino in Naddi with Dhauladhar views', 'Midday bakery catch-up in Dharamshala town'],
             ],
             'meet-singles-in-mandi' => [
-                'title' => 'Meet Singles in Mandi — Genuine Local Connections | CupDate',
+                'title' => 'Meet Singles in Mandi | Genuine Local Connections | CupDate',
                 'h1' => 'Meet Genuine People in Mandi',
                 'description' => 'Find verified local singles and friends in Mandi, Himachal Pradesh for respectful chat, video calls, and coffee dates.',
                 'city' => 'Mandi',
@@ -384,7 +388,7 @@ class PublicController extends Controller
                 'city' => null,
                 'intro' => 'A good first date should feel comfortable, safe, and unhurried. Here is how CupDate members turn an online match into a warm, respectful coffee meetup in Himachal.',
                 'highlights' => ['Pick sunlit public cafés with comfortable seating', 'Start with a quick 10-minute video call first', 'Share your meetup city and preferred time cleanly inside CupDate'],
-                'ideas' => ['Illiterati Books & Cafe — Jogibara Rd, Dharamshala', 'The Wake & Bake Cafe — The Mall, Shimla', 'Mandi Riverfront Cafe — Riverfront Rd, Mandi', 'Bir Billing Paragliding Cafe — Baijnath, Kangra'],
+                'ideas' => ['Illiterati Books & Cafe - Jogibara Rd, Dharamshala', 'The Wake & Bake Cafe - The Mall, Shimla', 'Mandi Riverfront Cafe - Riverfront Rd, Mandi', 'Bir Billing Paragliding Cafe - Baijnath, Kangra'],
             ],
         ];
 

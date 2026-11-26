@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Set New Password — CupDate')
+@section('title', 'Set New Password | CupDate')
 @section('robots', 'noindex, nofollow')
 
 @section('content')

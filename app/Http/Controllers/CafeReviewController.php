@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CafeReview;
 use App\Models\DatePlace;
 use App\Services\SafetyModerationService;
+use App\Support\SqlSafe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class CafeReviewController extends Controller
                 ->latest('created_at');
 
             if ($city = $request->query('city')) {
-                $query->where('city', 'like', "%{$city}%");
+                $query->where('city', 'like', '%' . SqlSafe::escapeLike((string) $city) . '%');
             }
             if ($tag = $request->query('tag')) {
                 $query->where('safety_tag', $tag);

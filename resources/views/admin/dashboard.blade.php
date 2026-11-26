@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Overview & Visitor Locations — CupDate Admin')
+@section('title', 'Overview & Visitor Locations | CupDate Admin')
 
 @section('content')
 <div class="app-header-row">
@@ -51,7 +51,7 @@
                         <tr>
                             <td>
                                 <strong>{{ $loc->city ?: 'Unknown' }}</strong>
-                                <div class="muted-small">{{ $loc->region ?: '—' }}</div>
+                                <div class="muted-small">{{ $loc->region ?: '-' }}</div>
                                 <div class="admin-progress-track">
                                     <div class="admin-progress-bar" style="width: {{ min(100, round(($loc->visits / $maxLocVisits) * 100)) }}%"></div>
                                 </div>
@@ -87,7 +87,7 @@
                     @forelse ($usersByLocation as $uLoc)
                         <tr>
                             <td><strong>{{ $uLoc->city ?: 'Unknown' }}</strong></td>
-                            <td>{{ $uLoc->state ?: '—' }}</td>
+                            <td>{{ $uLoc->state ?: '-' }}</td>
                             <td>{{ $uLoc->country ?: 'IN' }}</td>
                             <td><span class="admin-badge-soft">{{ $uLoc->total }}</span></td>
                         </tr>
@@ -99,6 +99,37 @@
         </div>
     </section>
 </div>
+
+<section class="admin-panel-card mt-24">
+    <div class="panel-head-row">
+        <h2 class="card-title">Online Users Right Now by City</h2>
+        <span class="muted-small">Active within last 10 minutes (real sessions &amp; member records)</span>
+    </div>
+    <div class="table-responsive mt-12">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Online Now</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($onlineUsersByCity as $onlineLoc)
+                    <tr>
+                        <td><strong>{{ $onlineLoc->city ?: 'Unknown' }}</strong></td>
+                        <td>{{ $onlineLoc->state ?: '-' }}</td>
+                        <td>{{ $onlineLoc->country ?: 'India' }}</td>
+                        <td><span class="admin-badge-soft">{{ $onlineLoc->online_total }} online</span></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="4" class="muted-small">No members are currently online in the last 10 minutes.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</section>
 
 <div class="admin-two-col mt-24">
     <section class="admin-panel-card">
@@ -191,7 +222,7 @@
                                 <strong>{{ $visit->user->full_name }}</strong>
                                 <div class="muted-small">{{ $visit->ip_address }}</div>
                             @else
-                                <span class="muted-small">Guest ({{ $visit->ip_address ?: '—' }})</span>
+                                <span class="muted-small">Guest ({{ $visit->ip_address ?: '-' }})</span>
                             @endif
                         </td>
                         <td class="muted-small">{{ $visit->created_at?->diffForHumans() }}</td>
@@ -229,7 +260,7 @@
                             </td>
                             <td>{{ $user->city }}</td>
                             <td><span class="status-pill status-{{ $user->deleted_at ? 'deleted' : $user->status }}">{{ $user->deleted_at ? 'Deleted' : ucfirst($user->status) }}</span></td>
-                            <td>{{ $user->is_verified ? 'Verified ✓' : 'Unverified' }}</td>
+                            <td>{{ $user->is_verified ? 'Verified' : 'Unverified' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

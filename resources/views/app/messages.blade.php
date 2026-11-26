@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Messages — CupDate')
+@section('title', 'Messages | CupDate')
 
 @section('content')
 <div class="app-header-row">
@@ -43,7 +43,7 @@
                             <span>
                                 {{ $partner->firstName() }}
                                 @if ($partner->is_verified)
-                                    <span class="mini-verified" title="Verified">✓</span>
+                                    <span class="mini-verified" title="Verified">Yes</span>
                                 @endif
                             </span>
                             @if ($unread > 0)
@@ -52,7 +52,7 @@
                         </div>
                         <div class="thread-preview">
                             @if ($lastMsg)
-                                {{ $lastMsg->image_path && !$lastMsg->message ? '📷 Photo' : \Illuminate\Support\Str::limit($lastMsg->message, 34) }}
+                                {{ $lastMsg->image_path && !$lastMsg->message ? 'Photo' : \Illuminate\Support\Str::limit($lastMsg->message, 34) }}
                             @else
                                 {{ $partner->is_online ? 'Online · ' : '' }}{{ $partner->city }}
                             @endif
@@ -79,7 +79,7 @@
                     <div class="thread-name">
                         {{ $activePartner->firstName() }} · {{ $activePartner->city }}
                         @if ($activePartner->is_verified)
-                            <span class="mini-verified">✓ Verified</span>
+                            <span class="mini-verified">Yes Verified</span>
                         @endif
                     </div>
                     <div class="chat-status" id="partnerOnlineStatus">
@@ -129,7 +129,7 @@
                         <span class="chat-msg-time">
                             {{ $msg->created_at?->format('g:i A') }}
                             @if ($msg->sender_id === $me->id)
-                                · {{ $msg->is_read ? 'Read ✓✓' : 'Sent ✓' }}
+                                · {{ $msg->is_read ? 'Read' : 'Sent' }}
                             @endif
                         </span>
                     </div>
@@ -139,9 +139,9 @@
             </div>
 
             <div class="chat-icebreakers">
-                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="Hey {{ $activePartner->firstName() }}! Coffee sometime this week?">☕ Coffee this week?</button>
-                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="Hi! Want to do a quick 5-minute video hello?">🎥 5-min video hello?</button>
-                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="What is your favorite café in {{ $activePartner->city }}?">📍 Favorite café?</button>
+                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="Hey {{ $activePartner->firstName() }}! Coffee sometime this week?">Coffee this week?</button>
+                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="Hi! Want to do a quick 5-minute video hello?">5-min video hello?</button>
+                <button type="button" class="icebreaker-chip js-icebreaker" data-msg="What is your favorite café in {{ $activePartner->city }}?">Favorite café?</button>
             </div>
 
             <div id="chatImagePreviewBar" class="chat-img-preview" hidden>

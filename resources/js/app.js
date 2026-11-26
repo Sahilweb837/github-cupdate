@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const data = await res.json();
                 if (res.ok && data.ok) {
-                    btn.textContent = action === 'dislike' ? 'Passed' : (data.matched ? 'Matched ❤' : 'Requested ✓');
+                    btn.textContent = action === 'dislike' ? 'Passed' : (data.matched ? 'Matched' : 'Requested');
                     if (card && action === 'dislike') card.style.opacity = '0.55';
                 } else {
                     btn.disabled = false;
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const time = document.createElement('span');
             time.className = 'chat-msg-time';
-            time.textContent = `${m.time || 'Just now'}${m.is_me ? ' · Sent ✓' : ''}`;
+            time.textContent = `${m.time || 'Just now'}${m.is_me ? ' · Sent' : ''}`;
             wrap.append(bubble, time);
             chatFeed.appendChild(wrap);
             chatFeed.scrollTop = chatFeed.scrollHeight;
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activeCallId) {
             acceptBtn.hidden = false;
-            statusText.textContent = 'Incoming video call waiting — click Accept Incoming';
+            statusText.textContent = 'Incoming video call waiting - click Accept Incoming';
         }
 
         startBtn?.addEventListener('click', async () => {
@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (navigator.clipboard) {
                 await navigator.clipboard.writeText(url);
                 const orig = btn.textContent;
-                btn.textContent = 'Link Copied ✓';
+                btn.textContent = 'Link Copied';
                 setTimeout(() => { btn.textContent = orig; }, 1800);
             }
         });
@@ -627,7 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const initPeer = async (match) => {
             roomId = match.room_id;
             partnerLabel.textContent = `Connected with ${match.partner_name} (${match.partner_country})`;
-            statusSub.textContent = 'Encrypted live video active — stay respectful';
+            statusSub.textContent = 'Encrypted live video active - stay respectful';
             if (partnerBadge) {
                 partnerBadge.textContent = `${match.partner_name} · Live`;
                 partnerBadge.hidden = false;
