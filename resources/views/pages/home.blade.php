@@ -174,11 +174,18 @@
     <div class="container">
         <div class="discover-header-row">
             <div>
-                <span class="eyebrow-text">REAL PROFILES · NO FAKE DATA</span>
-                <h2 class="section-title">Genuine members on CupDate</h2>
+                <span class="eyebrow-text">REAL PROFILES · SEARCH &amp; EXPLORE</span>
+                <h2 class="section-title">Search people, cities, games &amp; travel groups</h2>
             </div>
             <a href="{{ route('public.discover') }}" class="text-link">Browse all profiles →</a>
         </div>
+
+        <form method="GET" action="{{ route('public.discover') }}" class="home-search-strip mt-12">
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Search people by name, city (Shimla, Delhi, Pune) or interest..." aria-label="Search people and cities">
+            <button type="submit" class="btn btn-pink btn-sm">Search People</button>
+            <a href="{{ route('games.truth-dare') }}" class="btn btn-coffee btn-sm">Play Truth &amp; Dare</a>
+            <a href="{{ route('travel.groups') }}" class="btn btn-outline btn-sm">Travel Groups</a>
+        </form>
 
         <div class="filter-bar" role="region" aria-label="Discover Filters">
             <a href="{{ route('home', ['filter' => 'nearby']) }}" class="filter-chip {{ $activeFilter === 'nearby' && !$activeCity ? 'is-active' : '' }}">Nearby</a>

@@ -45,7 +45,6 @@
             <div class="auth-divider"><span>or</span></div>
 
             <div class="auth-alt-actions">
-                <a href="{{ route('auth.google') }}" class="btn btn-outline btn-full">Continue with Google</a>
                 <form method="POST" action="{{ route('auth.guest') }}">
                     @csrf
                     <button type="submit" class="btn btn-blush btn-full">Continue as Guest</button>

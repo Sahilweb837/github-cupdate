@@ -274,4 +274,52 @@ class LiveAndSeoFeaturesTest extends TestCase
             ->assertSee('Shimla')
             ->assertSee('1 online');
     }
+
+    public function test_google_auth_removed_hashed_visitor_logs_truth_dare_travel_groups_and_skeletons(): void
+    {
+        // Google auth removed cleanly from login UI & routes
+        $this->get('/login')
+            ->assertStatus(200)
+            ->assertDontSee('Continue with Google');
+        $this->get('/auth/google')->assertStatus(404);
+
+        // Plain IP is hashed before storing in visitor_logs
+        $this->withHeaders(['REMOTE_ADDR' => '198.51.100.77'])
+            ->get('/truth-and-dare')
+            ->assertStatus(200)
+            ->assertSee('data-truth-dare-app', false)
+            ->assertSee('Truth or Dare');
+
+        $this->assertDatabaseMissing('visitor_logs', ['ip_address' => '198.51.100.77']);
+
+        // New SEO ranking pages, user search, travel groups & skeleton loaders
+        $seoRoutes = [
+            '/truth-and-dare',
+            '/travel-groups',
+            '/travel-groups?q=Spiti',
+            '/icebreaker-questions',
+            '/weekend-meetups',
+            '/speed-dating',
+            '/couple-activities',
+            '/college-dating-india',
+            '/solo-travel-companions',
+            '/dating-etiquette-india',
+        ];
+        foreach ($seoRoutes as $route) {
+            $this->get($route)->assertStatus(200);
+        }
+
+        foreach (['/', '/discover', '/cafes', '/cities', '/moments', '/travel-groups'] as $pageWithSkeleton) {
+            $this->get($pageWithSkeleton)
+                ->assertStatus(200)
+                ->assertSee('data-skeleton-loader', false);
+        }
+
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertSee('/truth-and-dare')
+            ->assertSee('/travel-groups')
+            ->assertSee('/speed-dating')
+            ->assertSee('/icebreaker-questions');
+    }
 }

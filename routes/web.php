@@ -26,6 +26,16 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/blog', 'blog')->name('blog');
     Route::get('/blog/{slug}', 'blogShow')->name('blog.show');
 
+    Route::get('/truth-and-dare', 'truthDare')->name('games.truth-dare');
+    Route::get('/travel-groups', 'travelGroups')->name('travel.groups');
+    Route::get('/icebreaker-questions', fn () => app(PublicController::class)->guide('icebreaker-questions'))->name('seo.icebreakers');
+    Route::get('/weekend-meetups', fn () => app(PublicController::class)->guide('weekend-meetups'))->name('seo.meetups');
+    Route::get('/speed-dating', fn () => app(PublicController::class)->guide('speed-dating'))->name('seo.speed-dating');
+    Route::get('/couple-activities', fn () => app(PublicController::class)->guide('couple-activities'))->name('seo.couple-activities');
+    Route::get('/college-dating-india', fn () => app(PublicController::class)->guide('college-dating-india'))->name('seo.college');
+    Route::get('/solo-travel-companions', fn () => app(PublicController::class)->guide('solo-travel-companions'))->name('seo.solo-travel');
+    Route::get('/dating-etiquette-india', fn () => app(PublicController::class)->guide('dating-etiquette-india'))->name('seo.etiquette');
+
     Route::get('/privacy-policy', fn () => app(PublicController::class)->legal('privacy-policy'))->name('privacy');
     Route::get('/terms-and-conditions', fn () => app(PublicController::class)->legal('terms-and-conditions'))->name('terms');
     Route::get('/community-guidelines', fn () => app(PublicController::class)->legal('community-guidelines'))->name('guidelines');
@@ -103,8 +113,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/join', fn () => redirect()->route('register'))->name('join');
     Route::post('/register', 'register')->middleware('throttle:10,1')->name('register.submit');
     Route::post('/guest', 'continueAsGuest')->middleware('throttle:20,1')->name('auth.guest');
-    Route::get('/auth/google', 'googleRedirect')->name('auth.google');
-    Route::get('/auth/google/callback', 'googleCallback')->name('auth.google.callback');
     Route::get('/forgot-password', 'showForgotPassword')->name('password.request');
     Route::post('/forgot-password', 'sendResetLink')->middleware('throttle:10,1')->name('password.email');
     Route::get('/reset-password/{token}', 'showResetPassword')->name('password.reset');

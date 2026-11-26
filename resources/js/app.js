@@ -225,14 +225,81 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. Fast skeleton loader reveal + per-image shimmer fade-in
+    // 2. Fast skeleton loader reveal + per-image fade-in
     document.querySelectorAll('[data-skeleton-container]').forEach((wrap) => {
         const loader = wrap.querySelector('[data-skeleton-loader]');
         if (!loader) return;
         requestAnimationFrame(() => {
-            setTimeout(() => loader.classList.add('is-hidden'), 110);
+            setTimeout(() => loader.classList.add('is-hidden'), 180);
         });
     });
+
+    // Interactive Truth or Dare Card Game with GSAP Reveal
+    const tdApp = document.querySelector('[data-truth-dare-app]');
+    if (tdApp) {
+        const tdDeck = [
+            { type: 'TRUTH', cat: 'coffee', text: 'What is one green flag you notice within the first five minutes of a coffee date?' },
+            { type: 'TRUTH', cat: 'coffee', text: 'Which cafe in your city has the best atmosphere for a calm first conversation?' },
+            { type: 'TRUTH', cat: 'couple', text: 'What small daily habit makes you feel most appreciated by a partner?' },
+            { type: 'TRUTH', cat: 'couple', text: 'Would you prefer a sunrise mountain road trip or a rainy bookstore afternoon together?' },
+            { type: 'TRUTH', cat: 'friends', text: 'What trip across India surprised you the most and why?' },
+            { type: 'TRUTH', cat: 'friends', text: 'If your group had 48 hours and a full fuel tank this weekend, where would you drive?' },
+            { type: 'TRUTH', cat: 'video', text: 'What song or playlist always improves your mood during a busy week?' },
+            { type: 'TRUTH', cat: 'video', text: 'What hobby are you genuinely curious to learn this year?' },
+            { type: 'DARE', cat: 'coffee', text: 'Order or recommend the next drink/pastry for the other person based only on their personality.' },
+            { type: 'DARE', cat: 'coffee', text: 'Share the most candid photo from your last coffee walk or mountain viewpoint.' },
+            { type: 'DARE', cat: 'couple', text: 'Give two sincere, specific compliments about how they handle conversations.' },
+            { type: 'DARE', cat: 'couple', text: 'Plan an imaginary Sunday morning itinerary in under 30 seconds.' },
+            { type: 'DARE', cat: 'friends', text: 'Describe your dream weekend travel route using only three city names and one food dish.' },
+            { type: 'DARE', cat: 'friends', text: 'Share the funniest minor travel detour that turned into a great memory.' },
+            { type: 'DARE', cat: 'video', text: 'Show the mug, notebook, or view beside you right now on camera and tell its short story.' },
+            { type: 'DARE', cat: 'video', text: 'Ask one unexpected icebreaker question before the timer hits 60 seconds.' },
+        ];
+
+        let activeCat = 'all';
+        const cardEl = document.getElementById('tdPromptCard');
+        const modeEl = document.getElementById('tdModeLabel');
+        const textEl = document.getElementById('tdPromptText');
+        const hintEl = document.getElementById('tdCategoryHint');
+        const copyBtn = document.getElementById('tdCopyBtn');
+
+        tdApp.querySelectorAll('[data-td-category]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                tdApp.querySelectorAll('[data-td-category]').forEach((b) => b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+                activeCat = btn.getAttribute('data-td-category') || 'all';
+            });
+        });
+
+        const drawCard = (wantedType = null) => {
+            const pool = tdDeck.filter((item) => {
+                const catOk = activeCat === 'all' || item.cat === activeCat;
+                const typeOk = !wantedType || item.type === wantedType;
+                return catOk && typeOk;
+            });
+            const pick = pool[Math.floor(Math.random() * pool.length)] || tdDeck[0];
+            if (modeEl) modeEl.textContent = pick.type;
+            if (textEl) textEl.textContent = pick.text;
+            if (hintEl) hintEl.textContent = `Category: ${pick.cat.toUpperCase()} - Respectful CupDate Deck`;
+            if (!prefersReducedMotion && cardEl) {
+                gsap.fromTo(cardEl, { scale: 0.96, y: 8, opacity: 0.65 }, { scale: 1, y: 0, opacity: 1, duration: 0.32, ease: 'power2.out' });
+            }
+        };
+
+        document.getElementById('tdTruthBtn')?.addEventListener('click', () => drawCard('TRUTH'));
+        document.getElementById('tdDareBtn')?.addEventListener('click', () => drawCard('DARE'));
+        document.getElementById('tdRandomBtn')?.addEventListener('click', () => drawCard(null));
+        copyBtn?.addEventListener('click', async () => {
+            const content = `${modeEl?.textContent}: ${textEl?.textContent}`;
+            try {
+                await navigator.clipboard.writeText(content);
+                copyBtn.textContent = 'Copied';
+                setTimeout(() => { copyBtn.textContent = 'Copy Prompt'; }, 1600);
+            } catch {
+                copyBtn.textContent = 'Copy Prompt';
+            }
+        });
+    }
 
     document.querySelectorAll('.profile-card-img-wrap img, .moment-img-wrap img').forEach((img) => {
         if (img.complete) {

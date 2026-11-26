@@ -28,6 +28,7 @@ class LiveStatsService
 
         try {
             $now = time();
+            $hashedKey = substr(hash_hmac('sha256', $visitorId, (string) config('app.key')), 0, 24);
             $visitors = Cache::get(self::CACHE_KEY, []);
             if (! is_array($visitors)) {
                 $visitors = [];
@@ -35,7 +36,7 @@ class LiveStatsService
 
             $cutoff = $now - self::WINDOW_SECONDS;
             $visitors = array_filter($visitors, static fn ($ts) => is_int($ts) && $ts >= $cutoff);
-            $visitors[$visitorId] = $now;
+            $visitors[$hashedKey] = $now;
 
             Cache::put(self::CACHE_KEY, $visitors, self::WINDOW_SECONDS);
         } catch (Throwable) {
@@ -87,10 +88,15 @@ class LiveStatsService
                 }
             }
 
+            $hashedSession = hash_hmac('sha256', $visitorId, (string) config('app.key'));
+            $hashedIp = $ip !== ''
+                ? 'h_' . substr(hash_hmac('sha256', $ip, (string) config('app.key')), 0, 16)
+                : null;
+
             VisitorLog::create([
-                'session_id' => mb_substr($visitorId, 0, 100),
+                'session_id' => $hashedSession,
                 'user_id' => $user?->id,
-                'ip_address' => mb_substr($ip, 0, 45),
+                'ip_address' => $hashedIp,
                 'country' => mb_substr($geo['country'] ?: 'Unknown', 0, 80),
                 'region' => mb_substr($geo['region'] ?: 'Unknown', 0, 100),
                 'city' => mb_substr($geo['city'] ?: 'Unknown', 0, 100),

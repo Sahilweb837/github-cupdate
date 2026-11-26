@@ -255,7 +255,7 @@ class PublicController extends Controller
             'category' => $validated['category'],
             'message' => $validated['message'],
             'status' => 'new',
-            'ip_address' => $request->ip(),
+            'ip_address' => 'h_' . substr(hash_hmac('sha256', (string) ($request->ip() ?? ''), (string) config('app.key')), 0, 16),
         ]);
 
         SupportTicket::create([
@@ -268,6 +268,105 @@ class PublicController extends Controller
         ]);
 
         return back()->with('success', 'Thank you for reaching out. Our CupDate support team will review your message shortly.');
+    }
+
+    public function truthDare(): View
+    {
+        return view('pages.truth-dare');
+    }
+
+    public function travelGroups(Request $request): View
+    {
+        $allTrips = collect([
+            [
+                'title' => 'Dharamshala & Bir Billing Cafe Hopping',
+                'region' => 'Himachal & Spiti',
+                'style' => 'Cafe & Workation',
+                'duration' => '3 Days · Weekend',
+                'city_match' => 'Dharamshala',
+                'meetup_spot' => 'McLeod Ganj & Bir',
+                'image' => 'images/couple-cafe-1.jpg',
+                'summary' => 'Relaxed mountain coffee meetup, bookstore evenings in McLeod Ganj, and scenic sunset views around Bir.',
+            ],
+            [
+                'title' => 'Manali, Old Manali & Kasol Valley Trip',
+                'region' => 'Himachal & Spiti',
+                'style' => 'Trekking & Hills',
+                'duration' => '4 Days · Group',
+                'city_match' => 'Manali',
+                'meetup_spot' => 'Old Manali Cafes',
+                'image' => 'images/hero-coffee-couple.jpg',
+                'summary' => 'Meet fellow remote workers and travelers for daytime riverside cafes, cedar forest walks, and group dinners.',
+            ],
+            [
+                'title' => 'Shimla Heritage & Mall Road Walk',
+                'region' => 'Himachal & Spiti',
+                'style' => 'Cafe & Workation',
+                'duration' => '2 Days · Weekend',
+                'city_match' => 'Shimla',
+                'meetup_spot' => 'The Ridge & Mall Road',
+                'image' => 'images/cafe-blue-bottle.jpg',
+                'summary' => 'Colonial architecture strolls, warm bakery mornings, and peaceful photography meetups in Shimla.',
+            ],
+            [
+                'title' => 'Rishikesh Riverside & Mussoorie Drive',
+                'region' => 'Uttarakhand',
+                'style' => 'Weekend Road Trip',
+                'duration' => '3 Days · Road Trip',
+                'city_match' => 'Dehradun',
+                'meetup_spot' => 'Tapovan & Landour',
+                'image' => 'images/member-diego.jpg',
+                'summary' => 'Early morning Ganges riverside coffee, scenic Landour bakehouse stop, and sunset viewpoints.',
+            ],
+            [
+                'title' => 'Jaipur & Udaipur Heritage Cafe Route',
+                'region' => 'Rajasthan Heritage',
+                'style' => 'Heritage & Food',
+                'duration' => '4 Days · Group',
+                'city_match' => 'Jaipur',
+                'meetup_spot' => 'C-Scheme & Lake Pichola',
+                'image' => 'images/member-sofia.jpg',
+                'summary' => 'Courtyard roasteries, historic forts, and sunset terrace meetups across Rajasthan.',
+            ],
+            [
+                'title' => 'North Goa, Assagao & Coorg Road Group',
+                'region' => 'Coastal & South India',
+                'style' => 'Weekend Road Trip',
+                'duration' => '4 Days · Coastal',
+                'city_match' => 'Bengaluru',
+                'meetup_spot' => 'Assagao & Indiranagar',
+                'image' => 'images/member-amara.jpg',
+                'summary' => 'Coastal specialty coffee spots, sunlit heritage lanes in Fontainhas, and weekend road-trip crews.',
+            ],
+        ]);
+
+        $search = trim((string) $request->query('q', ''));
+        $region = (string) $request->query('region', '');
+        $style = (string) $request->query('style', '');
+
+        $trips = $allTrips->filter(function (array $trip) use ($search, $region, $style) {
+            if ($region !== '' && $trip['region'] !== $region) {
+                return false;
+            }
+            if ($style !== '' && $trip['style'] !== $style) {
+                return false;
+            }
+            if ($search !== '') {
+                $haystack = strtolower($trip['title'] . ' ' . $trip['region'] . ' ' . $trip['summary'] . ' ' . $trip['meetup_spot']);
+                if (! str_contains($haystack, strtolower($search))) {
+                    return false;
+                }
+            }
+
+            return true;
+        })->values();
+
+        return view('pages.travel-groups', [
+            'trips' => $trips,
+            'searchQuery' => $search,
+            'activeRegion' => $region,
+            'activeStyle' => $style,
+        ]);
     }
 
     public function blog(): View

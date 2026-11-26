@@ -110,7 +110,17 @@
                 @endforeach
             </div>
 
-            <div class="moments-grid">
+            <div class="skeleton-grid-wrap" data-skeleton-container>
+                <div class="skeleton-overlay skeleton-overlay-2" data-skeleton-loader aria-hidden="true">
+                    @for ($i = 0; $i < 2; $i++)
+                        <div class="skeleton-card">
+                            <div class="skeleton-box skeleton-line w-60"></div>
+                            <div class="skeleton-box skeleton-line w-85"></div>
+                        </div>
+                    @endfor
+                </div>
+
+                <div class="moments-grid" data-skeleton-content>
                 @forelse ($reviews as $review)
                     @php
                         $shareText = "{$review->cafe_name} ({$review->city}) - {$review->rating}/5: " . \Illuminate\Support\Str::limit($review->review_text, 90) . ' via CupDate';
@@ -138,6 +148,7 @@
                         <p class="muted-small">Be the first to review a women-friendly coffee date spot!</p>
                     </div>
                 @endforelse
+                </div>
             </div>
 
             @if (method_exists($reviews, 'links'))

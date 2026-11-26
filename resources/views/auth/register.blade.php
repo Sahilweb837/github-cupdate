@@ -9,7 +9,7 @@
         <div>
             <span class="eyebrow-pill"><x-icon name="heart" class="cup-icon-xs" /> Free &amp; Verified Community</span>
             <h1 class="hero-title">Meet someone genuine over coffee.</h1>
-            <p class="hero-subtitle">Your profile is saved securely in MySQL. Free chat, free video calling, and real local discovery across Himachal Pradesh.</p>
+            <p class="hero-subtitle">Your credentials are protected with cryptographic password hashing. Free chat, free video calling, and real local discovery across India and worldwide.</p>
         </div>
 
         <div class="auth-card">

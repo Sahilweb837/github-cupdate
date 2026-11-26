@@ -39,15 +39,21 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Your account has been suspended. Please contact support.']);
         }
 
+        $rehash = Hash::needsRehash((string) $user->password_hash);
+
         Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
         $request->session()->forget('guest_mode');
 
-        $user->forceFill([
+        $updates = [
             'is_online' => true,
             'last_active' => now(),
             'last_login_date' => now()->toDateString(),
-        ])->saveQuietly();
+        ];
+        if ($rehash) {
+            $updates['password_hash'] = Hash::make($credentials['password']);
+        }
+        $user->forceFill($updates)->saveQuietly();
 
         if ($user->isAdmin()) {
             return redirect()->intended(route('admin.dashboard'));
@@ -81,6 +87,8 @@ class AuthController extends Controller
             'dob.before' => 'You must be at least 18 years old to join CupDate.',
         ]);
 
+        $cityState = City::where('name', $data['city'])->value('state') ?: 'India';
+
         $user = User::create([
             'full_name' => $data['full_name'],
             'email' => $data['email'],
@@ -89,7 +97,7 @@ class AuthController extends Controller
             'gender' => $data['gender'],
             'preference' => $data['preference'],
             'city' => $data['city'],
-            'state' => 'Himachal Pradesh',
+            'state' => $cityState,
             'coffee_preference' => $data['coffee_preference'] ?? 'Cappuccino',
             'bio' => $data['bio'] ?? 'Here for genuine conversations and good coffee.',
             'interests' => json_encode($data['interests'] ?? ['Coffee Dates']),
@@ -121,35 +129,6 @@ class AuthController extends Controller
     {
         $request->session()->put('guest_mode', true);
         return redirect()->route('public.discover')->with('info', 'Exploring CupDate in Guest Mode. Create a free account anytime to message or video call.');
-    }
-
-    public function googleRedirect(): RedirectResponse
-    {
-        $clientId = config('services.google.client_id');
-        if (! $clientId) {
-            return redirect()->route('login')
-                ->with('info', 'Google Sign-In requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env. Use email sign-in below in the meantime.');
-        }
-
-        $query = http_build_query([
-            'client_id' => $clientId,
-            'redirect_uri' => route('auth.google.callback'),
-            'response_type' => 'code',
-            'scope' => 'openid email profile',
-            'access_type' => 'online',
-        ]);
-
-        return redirect()->away('https://accounts.google.com/o/oauth2/v2/auth?' . $query);
-    }
-
-    public function googleCallback(Request $request): RedirectResponse
-    {
-        if (! $request->filled('code')) {
-            return redirect()->route('login')->withErrors(['email' => 'Google Sign-In was cancelled.']);
-        }
-
-        return redirect()->route('login')
-            ->with('info', 'Google OAuth callback reached. Configure Socialite/token exchange keys in .env to complete live OAuth.');
     }
 
     public function showForgotPassword(): View

@@ -79,7 +79,8 @@
                 <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
                 <a href="{{ route('public.discover') }}" class="nav-link {{ request()->routeIs('public.discover') ? 'is-active' : '' }}">Discover</a>
                 <a href="{{ route('live-video.index') }}" class="nav-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">CupTV Video</a>
-                <a href="{{ route('moments.index') }}" class="nav-link {{ request()->routeIs('moments.*') ? 'is-active' : '' }}">Moments</a>
+                <a href="{{ route('games.truth-dare') }}" class="nav-link {{ request()->routeIs('games.*') ? 'is-active' : '' }}">Truth &amp; Dare</a>
+                <a href="{{ route('travel.groups') }}" class="nav-link {{ request()->routeIs('travel.*') ? 'is-active' : '' }}">Travel Groups</a>
                 <a href="{{ route('cafes.index') }}" class="nav-link {{ request()->routeIs('cafes.*') ? 'is-active' : '' }}">Cafés</a>
                 <a href="{{ route('cities') }}" class="nav-link {{ request()->routeIs('cities', 'seo.city') ? 'is-active' : '' }}">Cities</a>
             </nav>
@@ -135,6 +136,18 @@
             </div>
 
             <div>
+                <h3 class="footer-heading">Games &amp; Meetups</h3>
+                <ul class="footer-list">
+                    <li><a href="{{ route('games.truth-dare') }}">Truth or Dare Online</a></li>
+                    <li><a href="{{ route('travel.groups') }}">Travel Groups &amp; Road Trips</a></li>
+                    <li><a href="{{ route('seo.speed-dating') }}">Free Video Speed Dating</a></li>
+                    <li><a href="{{ route('seo.icebreakers') }}">Coffee Icebreaker Questions</a></li>
+                    <li><a href="{{ route('seo.meetups') }}">Weekend Coffee Meetups</a></li>
+                    <li><a href="{{ route('seo.couple-activities') }}">Daytime Couple Activities</a></li>
+                </ul>
+            </div>
+
+            <div>
                 <h3 class="footer-heading">Top City Guides</h3>
                 <ul class="footer-list">
                     <li><a href="{{ route('seo.city', 'india') }}">Free Dating in India</a></li>
@@ -142,6 +155,8 @@
                     <li><a href="{{ route('seo.city', 'new-delhi') }}">Dating in New Delhi</a></li>
                     <li><a href="{{ route('seo.city', 'mumbai') }}">Dating in Mumbai</a></li>
                     <li><a href="{{ route('seo.city', 'bengaluru') }}">Dating in Bengaluru</a></li>
+                    <li><a href="{{ route('seo.college') }}">College &amp; Campus Meetups</a></li>
+                    <li><a href="{{ route('seo.solo-travel') }}">Solo Travel Companions</a></li>
                 </ul>
             </div>
 

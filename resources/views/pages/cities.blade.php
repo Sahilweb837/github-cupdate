@@ -30,20 +30,31 @@
 
 <section class="section-white">
     <div class="container">
-        <div class="cities-groups-stack" id="cityDirectoryGroups">
-            @foreach ($groups as $groupName => $items)
-                <div class="city-group-block" data-city-group>
-                    <h2 class="city-group-title">{{ $groupName }}</h2>
-                    <div class="cities-seo-grid">
-                        @foreach ($items as $item)
-                            <a href="{{ route('seo.city', $item['slug']) }}" class="city-seo-card" data-city-item="{{ strtolower($item['name'] . ' ' . $item['state'] . ' ' . $item['country']) }}">
-                                <strong>Free Dating in {{ $item['name'] }}</strong>
-                                <span>{{ $item['spot'] }}</span>
-                            </a>
-                        @endforeach
+        <div class="skeleton-grid-wrap" data-skeleton-container>
+            <div class="skeleton-overlay" data-skeleton-loader aria-hidden="true">
+                @for ($i = 0; $i < 3; $i++)
+                    <div class="skeleton-card">
+                        <div class="skeleton-box skeleton-line w-60"></div>
+                        <div class="skeleton-box skeleton-line w-85"></div>
                     </div>
-                </div>
-            @endforeach
+                @endfor
+            </div>
+
+            <div class="cities-groups-stack" id="cityDirectoryGroups" data-skeleton-content>
+                @foreach ($groups as $groupName => $items)
+                    <div class="city-group-block" data-city-group>
+                        <h2 class="city-group-title">{{ $groupName }}</h2>
+                        <div class="cities-seo-grid">
+                            @foreach ($items as $item)
+                                <a href="{{ route('seo.city', $item['slug']) }}" class="city-seo-card" data-city-item="{{ strtolower($item['name'] . ' ' . $item['state'] . ' ' . $item['country']) }}">
+                                    <strong>Free Dating in {{ $item['name'] }}</strong>
+                                    <span>{{ $item['spot'] }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </section>
