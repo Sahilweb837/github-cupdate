@@ -4,6 +4,7 @@
 
 @push('preload')
 <link rel="preload" as="image" href="{{ asset('images/hero-coffee-couple.jpg') }}" fetchpriority="high">
+<link rel="preload" as="image" href="{{ asset('images/couple-cafe-1.jpg') }}">
 @endpush
 
 @push('head')
@@ -28,7 +29,50 @@
 @endpush
 
 @section('content')
+@php
+    $heroSlides = [
+        [
+            'image' => asset('images/hero-coffee-couple.jpg'),
+            'alt' => 'Couple talking over coffee inside a sunlit local cafe',
+            'city' => 'Shimla',
+            'caption' => 'Mall Road Cafe Meetup',
+        ],
+        [
+            'image' => asset('images/couple-cafe-1.jpg'),
+            'alt' => 'Indian couple smiling over cappuccinos beside a mountain cafe window',
+            'city' => 'Dharamshala',
+            'caption' => 'Morning Cappuccino in the Hills',
+        ],
+        [
+            'image' => asset('images/cafe-blue-bottle.jpg'),
+            'alt' => 'Warm sunlit neighborhood coffee shop table set for two',
+            'city' => 'New Delhi',
+            'caption' => 'Connaught Place Espresso Date',
+        ],
+        [
+            'image' => asset('images/member-sofia.jpg'),
+            'alt' => 'Woman smiling during a relaxed afternoon coffee meetup',
+            'city' => 'Bengaluru',
+            'caption' => 'Indiranagar Roastery',
+        ],
+        [
+            'image' => asset('images/member-diego.jpg'),
+            'alt' => 'Young man outdoors enjoying daytime coffee conversation',
+            'city' => 'Chandigarh',
+            'caption' => 'Sector 17 Courtyard Coffee',
+        ],
+    ];
+@endphp
 <section class="hero-section">
+    <div class="hero-bg-slider" data-hero-bg-slider aria-hidden="true">
+        @foreach ($heroSlides as $idx => $slide)
+            <div class="hero-bg-slide {{ $idx === 0 ? 'is-active' : '' }}" data-bg-index="{{ $idx }}">
+                <img src="{{ $slide['image'] }}" alt="" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}" decoding="async">
+            </div>
+        @endforeach
+        <div class="hero-bg-overlay"></div>
+    </div>
+
     <div class="container hero-grid">
         <div class="hero-copy">
             <div class="eyebrow-pill">
@@ -70,15 +114,26 @@
         </div>
 
         <div class="hero-visual">
-            <div class="hero-shape-blush" aria-hidden="true"></div>
-            <div class="hero-photo-frame">
-                <img src="{{ asset('images/hero-coffee-couple.jpg') }}" alt="Two people enjoying coffee together in a warm modern cafe" class="hero-photo" fetchpriority="high" decoding="async">
-                <div class="floating-badge badge-bottom-left">
-                    <span class="badge-coffee-dot"><x-icon name="coffee" class="cup-icon-xs" /></span>
-                    <div>
-                        <div class="badge-title">100% Free · Zero Paywalls</div>
-                        <div class="badge-sub">{{ $totalSeoCities }}+ India &amp; Global Cities</div>
-                    </div>
+            <div class="tinder-stage" data-tinder-deck>
+                <div class="tinder-deck-cards" aria-live="polite">
+                    @foreach ($heroSlides as $idx => $slide)
+                        <article class="tinder-card" data-tinder-card data-slide-index="{{ $idx }}">
+                            <img src="{{ $slide['image'] }}" alt="{{ $slide['alt'] }}" loading="{{ $idx < 2 ? 'eager' : 'lazy' }}" decoding="async" draggable="false">
+                            <div class="tinder-card-scrim"></div>
+                            <div class="tinder-card-stamp tinder-stamp-like" aria-hidden="true">COFFEE</div>
+                            <div class="tinder-card-stamp tinder-stamp-pass" aria-hidden="true">NEXT</div>
+                            <div class="tinder-card-caption">
+                                <span class="tinder-card-city"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $slide['city'] }}</span>
+                                <strong class="tinder-card-title">{{ $slide['caption'] }}</strong>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+
+                <div class="tinder-controls" aria-label="Photo deck controls">
+                    <button type="button" class="btn btn-outline btn-sm tinder-nav-btn" data-deck-prev aria-label="Previous couple photo">Prev</button>
+                    <span class="tinder-counter"><span data-deck-current>1</span> / {{ count($heroSlides) }}</span>
+                    <button type="button" class="btn btn-pink btn-sm tinder-nav-btn" data-deck-next aria-label="Next couple photo">Swipe Next</button>
                 </div>
             </div>
         </div>

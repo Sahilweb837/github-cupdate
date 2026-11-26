@@ -255,6 +255,13 @@ class LiveAndSeoFeaturesTest extends TestCase
                 ->assertHeader('X-Content-Type-Options', 'nosniff')
                 ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+            if ($path === '/') {
+                $resp->assertSee('data-tinder-deck', false)
+                    ->assertSee('data-hero-bg-slider', false)
+                    ->assertSee('couple-cafe-1.jpg')
+                    ->assertSee('hero-coffee-couple.jpg');
+            }
+
             $html = $resp->getContent();
             $this->assertStringNotContainsString("\u{2014}", $html);
             $this->assertStringNotContainsString('Made with AI', $html);

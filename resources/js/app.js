@@ -1,5 +1,219 @@
+import { gsap } from 'gsap';
+
 document.addEventListener('DOMContentLoaded', () => {
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    // 0. GSAP Hero Tinder Couple Card Stack + Background Multi-Couple Slider
+    const tinderDeck = document.querySelector('[data-tinder-deck]');
+    const bgSlider = document.querySelector('[data-hero-bg-slider]');
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (tinderDeck) {
+        const cardContainer = tinderDeck.querySelector('.tinder-deck-cards');
+        const cards = Array.from(tinderDeck.querySelectorAll('[data-tinder-card]'));
+        const bgSlides = bgSlider ? Array.from(bgSlider.querySelectorAll('[data-bg-index]')) : [];
+        const counterEl = tinderDeck.querySelector('[data-deck-current]');
+        const prevBtn = tinderDeck.querySelector('[data-deck-prev]');
+        const nextBtn = tinderDeck.querySelector('[data-deck-next]');
+
+        let order = cards.map((_, i) => i);
+        let isAnimating = false;
+        let autoTimer = null;
+
+        if (!prefersReducedMotion) {
+            gsap.from('.hero-copy > *', {
+                y: 12,
+                opacity: 0,
+                duration: 0.45,
+                stagger: 0.06,
+                ease: 'power2.out',
+                clearProps: 'transform,opacity',
+            });
+        }
+
+        const syncBgSlide = (activeIdx) => {
+            if (!bgSlides.length) return;
+            bgSlides.forEach((slide, i) => {
+                const isTarget = i === activeIdx;
+                slide.classList.toggle('is-active', isTarget);
+                if (prefersReducedMotion) {
+                    slide.style.opacity = isTarget ? '1' : '0';
+                    return;
+                }
+                const img = slide.querySelector('img');
+                gsap.to(slide, {
+                    opacity: isTarget ? 1 : 0,
+                    duration: 0.85,
+                    ease: 'power2.inOut',
+                });
+                if (isTarget && img) {
+                    gsap.fromTo(
+                        img,
+                        { scale: 1.05 },
+                        { scale: 1, duration: 5.2, ease: 'power1.out', overwrite: 'auto' }
+                    );
+                }
+            });
+            if (counterEl) {
+                counterEl.textContent = String(activeIdx + 1);
+            }
+        };
+
+        const layoutDeck = (immediate = false) => {
+            const total = order.length;
+            order.forEach((cardIdx, stackPos) => {
+                const el = cards[cardIdx];
+                if (!el) return;
+                const depth = Math.min(stackPos, 3);
+                const xOffset = stackPos === 0 ? 0 : (stackPos % 2 === 1 ? 10 * depth : -8 * depth);
+                const yOffset = depth * 11;
+                const scale = 1 - depth * 0.045;
+                const rot = stackPos === 0 ? 0 : (stackPos % 2 === 1 ? 2.2 * depth : -2.2 * depth);
+                const opacity = stackPos > 3 ? 0 : 1 - depth * 0.1;
+
+                el.style.zIndex = String(total - stackPos);
+                el.style.pointerEvents = stackPos === 0 ? 'auto' : 'none';
+
+                const likeStamp = el.querySelector('.tinder-stamp-like');
+                const passStamp = el.querySelector('.tinder-stamp-pass');
+                if (likeStamp) likeStamp.style.opacity = '0';
+                if (passStamp) passStamp.style.opacity = '0';
+
+                if (immediate || prefersReducedMotion) {
+                    gsap.set(el, { x: xOffset, y: yOffset, scale, rotation: rot, opacity });
+                } else {
+                    gsap.to(el, {
+                        x: xOffset,
+                        y: yOffset,
+                        scale,
+                        rotation: rot,
+                        opacity,
+                        duration: 0.42,
+                        ease: 'power3.out',
+                        overwrite: 'auto',
+                    });
+                }
+            });
+            syncBgSlide(order[0]);
+        };
+
+        const cycleCard = (direction = 1) => {
+            if (isAnimating || order.length < 2) return;
+            isAnimating = true;
+            const topCard = cards[order[0]];
+
+            const onThrown = () => {
+                if (direction > 0) {
+                    order.push(order.shift());
+                } else {
+                    order.unshift(order.pop());
+                }
+                layoutDeck(false);
+                isAnimating = false;
+            };
+
+            if (prefersReducedMotion) {
+                onThrown();
+                return;
+            }
+
+            const targetX = direction > 0 ? 340 : -340;
+            const targetRot = direction > 0 ? 15 : -15;
+            const activeStamp = topCard.querySelector(direction > 0 ? '.tinder-stamp-like' : '.tinder-stamp-pass');
+            if (activeStamp) activeStamp.style.opacity = '1';
+
+            gsap.to(topCard, {
+                x: targetX,
+                y: 16,
+                rotation: targetRot,
+                opacity: 0,
+                duration: 0.36,
+                ease: 'power2.in',
+                onComplete: () => {
+                    gsap.set(topCard, { x: 0, y: 28, rotation: 0, scale: 0.88, opacity: 0 });
+                    onThrown();
+                },
+            });
+        };
+
+        const startAuto = () => {
+            clearInterval(autoTimer);
+            autoTimer = setInterval(() => cycleCard(1), 4600);
+        };
+
+        const stopAuto = () => clearInterval(autoTimer);
+
+        // Pointer drag swipe like Tinder
+        let dragging = false;
+        let startX = 0;
+        let currentDx = 0;
+        let activeTop = null;
+
+        cardContainer?.addEventListener('pointerdown', (e) => {
+            if (isAnimating) return;
+            const top = cards[order[0]];
+            if (!top || e.target.closest('button')) return;
+            dragging = true;
+            activeTop = top;
+            startX = e.clientX;
+            currentDx = 0;
+            stopAuto();
+            top.setPointerCapture?.(e.pointerId);
+        });
+
+        cardContainer?.addEventListener('pointermove', (e) => {
+            if (!dragging || !activeTop) return;
+            currentDx = e.clientX - startX;
+            const rot = Math.max(-14, Math.min(14, currentDx * 0.06));
+            gsap.set(activeTop, { x: currentDx, rotation: rot });
+
+            const likeStamp = activeTop.querySelector('.tinder-stamp-like');
+            const passStamp = activeTop.querySelector('.tinder-stamp-pass');
+            const ratio = Math.min(1, Math.abs(currentDx) / 90);
+            if (likeStamp) likeStamp.style.opacity = currentDx > 12 ? String(ratio) : '0';
+            if (passStamp) passStamp.style.opacity = currentDx < -12 ? String(ratio) : '0';
+        });
+
+        const endDrag = () => {
+            if (!dragging || !activeTop) return;
+            const dx = currentDx;
+            const card = activeTop;
+            dragging = false;
+            activeTop = null;
+            currentDx = 0;
+
+            if (Math.abs(dx) >= 85) {
+                cycleCard(dx > 0 ? 1 : -1);
+            } else {
+                const likeStamp = card.querySelector('.tinder-stamp-like');
+                const passStamp = card.querySelector('.tinder-stamp-pass');
+                if (likeStamp) likeStamp.style.opacity = '0';
+                if (passStamp) passStamp.style.opacity = '0';
+                gsap.to(card, { x: 0, rotation: 0, duration: 0.35, ease: 'power3.out' });
+            }
+            startAuto();
+        };
+
+        cardContainer?.addEventListener('pointerup', endDrag);
+        cardContainer?.addEventListener('pointercancel', endDrag);
+
+        nextBtn?.addEventListener('click', () => {
+            stopAuto();
+            cycleCard(1);
+            startAuto();
+        });
+        prevBtn?.addEventListener('click', () => {
+            stopAuto();
+            cycleCard(-1);
+            startAuto();
+        });
+
+        tinderDeck.addEventListener('mouseenter', stopAuto);
+        tinderDeck.addEventListener('mouseleave', startAuto);
+
+        layoutDeck(true);
+        startAuto();
+    }
 
     // 1. Fast navigation progress indicator
     const progressBar = document.getElementById('cupPageProgress');
