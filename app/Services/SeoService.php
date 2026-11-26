@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Data\SeoCities;
+use App\Data\SeoGuides;
 use App\Models\BlogPost;
 use App\Models\Moment;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class SeoService
         $today = now()->toAtomString();
 
         $entries = [
-            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate — World’s Best Free Coffee & Social Dating Website'],
+            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate — World’s Best Free Coffee & CupTV Live Video Dating Website'],
             ['loc' => self::canonicalForPath('/discover'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/live-video'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.95'],
             ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
@@ -53,7 +54,9 @@ class SeoService
             ['loc' => self::canonicalForPath('/safety'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => self::canonicalForPath('/about-us'), 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['loc' => self::canonicalForPath('/contact'), 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.6'],
-            ['loc' => self::canonicalForPath('/blog'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.8'],
+            ['loc' => self::canonicalForPath('/blog'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.85'],
+            ['loc' => self::canonicalForPath('/rishta'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
+            ['loc' => self::canonicalForPath('/community/lgbtq'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => self::canonicalForPath('/dating-in-himachal-pradesh'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/meet-singles-in-kangra'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/meet-singles-in-dharamshala'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
@@ -65,26 +68,51 @@ class SeoService
             ['loc' => self::canonicalForPath('/safety-center'), 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
         ];
 
+        $seenLocs = array_flip(array_column($entries, 'loc'));
+
+        foreach (SeoGuides::all() as $guide) {
+            $loc = self::canonicalForPath('/blog/' . $guide['slug']);
+            if (! isset($seenLocs[$loc])) {
+                $seenLocs[$loc] = true;
+                $entries[] = [
+                    'loc' => $loc,
+                    'lastmod' => $today,
+                    'changefreq' => 'weekly',
+                    'priority' => '0.85',
+                    'image' => self::baseUrl() . '/' . ltrim($guide['image'] ?? 'images/cafe-blue-bottle.jpg', '/'),
+                    'image_title' => $guide['h1'],
+                ];
+            }
+        }
+
         foreach (SeoCities::all() as $city) {
-            $entries[] = [
-                'loc' => self::canonicalForPath('/dating-in/' . $city['slug']),
-                'lastmod' => $today,
-                'changefreq' => 'weekly',
-                'priority' => '0.85',
-            ];
+            $loc = self::canonicalForPath('/dating-in/' . $city['slug']);
+            if (! isset($seenLocs[$loc])) {
+                $seenLocs[$loc] = true;
+                $entries[] = [
+                    'loc' => $loc,
+                    'lastmod' => $today,
+                    'changefreq' => 'weekly',
+                    'priority' => '0.85',
+                ];
+            }
         }
 
         try {
             $posts = BlogPost::where('is_published', true)->latest('published_at')->get();
             foreach ($posts as $post) {
-                $entries[] = [
-                    'loc' => self::canonicalForPath('/blog/' . $post->slug),
-                    'lastmod' => ($post->updated_at ?? $post->published_at ?? now())->toAtomString(),
-                    'changefreq' => 'monthly',
-                    'priority' => '0.7',
-                    'image' => $post->cover_image ? self::baseUrl() . '/' . ltrim($post->cover_image, '/') : null,
-                    'image_title' => $post->title,
-                ];
+                $loc = self::canonicalForPath('/blog/' . $post->slug);
+                if (! isset($seenLocs[$loc])) {
+                    $seenLocs[$loc] = true;
+                    $entries[] = [
+                        'loc' => $loc,
+                        'lastmod' => ($post->updated_at ?? $post->published_at ?? now())->toAtomString(),
+                        'changefreq' => 'monthly',
+                        'priority' => '0.75',
+                        'image' => $post->cover_image ? self::baseUrl() . '/' . ltrim($post->cover_image, '/') : null,
+                        'image_title' => $post->title,
+                    ];
+                }
             }
         } catch (Throwable) {
             // Keep static SEO entries resilient if DB is unavailable during CLI generation
@@ -120,33 +148,58 @@ class SeoService
     {
         $sitemapUrl = self::canonicalForPath('/sitemap.xml');
 
-        return implode("\n", [
+        $aiBots = [
+            'Googlebot',
+            'Google-Extended',
+            'Bingbot',
+            'GPTBot',
+            'OAI-SearchBot',
+            'ChatGPT-User',
+            'ClaudeBot',
+            'Claude-Web',
+            'anthropic-ai',
+            'PerplexityBot',
+            'Applebot',
+            'Applebot-Extended',
+            'CCBot',
+        ];
+
+        $lines = [
+            '# CupDate (cupdate.in) — Search Engine & AI Discovery Robots Rules',
             'User-agent: *',
             'Allow: /',
+            'Allow: /llms.txt',
             '',
-            '# Block private member, admin, and auth endpoints',
+            '# Private authenticated & API endpoints only',
             'Disallow: /admin',
             'Disallow: /admin/',
             'Disallow: /app',
             'Disallow: /app/',
-            'Disallow: /login',
-            'Disallow: /register',
-            'Disallow: /forgot-password',
-            'Disallow: /reset-password',
-            'Disallow: /auth/',
-            'Disallow: /guest',
             'Disallow: /live-stats',
+            'Disallow: /live-video/poll',
+            'Disallow: /live-video/signal',
+            'Disallow: /live-video/leave',
             '',
             '# Prevent duplicate filtered/search parameter crawling',
             'Disallow: /*?filter=',
             'Disallow: /*?sort=',
             'Disallow: /*?q=',
-            'Disallow: /*?city=',
             'Disallow: /*?interest=',
             '',
-            'Sitemap: ' . $sitemapUrl,
-            '',
-        ]);
+        ];
+
+        foreach ($aiBots as $bot) {
+            $lines[] = "User-agent: {$bot}";
+            $lines[] = 'Allow: /';
+            $lines[] = 'Disallow: /admin/';
+            $lines[] = 'Disallow: /app/';
+            $lines[] = '';
+        }
+
+        $lines[] = 'Sitemap: ' . $sitemapUrl;
+        $lines[] = '';
+
+        return implode("\n", $lines);
     }
 
     public function writeStaticFiles(): void

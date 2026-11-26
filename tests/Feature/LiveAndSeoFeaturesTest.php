@@ -162,4 +162,52 @@ class LiveAndSeoFeaturesTest extends TestCase
             ->assertSee('Himachal Pradesh')
             ->assertSee('Mobile');
     }
+
+    public function test_search_console_legacy_php_city_blog_and_ai_crawler_urls_succeed(): void
+    {
+        $okRoutes = [
+            '/community/lgbtq',
+            '/city/patiala',
+            '/rishta',
+            '/city/delhi-ncr',
+            '/blog/dating-pune',
+            '/blog/best-himachal-dating-website',
+            '/blog/best-delhi-dating-website',
+            '/city/toronto',
+            '/faq.php',
+            '/city/chandigarh',
+            '/dates',
+            '/disclaimer.php',
+            '/blog/haryana-dating-guide',
+            '/terms',
+            '/blog/women-dating-safety-guide-india',
+            '/coffee-date-ideas',
+            '/privacy',
+            '/city/manali',
+            '/community-guidelines.php',
+            '/dating-navi-mumbai',
+            '/dating-in-bathinda',
+            '/blog-how-to-report-suspicious-profile.php',
+            '/blog-mbti-personality-dating-compatibility.php',
+            '/blog/how-to-impress-on-a-first-date',
+            '/dating-karachi',
+            '/tips-red-flags.php',
+            '/dating-up',
+        ];
+
+        foreach ($okRoutes as $route) {
+            $this->get($route)->assertStatus(200);
+        }
+
+        $this->get('/city.php?city=jamshedpur')->assertRedirect('/dating-in/jamshedpur');
+        $this->get('/city.php?city=peshawar')->assertRedirect('/dating-in/peshawar');
+
+        $this->get('/robots.txt')
+            ->assertStatus(200)
+            ->assertSee('ClaudeBot')
+            ->assertSee('GPTBot')
+            ->assertSee('PerplexityBot');
+
+        $this->assertFileExists(public_path('llms.txt'));
+    }
 }

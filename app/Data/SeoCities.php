@@ -260,6 +260,11 @@ class SeoCities
             ['toronto', 'Toronto', 'Ontario', 'Canada', 'Queen West, Yorkville & Kensington Market cafés', 'Friendly Canadian coffee dates & CupTV cam'],
             ['dubai', 'Dubai', 'Dubai', 'United Arab Emirates', 'JBR, City Walk & DIFC cafés', 'Safe modern coffee lounges & verified profiles'],
             ['melbourne', 'Melbourne', 'Victoria', 'Australia', 'Fitzroy, CBD laneways & St Kilda cafés', 'World-famous flat whites & free global dating'],
+            ['sydney', 'Sydney', 'New South Wales', 'Australia', 'Surry Hills, Bondi & Circular Quay cafés', 'Harbourside coffee dates & free live video'],
+            ['delhi-ncr', 'Delhi NCR', 'Delhi NCR', 'India', 'Connaught Place, Hauz Khas, CyberHub & Sector 18 cafés', 'Best free Delhi NCR dating, coffee dates & CupTV live video'],
+            ['up', 'Uttar Pradesh', 'Uttar Pradesh', 'India', 'Lucknow, Noida, Varanasi, Agra & Kanpur cafés', 'Free coffee dating & safe connections across Uttar Pradesh'],
+            ['karachi', 'Karachi', 'Sindh', 'Pakistan', 'Clifton & DHA specialty cafés', 'Friendly coffee conversations & free global video chats'],
+            ['peshawar', 'Peshawar', 'Khyber Pakhtunkhwa', 'Pakistan', 'University Town & Hayatabad cafés', 'Warm hospitality and respectful conversations'],
         ];
 
         $out = [];
@@ -280,6 +285,65 @@ class SeoCities
     public static function findBySlug(string $slug): ?array
     {
         return self::all()[$slug] ?? null;
+    }
+
+    /**
+     * Resolve curated city or build a clean, rich city/region entry for legacy Search Console slugs.
+     *
+     * @return array{slug: string, name: string, state: string, country: string, spot: string, vibe: string}|null
+     */
+    public static function findOrBuild(string $slug): ?array
+    {
+        $clean = strtolower(trim($slug, '/ '));
+        if ($clean === '' || ! preg_match('/^[a-z0-9\-]{2,60}$/', $clean)) {
+            return null;
+        }
+
+        if ($found = self::findBySlug($clean)) {
+            return $found;
+        }
+
+        $aliases = [
+            'delhi' => 'new-delhi',
+            'bangalore' => 'bengaluru',
+            'bombay' => 'mumbai',
+            'calcutta' => 'kolkata',
+            'madras' => 'chennai',
+            'trivandrum' => 'thiruvananthapuram',
+            'cochin' => 'kochi',
+            'baroda' => 'vadodara',
+            'benares' => 'varanasi',
+            'banaras' => 'varanasi',
+            'allahabad' => 'prayagraj',
+            'gurgaon' => 'gurugram',
+            'poona' => 'pune',
+            'mysore' => 'mysuru',
+            'mangalore' => 'mangaluru',
+            'pondicherry' => 'puducherry',
+            'vizag' => 'visakhapatnam',
+            'simla' => 'shimla',
+            'dharamsala' => 'dharamshala',
+            'bilaspur' => 'bilaspur-hp',
+            'goa' => 'panaji',
+            'uk' => 'united-kingdom',
+            'usa' => 'united-states',
+            'us' => 'united-states',
+        ];
+
+        if (isset($aliases[$clean]) && ($aliased = self::findBySlug($aliases[$clean]))) {
+            return $aliased;
+        }
+
+        $title = ucwords(str_replace('-', ' ', $clean));
+
+        return [
+            'slug' => $clean,
+            'name' => $title,
+            'state' => $title,
+            'country' => 'India & Global',
+            'spot' => "Popular daytime cafés & coffee houses in {$title}",
+            'vibe' => "Genuine coffee dates, verified local profiles, and 100% free CupTV live video in {$title}",
+        ];
     }
 
     /**

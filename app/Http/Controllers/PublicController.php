@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\SeoCities;
+use App\Data\SeoGuides;
 use App\Models\BlogPost;
 use App\Models\City;
 use App\Models\ContactMessage;
@@ -23,8 +24,13 @@ use Illuminate\View\View;
 
 class PublicController extends Controller
 {
-    public function home(Request $request, LiveStatsService $liveStats): View
+    public function home(Request $request, LiveStatsService $liveStats): View|RedirectResponse
     {
+        $rawUri = (string) ($request->server('REQUEST_URI') ?: $request->getRequestUri());
+        if (str_starts_with($rawUri, '/index.php') && ($legacyCity = $request->query('city'))) {
+            return redirect()->route('seo.city', ['slug' => \Illuminate\Support\Str::slug((string) $legacyCity)], 301);
+        }
+
         $filter = $request->query('filter', 'nearby');
         $cityFilter = $request->query('city');
         $interestFilter = $request->query('interest');
@@ -105,7 +111,7 @@ class PublicController extends Controller
 
     public function cityLanding(string $slug): View
     {
-        $city = SeoCities::findBySlug($slug);
+        $city = SeoCities::findOrBuild($slug);
         abort_unless($city !== null, 404);
 
         $cityName = $city['name'];
@@ -263,15 +269,56 @@ class PublicController extends Controller
     public function blog(): View
     {
         return view('pages.blog', [
-            'posts' => BlogPost::where('is_published', true)->latest('published_at')->paginate(9),
+            'posts' => BlogPost::where('is_published', true)->latest('published_at')->paginate(12),
+            'seoGuides' => SeoGuides::all(),
         ]);
     }
 
     public function blogShow(string $slug): View
     {
+        if ($guide = SeoGuides::findBySlug($slug)) {
+            $relatedGuides = collect(SeoGuides::all())
+                ->reject(fn ($g) => $g['slug'] === $slug)
+                ->take(4)
+                ->values()
+                ->all();
+
+            return view('pages.guide-show', [
+                'guide' => $guide,
+                'relatedGuides' => $relatedGuides,
+            ]);
+        }
+
         $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
 
         return view('pages.blog-show', ['post' => $post]);
+    }
+
+    public function guide(string $slug): View
+    {
+        $guide = SeoGuides::findBySlug($slug);
+        abort_unless($guide !== null, 404);
+
+        $relatedGuides = collect(SeoGuides::all())
+            ->reject(fn ($g) => $g['slug'] === $slug)
+            ->take(4)
+            ->values()
+            ->all();
+
+        return view('pages.guide-show', [
+            'guide' => $guide,
+            'relatedGuides' => $relatedGuides,
+        ]);
+    }
+
+    public function legacyCityQuery(Request $request): RedirectResponse
+    {
+        $city = trim((string) $request->query('city', ''));
+        if ($city !== '') {
+            return redirect()->route('seo.city', ['slug' => \Illuminate\Support\Str::slug($city)], 301);
+        }
+
+        return redirect()->route('cities', [], 301);
     }
 
     public function legal(string $page): View
