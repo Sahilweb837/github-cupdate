@@ -23,7 +23,16 @@
         <div class="threads-search-wrap">
             <input type="search" id="threadsSearchInput" placeholder="Search conversations..." aria-label="Search conversations">
         </div>
-        <div class="threads-list-scroll" id="threadsList">
+        <div class="skeleton-grid-wrap" data-skeleton-container>
+            <div class="skeleton-overlay" style="grid-template-columns:1fr;padding:10px;" data-skeleton-loader aria-hidden="true">
+                @for ($i = 0; $i < 4; $i++)
+                    <div class="skeleton-card" style="padding:10px;">
+                        <div class="skeleton-box skeleton-line w-60"></div>
+                        <div class="skeleton-box skeleton-line w-85"></div>
+                    </div>
+                @endfor
+            </div>
+            <div class="threads-list-scroll" id="threadsList" data-skeleton-content>
             @forelse ($partners as $partner)
                 @php
                     $lastMsg = $lastMessages->get($partner->id);
@@ -43,7 +52,7 @@
                             <span>
                                 {{ $partner->firstName() }}
                                 @if ($partner->is_verified)
-                                    <span class="mini-verified" title="Verified">Yes</span>
+                                    <span class="mini-verified" title="Verified">Verified</span>
                                 @endif
                             </span>
                             @if ($unread > 0)
@@ -60,26 +69,27 @@
                     </div>
                 </a>
             @empty
-                <p class="muted-small p-12">No conversations yet. Visit Discover to connect with someone!</p>
+                <p class="muted-small p-12">No conversations yet. Visit Discover to connect with someone on CupDate.</p>
             @endforelse
+            </div>
         </div>
     </aside>
 
     <section class="chat-pane">
         @if ($activePartner)
             <div class="chat-pane-header">
-                <button type="button" id="mobileBackToThreads" class="btn btn-outline btn-xs mobile-only-btn">← Chats</button>
+                <button type="button" id="mobileBackToThreads" class="btn btn-outline btn-xs mobile-only-btn">Back</button>
                 <div class="thread-avatar-wrap">
                     <img src="{{ $activePartner->avatarUrl() }}" alt="{{ $activePartner->firstName() }}" class="thread-avatar">
                     @if ($activePartner->is_online)
                         <span class="thread-online-dot"></span>
                     @endif
                 </div>
-                <div>
+                <div class="min-w-0">
                     <div class="thread-name">
-                        {{ $activePartner->firstName() }} · {{ $activePartner->city }}
+                        <span>{{ $activePartner->firstName() }} · {{ $activePartner->city }}</span>
                         @if ($activePartner->is_verified)
-                            <span class="mini-verified">Yes Verified</span>
+                            <span class="mini-verified">Verified</span>
                         @endif
                     </div>
                     <div class="chat-status" id="partnerOnlineStatus">
@@ -117,7 +127,7 @@
                  data-poll-url="{{ route('app.messages.poll', $activePartner) }}"
                  data-last-id="{{ $thread->last()?->id ?? 0 }}">
                 @forelse ($thread as $msg)
-                    <div class="chat-msg {{ $msg->sender_id === $me->id ? 'is-me' : 'is-them' }}">
+                    <div class="chat-msg {{ $msg->sender_id === $me->id ? 'is-me' : 'is-them' }}" data-msg-id="{{ $msg->id }}">
                         <div class="chat-msg-bubble">
                             @if ($msg->image_path)
                                 <img src="{{ asset($msg->image_path) }}" alt="Shared photo" class="chat-shared-img js-chat-zoom">
@@ -156,7 +166,7 @@
                     <input type="file" name="image" id="chatImageInput" accept="image/jpeg,image/png,image/webp" hidden>
                     <span>+ Photo</span>
                 </label>
-                <input type="text" name="message" id="chatTextInput" placeholder="Write a respectful message..." autocomplete="off">
+                <input type="text" name="message" id="chatTextInput" placeholder="Write a message on CupDate..." autocomplete="off" enterkeyhint="send">
                 <button type="submit" id="chatSendBtn" class="btn btn-pink btn-sm">Send</button>
             </form>
 

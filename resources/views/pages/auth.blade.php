@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($mode === 'join' ? 'Join free' : 'Log in') . ' - Cupdate')
+@section('title', ($mode === 'join' ? 'Join free' : 'Log in') . ' | CupDate')
 
 @section('content')
 <section class="auth-section">
@@ -9,12 +9,12 @@
             <span class="eyebrow-pill">Coffee first, chemistry next</span>
             <h1 class="hero-title">
                 {{ $mode === 'join' ? 'Create your' : 'Welcome back to' }}<br>
-                <em class="accent-italic">Cupdate</em> {{ $mode === 'join' ? 'profile.' : 'today.' }}
+                <em class="accent-italic">CupDate</em> {{ $mode === 'join' ? 'profile.' : 'today.' }}
             </h1>
             <p class="hero-subtitle">
                 {{ $mode === 'join'
-                    ? 'Join 2.4M verified members meeting for real coffee dates instead of endless swiping.'
-                    : 'Check your daily curated picks, Live Radar nearby spots, and upcoming coffee dates.' }}
+                    ? 'Join verified CupDate members meeting for real coffee dates instead of endless swiping.'
+                    : 'Check your daily curated picks, free messages, CupTV video, and upcoming coffee dates.' }}
             </p>
         </div>
 
@@ -31,29 +31,29 @@
                 @if ($mode === 'join')
                     <div class="form-group">
                         <label for="name">First name</label>
-                        <input id="name" name="name" type="text" value="{{ old('name', 'Sofia') }}" required>
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" placeholder="Your first name" required>
                         @error('name')<span class="form-error">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input id="city" name="city" type="text" value="{{ old('city', 'Portland, OR') }}">
+                        <input id="city" name="city" type="text" value="{{ old('city') }}" placeholder="e.g. Shimla, New Delhi, Bengaluru">
                     </div>
                 @endif
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input id="email" name="email" type="email" value="{{ old('email', 'sofia@cupdate.app') }}" required>
+                    <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="you@example.com" required>
                     @error('email')<span class="form-error">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" name="password" type="password" value="cupdate123" required>
+                    <input id="password" name="password" type="password" required>
                     @error('password')<span class="form-error">{{ $message }}</span>@enderror
                 </div>
 
                 <button type="submit" class="btn btn-coral btn-full">
-                    {{ $mode === 'join' ? 'Create my profile →' : 'Open Cupdate →' }}
+                    {{ $mode === 'join' ? 'Create CupDate Profile' : 'Open CupDate' }}
                 </button>
             </form>
         </div>

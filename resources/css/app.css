@@ -821,22 +821,24 @@ button, input, select, textarea { font: inherit; }
 .thread-name { font-weight: 700; font-size: 0.88rem; }
 .thread-preview, .chat-status { font-size: 0.76rem; color: var(--ink-muted); }
 
-.chat-pane { display: flex; flex-direction: column; }
-.chat-pane-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.chat-header-tools { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
-.chat-messages-scroll { flex: 1; padding: 18px; background: var(--cream); display: flex; flex-direction: column; gap: 10px; max-height: 390px; overflow-y: auto; }
-.chat-msg { display: flex; flex-direction: column; max-width: 72%; }
+.chat-pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; height: 100%; }
+.chat-pane-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0; background: var(--white); }
+.chat-header-tools { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.chat-messages-scroll { flex: 1 1 auto; min-height: 240px; max-height: 440px; padding: 16px; background: var(--cream); display: flex; flex-direction: column; gap: 10px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.chat-msg { display: flex; flex-direction: column; max-width: 78%; }
 .chat-msg.is-me { align-self: flex-end; align-items: flex-end; }
 .chat-msg.is-them { align-self: flex-start; }
-.chat-msg-bubble { padding: 10px 14px; border-radius: 14px; font-size: 0.88rem; }
+.chat-msg-bubble { padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; word-break: break-word; overflow-wrap: anywhere; }
 .chat-msg-bubble p { margin: 0; }
 .chat-msg.is-them .chat-msg-bubble { background: var(--white); border: 1px solid var(--border); }
 .chat-msg.is-me .chat-msg-bubble { background: var(--pink-dark); color: var(--white); }
 .chat-shared-img { max-width: 220px; border-radius: 10px; margin-bottom: 6px; }
 .chat-msg-time { font-size: 0.7rem; color: var(--ink-muted); margin-top: 3px; }
-.chat-composer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
-.chat-composer input[type="text"] { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 9px 14px; outline: none; }
-.attach-btn { background: var(--blush); color: var(--coffee-dark); padding: 8px 12px; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+.chat-composer { padding: 10px 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; background: var(--white); flex-shrink: 0; }
+.chat-composer input[type="text"] { flex: 1 1 auto; min-width: 0; width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 0.92rem; outline: none; background: var(--grey-light); }
+.chat-composer input[type="text"]:focus { border-color: var(--pink-dark); background: var(--white); }
+.attach-btn { flex-shrink: 0; background: var(--blush); color: var(--coffee-dark); padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.chat-composer .btn { flex-shrink: 0; white-space: nowrap; }
 .report-inline-box { padding: 10px 16px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--ink-muted); }
 
 /* WebRTC Video */
@@ -1164,9 +1166,16 @@ html, body { -webkit-tap-highlight-color: transparent; }
 
 @media (max-width: 960px) {
     .mobile-only-btn { display: inline-flex; }
+    .messages-shell { min-height: calc(100dvh - 156px); height: calc(100dvh - 156px); }
     .messages-shell .chat-pane { display: none; }
     .messages-shell.has-active-chat .threads-pane { display: none; }
     .messages-shell.has-active-chat .chat-pane { display: flex; }
+    .chat-messages-scroll { max-height: none; flex: 1 1 auto; }
+    .chat-header-tools { width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; padding-top: 4px; }
+    .chat-header-tools .btn { flex-shrink: 0; white-space: nowrap; }
+    .chat-msg { max-width: 86%; }
+    .chat-icebreakers { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+    .icebreaker-chip { flex-shrink: 0; white-space: nowrap; }
 }
 
 @media (max-width: 768px) {

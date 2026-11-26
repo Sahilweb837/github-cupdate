@@ -552,7 +552,7 @@ class AppController extends Controller
             'avatar' => $avatarPath,
         ]);
 
-        return back()->with('success', 'Profile saved to MySQL successfully!');
+        return back()->with('success', 'Your CupDate profile has been updated.');
     }
 
     public function requestVerification(Request $request): RedirectResponse
@@ -571,7 +571,7 @@ class AppController extends Controller
             'premium_until' => ! $me->is_premium ? now()->addMonth() : null,
         ]);
 
-        return back()->with('success', $me->is_premium ? 'CupDate Plus preview activated!' : 'Switched back to free plan.');
+        return back()->with('success', $me->is_premium ? 'CupDate Plus supporter badge updated!' : 'Switched back to free plan.');
     }
 
     public function deleteAccount(Request $request): RedirectResponse

@@ -80,9 +80,17 @@ class LiveAndSeoFeaturesTest extends TestCase
 
         // Messaging UI opens, sends JSON message, and polls cleanly
         $this->actingAs($sender)
+            ->get('/app/profile')
+            ->assertStatus(200)
+            ->assertDontSee('MySQL')
+            ->assertSee('Edit Your CupDate Profile');
+
+        $this->actingAs($sender)
             ->get('/app/messages?with=' . $partner->id)
             ->assertStatus(200)
-            ->assertSee('Meera');
+            ->assertSee('Meera')
+            ->assertSee('data-skeleton-loader', false)
+            ->assertSee('enterkeyhint="send"', false);
 
         $sendRes = $this->actingAs($sender)
             ->postJson('/app/messages/' . $partner->id, [

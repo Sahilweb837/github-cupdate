@@ -17,7 +17,7 @@
 
 <div class="profile-grid">
     <div class="profile-card">
-        <h2 class="card-title">Edit Personal Details (Saved to MySQL)</h2>
+        <h2 class="card-title">Edit Your CupDate Profile</h2>
         <form method="POST" action="{{ route('app.profile.update') }}" enctype="multipart/form-data" class="cupdate-form mt-16">
             @csrf
             <div class="form-group">

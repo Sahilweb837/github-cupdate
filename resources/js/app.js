@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Discover AJAX Like / Pass / Send Request persisted in MySQL
+    // 5. Discover AJAX Like / Pass / Send Request persisted safely
     document.querySelectorAll('[data-swipe-btn]').forEach((btn) => {
         btn.addEventListener('click', async () => {
             const targetId = btn.getAttribute('data-target');
@@ -376,11 +376,19 @@ document.addEventListener('DOMContentLoaded', () => {
         chatFeed.scrollTop = chatFeed.scrollHeight;
         let lastId = Number(chatFeed.getAttribute('data-last-id') || 0);
         const pollUrl = chatFeed.getAttribute('data-poll-url');
+        const seenMsgIds = new Set(
+            Array.from(chatFeed.querySelectorAll('[data-msg-id]')).map((el) => Number(el.getAttribute('data-msg-id')))
+        );
 
         const appendMessage = (m) => {
+            const msgId = Number(m.id || 0);
+            if (msgId > 0 && seenMsgIds.has(msgId)) return;
+            if (msgId > 0) seenMsgIds.add(msgId);
+
             document.getElementById('chatEmptyNote')?.remove();
             const wrap = document.createElement('div');
             wrap.className = `chat-msg ${m.is_me ? 'is-me' : 'is-them'}`;
+            if (msgId > 0) wrap.setAttribute('data-msg-id', String(msgId));
             const bubble = document.createElement('div');
             bubble.className = 'chat-msg-bubble';
             if (m.image_url) {
@@ -410,6 +418,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const clearImgBtn = document.getElementById('clearChatImageBtn');
         const errBanner = document.getElementById('chatErrorBanner');
         const sendBtn = document.getElementById('chatSendBtn');
+        const chatInput = document.getElementById('chatTextInput');
+
+        chatInput?.addEventListener('focus', () => {
+            setTimeout(() => { chatFeed.scrollTop = chatFeed.scrollHeight; }, 160);
+        });
 
         const showChatError = (msg) => {
             if (!errBanner) return;
@@ -436,12 +449,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const input = document.getElementById('chatTextInput');
-            const text = input.value.trim();
+            const text = (chatInput?.value || '').trim();
             const hasFile = chatImageInput && chatImageInput.files.length > 0;
             if (!text && !hasFile) return;
 
-            if (sendBtn) sendBtn.disabled = true;
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Sending...';
+            }
             try {
                 let res;
                 if (hasFile) {
@@ -466,10 +481,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 const data = await res.json();
                 if (res.ok && data.ok) {
-                    input.value = '';
+                    if (chatInput) chatInput.value = '';
                     if (chatImageInput) chatImageInput.value = '';
                     if (previewBar) previewBar.hidden = true;
                     lastId = Math.max(lastId, Number(data.message.id));
+                    chatFeed.setAttribute('data-last-id', String(lastId));
                     appendMessage({ ...data.message, is_me: true });
                 } else if (data.error) {
                     showChatError(data.error);
@@ -480,7 +496,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch {
                 showChatError('Could not send message. Please check your connection.');
             } finally {
-                if (sendBtn) sendBtn.disabled = false;
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send';
+                }
             }
         });
 
