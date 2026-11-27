@@ -13,11 +13,7 @@ Disallow: /live-video/poll
 Disallow: /live-video/signal
 Disallow: /live-video/leave
 
-# Prevent duplicate filtered/search parameter crawling
-Disallow: /*?filter=
-Disallow: /*?sort=
-Disallow: /*?q=
-Disallow: /*?interest=
+# Crawl budget: filter/search variants carry noindex + canonical tags in HTML
 
 User-agent: Googlebot
 Allow: /

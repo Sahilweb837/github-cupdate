@@ -33,6 +33,32 @@ class SeoService
 
         $path = $request->getPathInfo() ?: '/';
         $path = preg_replace('#^/index\.php#i', '', $path) ?: '/';
+        $aliases = [
+            '/index.html' => '/',
+            '/home' => '/',
+            '/home.php' => '/',
+            '/about' => '/about-us',
+            '/about.php' => '/about-us',
+            '/contact.php' => '/contact',
+            '/safety.php' => '/safety',
+            '/blog.php' => '/blog',
+            '/guides' => '/blog',
+            '/guides.php' => '/blog',
+            '/discover.php' => '/discover',
+            '/cities.php' => '/cities',
+            '/dates' => '/how-it-works',
+            '/coffee-date-ideas' => '/coffee-date-ideas-in-himachal-pradesh',
+            '/video' => '/live-video',
+            '/video.php' => '/live-video',
+            '/video-chat' => '/live-video',
+            '/live-video.php' => '/live-video',
+            '/cuptv' => '/live-video',
+            '/moments.php' => '/moments',
+            '/cafes.php' => '/cafes',
+            '/truth-or-dare' => '/truth-and-dare',
+            '/travel-groups.php' => '/travel-groups',
+        ];
+        $path = $aliases[$path] ?? $path;
         $page = (int) $request->query('page', 1);
 
         $base = self::canonicalForPath($path);
@@ -80,8 +106,21 @@ class SeoService
 
         $seenLocs = array_flip(array_column($entries, 'loc'));
 
+        $topLevelGuidePaths = [
+            'rishta' => '/rishta',
+            'community-lgbtq' => '/community/lgbtq',
+            'icebreaker-questions' => '/icebreaker-questions',
+            'weekend-meetups' => '/weekend-meetups',
+            'speed-dating' => '/speed-dating',
+            'couple-activities' => '/couple-activities',
+            'college-dating-india' => '/college-dating-india',
+            'solo-travel-companions' => '/solo-travel-companions',
+            'dating-etiquette-india' => '/dating-etiquette-india',
+        ];
+
         foreach (SeoGuides::all() as $guide) {
-            $loc = self::canonicalForPath('/blog/' . $guide['slug']);
+            $guidePath = $topLevelGuidePaths[$guide['slug']] ?? ('/blog/' . $guide['slug']);
+            $loc = self::canonicalForPath($guidePath);
             if (! isset($seenLocs[$loc])) {
                 $seenLocs[$loc] = true;
                 $entries[] = [
@@ -190,11 +229,7 @@ class SeoService
             'Disallow: /live-video/signal',
             'Disallow: /live-video/leave',
             '',
-            '# Prevent duplicate filtered/search parameter crawling',
-            'Disallow: /*?filter=',
-            'Disallow: /*?sort=',
-            'Disallow: /*?q=',
-            'Disallow: /*?interest=',
+            '# Crawl budget: filter/search variants carry noindex + canonical tags in HTML',
             '',
         ];
 

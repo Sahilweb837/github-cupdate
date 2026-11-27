@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('title', $title . ' | CupDate')
+@if (!empty($canonicalUrl))
+@section('canonical', $canonicalUrl)
+@endif
 
 @section('content')
 <section class="page-hero section-cream">

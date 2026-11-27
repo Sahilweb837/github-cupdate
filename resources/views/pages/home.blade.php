@@ -129,9 +129,9 @@
         </form>
 
         <div class="filter-bar" role="region" aria-label="Discover Filters">
-            <a href="{{ route('home', ['filter' => 'nearby']) }}" class="filter-chip {{ $activeFilter === 'nearby' && !$activeCity ? 'is-active' : '' }}">Nearby</a>
-            <a href="{{ route('home', ['filter' => 'new']) }}" class="filter-chip {{ $activeFilter === 'new' ? 'is-active' : '' }}">New Members</a>
-            <a href="{{ route('home', ['filter' => 'popular']) }}" class="filter-chip {{ $activeFilter === 'popular' ? 'is-active' : '' }}">Popular</a>
+            <a href="{{ route('home', ['filter' => 'nearby']) }}" rel="nofollow" class="filter-chip {{ $activeFilter === 'nearby' && !$activeCity ? 'is-active' : '' }}">Nearby</a>
+            <a href="{{ route('home', ['filter' => 'new']) }}" rel="nofollow" class="filter-chip {{ $activeFilter === 'new' ? 'is-active' : '' }}">New Members</a>
+            <a href="{{ route('home', ['filter' => 'popular']) }}" rel="nofollow" class="filter-chip {{ $activeFilter === 'popular' ? 'is-active' : '' }}">Popular</a>
 
             <form method="GET" action="{{ route('home') }}" class="filter-selects">
                 <select name="interest" onchange="this.form.submit()" aria-label="Filter by Interest">

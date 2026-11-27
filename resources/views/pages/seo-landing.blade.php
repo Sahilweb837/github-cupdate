@@ -2,6 +2,9 @@
 
 @section('title', $page['title'])
 @section('description', $page['description'])
+@if (!empty($canonicalUrl))
+@section('canonical', $canonicalUrl)
+@endif
 
 @push('head')
 <script type="application/ld+json">
@@ -72,6 +75,20 @@
                     <li><x-icon name="coffee" class="cup-icon-xs" /> {{ $idea }}</li>
                 @endforeach
             </ul>
+        </div>
+    </div>
+</section>
+
+<section class="section-cream">
+    <div class="container">
+        <div class="honest-story-card" style="margin-top:0;">
+            <h2 class="card-title">How CupDate Works in {{ $page['city'] ?? ($page['country'] ?? 'Your City') }}</h2>
+            <p class="mt-8">Create your free profile in under a minute, browse active members in {{ $page['city'] ?? ($page['country'] ?? 'your area') }}, start 1-to-1 encrypted conversations, or try a quick CupTV live video introduction before meeting at a busy daytime cafe. Every profile and message passes automated anti-spam and no-nudity screening.</p>
+            <div class="hero-actions">
+                <a href="{{ route('games.truth-dare') }}" class="btn btn-coffee btn-sm">Play Truth or Dare</a>
+                <a href="{{ route('travel.groups') }}" class="btn btn-outline btn-sm">Join Travel Groups</a>
+                <a href="{{ route('cafes.index') }}" class="btn btn-outline btn-sm">Read Cafe Reviews</a>
+            </div>
         </div>
     </div>
 </section>

@@ -203,6 +203,7 @@ class PublicController extends Controller
         return view('pages.seo-landing', [
             'slug' => $canonicalSlug,
             'page' => $page,
+            'canonicalUrl' => route('seo.city', $canonicalSlug),
             'localMembers' => $localMembers,
             'datePlaces' => $datePlaces,
             'relatedCities' => $relatedCities,
@@ -464,16 +465,7 @@ class PublicController extends Controller
     public function blogShow(string $slug): View
     {
         if ($guide = SeoGuides::findBySlug($slug)) {
-            $relatedGuides = collect(SeoGuides::all())
-                ->reject(fn ($g) => $g['slug'] === $slug)
-                ->take(4)
-                ->values()
-                ->all();
-
-            return view('pages.guide-show', [
-                'guide' => $guide,
-                'relatedGuides' => $relatedGuides,
-            ]);
+            return $this->guide($slug);
         }
 
         try {
@@ -501,9 +493,25 @@ class PublicController extends Controller
             ->values()
             ->all();
 
+        $topLevelRoutes = [
+            'rishta' => 'rishta',
+            'community-lgbtq' => 'community/lgbtq',
+            'icebreaker-questions' => 'icebreaker-questions',
+            'weekend-meetups' => 'weekend-meetups',
+            'speed-dating' => 'speed-dating',
+            'couple-activities' => 'couple-activities',
+            'college-dating-india' => 'college-dating-india',
+            'solo-travel-companions' => 'solo-travel-companions',
+            'dating-etiquette-india' => 'dating-etiquette-india',
+        ];
+        $canonicalUrl = isset($topLevelRoutes[$slug])
+            ? url($topLevelRoutes[$slug])
+            : route('blog.show', $slug);
+
         return view('pages.guide-show', [
             'guide' => $guide,
             'relatedGuides' => $relatedGuides,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
@@ -528,9 +536,17 @@ class PublicController extends Controller
 
         abort_unless(isset($titles[$page]), 404);
 
+        $canonicalUrl = match ($page) {
+            'privacy-policy' => route('privacy'),
+            'terms-and-conditions' => route('terms'),
+            'community-guidelines' => route('guidelines'),
+            default => route('safety-center'),
+        };
+
         return view('pages.legal', [
             'page' => $page,
             'title' => $titles[$page],
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 

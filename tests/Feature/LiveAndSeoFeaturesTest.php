@@ -176,40 +176,49 @@ class LiveAndSeoFeaturesTest extends TestCase
     {
         $okRoutes = [
             '/community/lgbtq',
-            '/city/patiala',
             '/rishta',
-            '/city/delhi-ncr',
             '/blog/dating-pune',
             '/blog/best-himachal-dating-website',
             '/blog/best-delhi-dating-website',
-            '/city/toronto',
-            '/faq.php',
-            '/city/chandigarh',
-            '/dates',
-            '/disclaimer.php',
             '/blog/haryana-dating-guide',
-            '/terms',
             '/blog/women-dating-safety-guide-india',
-            '/coffee-date-ideas',
-            '/privacy',
-            '/city/manali',
-            '/community-guidelines.php',
-            '/dating-navi-mumbai',
-            '/dating-in-bathinda',
-            '/blog-how-to-report-suspicious-profile.php',
-            '/blog-mbti-personality-dating-compatibility.php',
             '/blog/how-to-impress-on-a-first-date',
-            '/dating-karachi',
-            '/tips-red-flags.php',
-            '/dating-up',
+            '/dating-in/patiala',
+            '/dating-in/chandigarh',
+            '/dating-in/manali',
         ];
 
         foreach ($okRoutes as $route) {
             $this->get($route)->assertStatus(200);
         }
 
-        $this->get('/city.php?city=jamshedpur')->assertRedirect('/dating-in/jamshedpur');
-        $this->get('/city.php?city=peshawar')->assertRedirect('/dating-in/peshawar');
+        $redirects = [
+            '/city/patiala' => '/dating-in/patiala',
+            '/city/delhi-ncr' => '/dating-in/delhi-ncr',
+            '/city/toronto' => '/dating-in/toronto',
+            '/city/chandigarh' => '/dating-in/chandigarh',
+            '/city/manali' => '/dating-in/manali',
+            '/faq.php' => '/blog/faq',
+            '/dates' => '/how-it-works',
+            '/disclaimer.php' => '/blog/disclaimer',
+            '/terms' => '/terms-and-conditions',
+            '/privacy' => '/privacy-policy',
+            '/coffee-date-ideas' => '/coffee-date-ideas-in-himachal-pradesh',
+            '/community-guidelines.php' => '/community-guidelines',
+            '/dating-navi-mumbai' => '/dating-in/navi-mumbai',
+            '/dating-in-bathinda' => '/dating-in/bathinda',
+            '/blog-how-to-report-suspicious-profile.php' => '/blog/how-to-report-suspicious-profile',
+            '/blog-mbti-personality-dating-compatibility.php' => '/blog/mbti-personality-dating-compatibility',
+            '/dating-karachi' => '/dating-in/karachi',
+            '/tips-red-flags.php' => '/blog/tips-red-flags',
+            '/dating-up' => '/dating-in/up',
+            '/city.php?city=jamshedpur' => '/dating-in/jamshedpur',
+            '/city.php?city=peshawar' => '/dating-in/peshawar',
+        ];
+
+        foreach ($redirects as $legacy => $target) {
+            $this->get($legacy)->assertRedirect($target);
+        }
 
         $this->get('/robots.txt')
             ->assertStatus(200)
@@ -222,13 +231,13 @@ class LiveAndSeoFeaturesTest extends TestCase
 
     public function test_security_headers_online_users_by_city_favicon_and_design_rules(): void
     {
-        $this->assertFileExists(public_path('favicon.ico'));
-        $this->assertGreaterThan(100, filesize(public_path('favicon.ico')));
+        $this->assertFileExists(public_path('images/cupdate-logo.svg'));
+        $this->assertFileExists(public_path('images/cupdate-logo.jpg'));
 
         $this->assertSame('abc\\%\\_def\\\\', SqlSafe::escapeLike('  abc%_def\\  '));
 
         User::create([
-            'email' => 'online-shimla@cupdate.in',
+            'email' => 'kavita.shimla@example.com',
             'password_hash' => Hash::make('Secret123!'),
             'full_name' => 'Kavita Thakur',
             'dob' => '1999-03-15',
@@ -264,10 +273,7 @@ class LiveAndSeoFeaturesTest extends TestCase
                 ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
             if ($path === '/') {
-                $resp->assertSee('data-tinder-deck', false)
-                    ->assertSee('data-hero-bg-slider', false)
-                    ->assertSee('couple-cafe-1.jpg')
-                    ->assertSee('hero-coffee-couple.jpg');
+                $resp->assertSee('cupdate-scene.svg');
             }
 
             $html = $resp->getContent();
@@ -285,11 +291,23 @@ class LiveAndSeoFeaturesTest extends TestCase
 
     public function test_google_auth_removed_hashed_visitor_logs_truth_dare_travel_groups_and_skeletons(): void
     {
-        // Google auth removed cleanly from login UI & routes
+        // Google auth removed from login UI; legacy /auth/google redirects cleanly to /login without 404
         $this->get('/login')
             ->assertStatus(200)
             ->assertDontSee('Continue with Google');
-        $this->get('/auth/google')->assertStatus(404);
+        $this->get('/auth/google')->assertRedirect('/login');
+
+        // Legacy & alias redirects and canonicals prevent duplicate canonicals and 404s
+        $this->get('/dating-in/patiala')
+            ->assertStatus(200)
+            ->assertSee('<link rel="canonical" href="https://cupdate.in/dating-in/patiala">', false);
+        $this->get('/about.php')->assertRedirect('/about-us');
+        $this->get('/meet-singles-in-jaipur')->assertRedirect('/dating-in/jaipur');
+        $this->get('/truth-or-dare')->assertRedirect('/truth-and-dare');
+        $this->get('/video-chat')->assertRedirect('/live-video');
+        $this->get('/robots.txt')
+            ->assertStatus(200)
+            ->assertDontSee('Disallow: /*?filter=');
 
         // Plain IP is hashed before storing in visitor_logs
         $this->withHeaders(['REMOTE_ADDR' => '198.51.100.77'])

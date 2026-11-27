@@ -4,6 +4,9 @@
 @section('description', $guide['description'])
 @section('og_type', 'article')
 @section('og_image', asset('images/cupdate-scene.svg'))
+@if (!empty($canonicalUrl))
+@section('canonical', $canonicalUrl)
+@endif
 
 @push('head')
 <script type="application/ld+json">
