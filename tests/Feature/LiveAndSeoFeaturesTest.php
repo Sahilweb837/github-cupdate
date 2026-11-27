@@ -273,7 +273,10 @@ class LiveAndSeoFeaturesTest extends TestCase
                 ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
             if ($path === '/') {
-                $resp->assertSee('cupdate-scene.svg');
+                $resp->assertSee('real-couple-shimla.jpg')
+                    ->assertSee('real-couple-delhi.jpg')
+                    ->assertSee('couple-cafe-1.jpg')
+                    ->assertSee('Mandatory 18+ Age Check');
             }
 
             $html = $resp->getContent();
@@ -347,5 +350,47 @@ class LiveAndSeoFeaturesTest extends TestCase
             ->assertSee('/travel-groups')
             ->assertSee('/speed-dating')
             ->assertSee('/icebreaker-questions');
+    }
+
+    public function test_search_console_drilldown_623_404_patterns_are_resolved(): void
+    {
+        $redirectExpectations = [
+            '/hyderabad' => '/dating-in/hyderabad',
+            '/haryana' => '/dating-in/gurugram',
+            '/sanjauli' => '/dating-in/shimla',
+            '/summer-hill-hpu' => '/dating-in/shimla',
+            '/bhuntar' => '/dating-in/kullu',
+            '/city.php?name=Kasol' => '/dating-in/kasol',
+            '/city.php?name=New%20Shimla' => '/dating-in/shimla',
+            '/city.php?city=rawalpindi' => '/dating-in/rawalpindi',
+            '/dating-dating-delhi' => '/dating-in/new-delhi',
+            '/dating/dating-kullu' => '/dating-in/kullu',
+            '/dating-islamabad' => '/dating-in/islamabad',
+            '/mcleodganj.php' => '/dating-in/mcleod-ganj',
+            '/blog-online-rishta-india-guide' => '/rishta',
+            '/blog-introvert-dating.php' => '/blog/how-to-impress-on-a-first-date',
+            '/blog-online-dating-safety-tips.php' => '/blog/women-dating-safety-guide-india',
+            '/blog/kullu.php' => '/dating-in/kullu',
+            '/blog/sitemap.xml' => '/sitemap.xml',
+            '/sitemap-post.xml' => '/sitemap.xml',
+            '/scam-awareness.php' => '/safety',
+            '/freevideocall.php' => '/live-video',
+            '/online-dating-punjab-girls.php' => '/dating-in/chandigarh',
+            '/india-rishta.php' => '/rishta',
+            '/search_term_string' => '/discover',
+        ];
+
+        foreach ($redirectExpectations as $legacy => $target) {
+            $this->get($legacy)->assertRedirect($target);
+        }
+
+        // Direct modern hubs for GSC cities work 200 OK
+        foreach (['/up', '/dating-in/up', '/dating-in/miami', '/dating-in/paris', '/dating-in/tokyo', '/dating-in/lahore', '/dating-in/islamabad'] as $cityPath) {
+            $this->get($cityPath)->assertStatus(200);
+        }
+
+        // Retired profile & message URLs return 410 Gone
+        $this->get('/user/rahul.kumar')->assertStatus(410);
+        $this->get('/messages.php?receiver_id=60')->assertStatus(410);
     }
 }

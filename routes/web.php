@@ -53,9 +53,15 @@ Route::controller(PublicController::class)->group(function () {
 
     // Legacy Search Console / PHP URL consolidation (301 to single canonical URL — eliminates duplicate canonicals)
     Route::get('/city.php', 'legacyCityQuery');
-    Route::get('/city/{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
-    Route::get('/dating-in-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
-    Route::get('/dating-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/city/{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => \App\Data\SeoCities::canonicalSlug($slug) ?? strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating/dating-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => \App\Data\SeoCities::canonicalSlug(preg_replace('/^(?:dating-|in-)+/', '', strtolower($slug))) ?? strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating/{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => \App\Data\SeoCities::canonicalSlug(preg_replace('/^(?:dating-|in-)+/', '', strtolower($slug))) ?? strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating-in-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => \App\Data\SeoCities::canonicalSlug(preg_replace('/^(?:dating-|in-)+/', '', strtolower($slug))) ?? strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => \App\Data\SeoCities::canonicalSlug(preg_replace('/^(?:dating-|in-)+/', '', strtolower($slug))) ?? strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::permanentRedirect('/sitemap.php', '/sitemap.xml');
+    Route::permanentRedirect('/sitemap-post.xml', '/sitemap.xml');
+    Route::permanentRedirect('/blog/sitemap.xml', '/sitemap.xml');
+    Route::permanentRedirect('/blog/sitemap.php', '/sitemap.xml');
     Route::get('/community/{slug}', fn (string $slug) => app(PublicController::class)->guide('community-' . $slug));
     Route::get('/rishta', fn () => app(PublicController::class)->guide('rishta'));
 
@@ -102,10 +108,25 @@ Route::controller(PublicController::class)->group(function () {
     Route::permanentRedirect('/join.php', '/register');
     Route::permanentRedirect('/auth/google', '/login');
     Route::get('/meet-singles-in-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::permanentRedirect('/blog/disclaimer.php', '/blog/disclaimer');
+    Route::permanentRedirect('/blog/faq.php', '/blog/faq');
+    Route::permanentRedirect('/blog/terms.php', '/terms-and-conditions');
+    Route::permanentRedirect('/blog/privacy.php', '/privacy-policy');
+    Route::permanentRedirect('/blog/cookie-policy.php', '/privacy-policy');
+    Route::permanentRedirect('/blog/community-guidelines.php', '/community-guidelines');
+    Route::permanentRedirect('/blog/about.php', '/about-us');
+    Route::permanentRedirect('/blog/contact.php', '/contact');
+    Route::permanentRedirect('/blog/safety.php', '/safety');
+    Route::permanentRedirect('/blog/login.php', '/login');
+    Route::permanentRedirect('/blog/blog.php', '/blog');
+    Route::permanentRedirect('/blog/how-it-works.php', '/how-it-works');
+    Route::permanentRedirect('/blog/coffee-date-ideas.php', '/coffee-date-ideas-in-himachal-pradesh');
+    Route::get('/blog/{slug}.php', 'resolveLegacyBlog')->where('slug', '[A-Za-z0-9\-]+');
     Route::permanentRedirect('/tips-red-flags.php', '/blog/tips-red-flags');
     Route::permanentRedirect('/blog-how-to-report-suspicious-profile.php', '/blog/how-to-report-suspicious-profile');
     Route::permanentRedirect('/blog-mbti-personality-dating-compatibility.php', '/blog/mbti-personality-dating-compatibility');
-    Route::get('/blog-{slug}.php', fn (string $slug) => redirect()->route('blog.show', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/blog-{slug}.php', 'resolveLegacyBlog')->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/blog-{slug}', 'resolveLegacyBlog')->where('slug', '[A-Za-z0-9\-]+');
 
     // Retired legacy dynamic profile/social URLs return clean 410 Gone so Search Console drops old 404s
     Route::any('/{legacy}', fn () => response()->view('errors.410', [], 410))
@@ -215,3 +236,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/settings', [AdminController::class, 'updateSettings'])->middleware('admin:super_admin,content_manager')->name('settings.update');
     });
 });
+
+// Final Legacy Catch for Bare City/State/Topic Slugs from 2026 Search Console 404 Drilldown
+Route::get('/{slug}', [PublicController::class, 'resolveBareLegacy'])
+    ->where('slug', '[A-Za-z0-9\-_]+(?:\.php)?');

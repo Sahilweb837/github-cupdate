@@ -21,7 +21,7 @@
 <body>
     <main class="card">
         <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in" class="logo">
-        <h1>410 — Legacy Page Retired</h1>
+        <h1>410: Legacy Page Retired</h1>
         <p>This older profile or feed URL is no longer available on CupDate.in. Visit our updated platform to meet verified members.</p>
         <div class="actions">
             <a href="{{ url('/') }}" class="primary">Go to CupDate.in</a>

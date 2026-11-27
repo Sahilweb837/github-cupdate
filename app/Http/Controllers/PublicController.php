@@ -29,8 +29,14 @@ class PublicController extends Controller
     public function home(Request $request, LiveStatsService $liveStats): View|RedirectResponse
     {
         $rawUri = (string) ($request->server('REQUEST_URI') ?: $request->getRequestUri());
-        if (str_starts_with($rawUri, '/index.php') && ($legacyCity = $request->query('city'))) {
-            return redirect()->route('seo.city', ['slug' => \Illuminate\Support\Str::slug((string) $legacyCity)], 301);
+        if (str_starts_with($rawUri, '/index.php') && ($legacyCity = ($request->query('city') ?: $request->query('name')))) {
+            $rawSlug = \Illuminate\Support\Str::slug((string) $legacyCity);
+            $resolved = SeoCities::canonicalSlug($rawSlug);
+            if ($resolved) {
+                return redirect()->route('seo.city', ['slug' => $resolved], 301);
+            }
+
+            return redirect()->route('cities', [], 301);
         }
 
         $filter = $request->query('filter', 'nearby');
@@ -517,12 +523,89 @@ class PublicController extends Controller
 
     public function legacyCityQuery(Request $request): RedirectResponse
     {
-        $city = trim((string) $request->query('city', ''));
+        $city = trim((string) ($request->query('city') ?: $request->query('name', '')));
         if ($city !== '') {
-            return redirect()->route('seo.city', ['slug' => \Illuminate\Support\Str::slug($city)], 301);
+            $slug = \Illuminate\Support\Str::slug($city);
+            $resolved = SeoCities::canonicalSlug($slug);
+            if ($resolved) {
+                return redirect()->route('seo.city', ['slug' => $resolved], 301);
+            }
         }
 
         return redirect()->route('cities', [], 301);
+    }
+
+    public function resolveLegacyBlog(string $slug): RedirectResponse
+    {
+        $clean = strtolower(preg_replace('/\.php$/i', '', trim($slug, '/ ')));
+        if (str_starts_with($clean, 'blog-')) {
+            $clean = substr($clean, 5);
+        }
+
+        if ($guide = SeoGuides::findBySlug($clean)) {
+            return redirect()->route('blog.show', ['slug' => $guide['slug']], 301);
+        }
+
+        if ($citySlug = SeoCities::canonicalSlug($clean)) {
+            return redirect()->route('seo.city', ['slug' => $citySlug], 301);
+        }
+
+        $target = match (true) {
+            str_contains($clean, 'rishta') || str_contains($clean, 'marriage') => url('/rishta'),
+            str_contains($clean, 'delhi') => route('blog.show', ['slug' => 'best-delhi-dating-website']),
+            str_contains($clean, 'pune') => route('blog.show', ['slug' => 'dating-pune']),
+            str_contains($clean, 'haryana') => route('blog.show', ['slug' => 'haryana-dating-guide']),
+            str_contains($clean, 'himachal') || str_contains($clean, 'mussoorie') || str_contains($clean, 'date-spots') => route('blog.show', ['slug' => 'best-himachal-dating-website']),
+            str_contains($clean, 'mbti') || str_contains($clean, 'astrology') => route('blog.show', ['slug' => 'mbti-personality-dating-compatibility']),
+            str_contains($clean, 'fake') || str_contains($clean, 'report') || str_contains($clean, 'scam') => route('blog.show', ['slug' => 'how-to-report-suspicious-profile']),
+            str_contains($clean, 'safety') || str_contains($clean, 'girls') => route('blog.show', ['slug' => 'women-dating-safety-guide-india']),
+            str_contains($clean, 'coffee') || str_contains($clean, 'first-date') || str_contains($clean, 'successful') || str_contains($clean, 'introvert') => route('blog.show', ['slug' => 'how-to-impress-on-a-first-date']),
+            str_contains($clean, 'video') => route('live-video.index'),
+            str_contains($clean, 'profile') || str_contains($clean, 'myths') || str_contains($clean, 'apps') || str_contains($clean, 'traditional') || str_contains($clean, 'relationship') => url('/dating-etiquette-india'),
+            str_contains($clean, 'girl-meet') => route('seo.city', ['slug' => 'chandigarh']),
+            str_contains($clean, 'nearby') || str_contains($clean, 'match') || str_contains($clean, 'swipes') => route('public.discover'),
+            default => route('blog'),
+        };
+
+        return redirect()->to($target, 301);
+    }
+
+    public function resolveBareLegacy(string $slug): RedirectResponse
+    {
+        $clean = strtolower(preg_replace('/\.php$/i', '', trim($slug, '/ ')));
+        if ($clean === '') {
+            abort(404);
+        }
+
+        if (str_starts_with($clean, 'dating-')) {
+            $stripped = preg_replace('/^(?:dating-|in-)+/', '', $clean);
+            if ($stripped && ($citySlug = SeoCities::canonicalSlug($stripped))) {
+                return redirect()->route('seo.city', ['slug' => $citySlug], 301);
+            }
+        }
+
+        if ($citySlug = SeoCities::canonicalSlug($clean)) {
+            return redirect()->route('seo.city', ['slug' => $citySlug], 301);
+        }
+
+        $target = match ($clean) {
+            'scam-awareness', 'safety-meetup', 'safety-reporting', 'safety-online' => route('safety'),
+            'tips-profile', 'tips', 'ai-bio-generator', 'relationship-advice' => url('/dating-etiquette-india'),
+            'freevideocall', 'video-chat', 'love-video-chat-india-free', 'free-video-chat-girls-india' => route('live-video.index'),
+            'online-dating-punjab-girls', 'meet-girls-chandigarh', 'girl-meet' => route('seo.city', ['slug' => 'chandigarh']),
+            'india-rishta', 'marriage' => url('/rishta'),
+            'couples', 'love' => url('/couple-activities'),
+            'cookie-policy' => route('privacy'),
+            'guest-chat', 'match', 'meet', 'swipes', 'search', 'search_term_string', 'chat', 'social' => route('public.discover'),
+            'city' => route('cities'),
+            default => null,
+        };
+
+        if ($target) {
+            return redirect()->to($target, 301);
+        }
+
+        abort(404);
     }
 
     public function legal(string $page): View

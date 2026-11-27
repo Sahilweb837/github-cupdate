@@ -66,15 +66,23 @@
         </div>
 
         <div class="hero-visual">
-            <div class="hero-shape-blush" aria-hidden="true"></div>
-            <div class="hero-photo-frame">
-                <img src="{{ asset('images/cupdate-scene.svg') }}" alt="CupDate free coffee dates, CupTV live video, and safe connections" class="scene-illustration">
-                <div class="floating-badge badge-bottom-left">
-                    <span class="badge-coffee-dot"><x-icon name="coffee" class="cup-icon-xs" /></span>
-                    <div>
-                        <div class="badge-title">Real Verified Community</div>
-                        <div class="badge-sub">Zero Fake Profiles · 100% Free</div>
+            <div class="hero-couple-showcase">
+                <div class="hero-couple-main">
+                    <img src="{{ asset('images/real-couple-shimla.jpg') }}" alt="Real couple smiling over warm coffee by a sunlit Himalayan cafe window" class="hero-couple-img" fetchpriority="high" decoding="async">
+                    <div class="hero-couple-caption">
+                        <strong>Real Conversations Over Coffee</strong>
+                        <span>Shimla, Dharamshala &amp; {{ $totalSeoCities }}+ Cities</span>
                     </div>
+                </div>
+                <div class="hero-couple-pair">
+                    <figure class="hero-couple-thumb">
+                        <img src="{{ asset('images/real-couple-delhi.jpg') }}" alt="Indian couple laughing over afternoon coffee at a sunlit outdoor garden cafe in New Delhi" loading="eager" decoding="async">
+                        <figcaption>Daytime Cafe Meetups · Delhi &amp; NCR</figcaption>
+                    </figure>
+                    <figure class="hero-couple-thumb">
+                        <img src="{{ asset('images/couple-cafe-1.jpg') }}" alt="Couple sharing cappuccinos beside a bright mountain cafe window" loading="eager" decoding="async">
+                        <figcaption>100% Free · Verified 18+ Community</figcaption>
+                    </figure>
                 </div>
             </div>
         </div>
@@ -299,6 +307,39 @@
         </div>
         <div class="centered mt-24">
             <a href="{{ route('safety') }}" class="btn btn-outline btn-sm">Read Full Safety Standards</a>
+        </div>
+    </div>
+</section>
+
+<section class="section-white">
+    <div class="container">
+        <div class="legal-trust-panel">
+            <div>
+                <span class="eyebrow-text">GENUINE LEGAL DATING PLATFORM · 18+ ONLY</span>
+                <h2 class="section-title">Why CupDate Is Built as a Safe, Transparent Indian &amp; Global Dating Platform</h2>
+                <p class="section-lead">CupDate (cupdate.in) connects consenting adults aged 18+ for honest friendship, coffee dates, and serious relationships with published policies, active moderation, and zero hidden charges.</p>
+                <div class="legal-links-row">
+                    <a href="{{ route('privacy') }}" class="btn btn-outline btn-xs">Privacy Policy</a>
+                    <a href="{{ route('terms') }}" class="btn btn-outline btn-xs">Terms &amp; Conditions</a>
+                    <a href="{{ route('guidelines') }}" class="btn btn-outline btn-xs">Community Guidelines</a>
+                    <a href="{{ route('safety-center') }}" class="btn btn-outline btn-xs">Safety Center</a>
+                    <a href="{{ route('contact') }}" class="btn btn-blush btn-xs">Contact Support</a>
+                </div>
+            </div>
+            <div class="legal-facts-list">
+                <div class="legal-fact-item">
+                    <strong>Mandatory 18+ Age Check</strong>
+                    <span>Only adults 18 years or older can register, message, or join video rooms.</span>
+                </div>
+                <div class="legal-fact-item">
+                    <strong>Hashed Credentials &amp; Private Locations</strong>
+                    <span>Passwords use cryptographic hashing and exact street coordinates are never exposed.</span>
+                </div>
+                <div class="legal-fact-item">
+                    <strong>Zero Paywalls &amp; Honest Community</strong>
+                    <span>Free messaging, free CupTV video, real café reviews, and instant user report/block controls.</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
