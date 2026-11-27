@@ -16,25 +16,31 @@ class MomentController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Moment::with('user')->latest('created_at');
+        $moments = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
 
-        if (Schema::hasColumn('posts', 'is_approved')) {
-            $query->where('is_approved', true)->where('is_flagged', false);
-        }
+        try {
+            if (Schema::hasTable('posts')) {
+                $query = Moment::with('user')->latest('created_at');
 
-        if ($city = $request->query('city')) {
-            if (Schema::hasColumn('posts', 'city')) {
-                $query->where('city', $city);
+                if (Schema::hasColumn('posts', 'is_approved')) {
+                    $query->where('is_approved', true)->where('is_flagged', false);
+                }
+                if ($city = $request->query('city')) {
+                    if (Schema::hasColumn('posts', 'city')) {
+                        $query->where('city', $city);
+                    }
+                }
+                if ($mood = $request->query('mood')) {
+                    if (Schema::hasColumn('posts', 'mood')) {
+                        $query->where('mood', $mood);
+                    }
+                }
+
+                $moments = $query->paginate(12)->withQueryString();
             }
+        } catch (\Throwable) {
+            // Keep moments page resilient without 5xx
         }
-
-        if ($mood = $request->query('mood')) {
-            if (Schema::hasColumn('posts', 'mood')) {
-                $query->where('mood', $mood);
-            }
-        }
-
-        $moments = $query->paginate(12)->withQueryString();
 
         return view('pages.moments', [
             'moments' => $moments,

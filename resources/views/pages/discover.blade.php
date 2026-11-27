@@ -84,9 +84,13 @@
                 </article>
             @empty
                 <div class="empty-state-card">
-                    <h3>No profiles matched your filters</h3>
-                    <p>Reset your filters to explore all active CupDate members.</p>
-                    <a href="{{ route('public.discover') }}" class="btn btn-outline btn-sm">Reset Filters</a>
+                    <h3>Explore Verified Connections Across India</h3>
+                    <p>Create your free CupDate profile to appear in city discovery, join CupTV live video, and connect over daytime coffee dates.</p>
+                    <div class="hero-actions mt-12">
+                        <a href="{{ route('register') }}" class="btn btn-pink btn-sm">Create Free Account</a>
+                        <a href="{{ route('cities') }}" class="btn btn-outline btn-sm">Explore 100+ Cities</a>
+                        <a href="{{ route('live-video.index') }}" class="btn btn-coffee btn-sm">Open CupTV Live</a>
+                    </div>
                 </div>
             @endforelse
             </div>

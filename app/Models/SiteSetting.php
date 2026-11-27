@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class SiteSetting extends Model
 {
@@ -10,6 +12,14 @@ class SiteSetting extends Model
 
     public static function getValue(string $key, ?string $default = null): ?string
     {
-        return static::query()->where('key', $key)->value('value') ?? $default;
+        try {
+            if (! Schema::hasTable('site_settings')) {
+                return $default;
+            }
+
+            return static::query()->where('key', $key)->value('value') ?? $default;
+        } catch (Throwable) {
+            return $default;
+        }
     }
 }

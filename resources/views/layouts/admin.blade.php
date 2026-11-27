@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate Admin Console')</title>
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/cupdate-logo.jpg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -18,8 +18,8 @@
         <div class="admin-topbar-inner">
             <div class="admin-brand-group">
                 <a href="{{ route('admin.dashboard') }}" class="brand-logo">
-                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="32" height="32">
-                    <span class="brand-text">CupDate <span>Admin</span></span>
+                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in" class="brand-logo-img" width="36" height="33">
+                    <span class="brand-text">CupDate.in <span>Admin</span></span>
                 </a>
                 <span class="admin-role-pill">{{ strtoupper(str_replace('_', ' ', auth()->user()->role ?? 'super_admin')) }}</span>
             </div>

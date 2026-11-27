@@ -16,25 +16,31 @@ class CafeReviewController extends Controller
 {
     public function index(Request $request): View
     {
-        $datePlaces = Schema::hasTable('date_places')
-            ? DatePlace::orderByDesc('rating')->get()
-            : collect();
+        $datePlaces = collect();
+        $reviews = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
 
-        $reviews = collect();
-        if (Schema::hasTable('cafe_reviews')) {
-            $query = CafeReview::with('user')
-                ->where('is_approved', true)
-                ->where('is_flagged', false)
-                ->latest('created_at');
-
-            if ($city = $request->query('city')) {
-                $query->where('city', 'like', '%' . SqlSafe::escapeLike((string) $city) . '%');
-            }
-            if ($tag = $request->query('tag')) {
-                $query->where('safety_tag', $tag);
+        try {
+            if (Schema::hasTable('date_places')) {
+                $datePlaces = DatePlace::orderByDesc('rating')->get();
             }
 
-            $reviews = $query->paginate(12)->withQueryString();
+            if (Schema::hasTable('cafe_reviews')) {
+                $query = CafeReview::with('user')
+                    ->where('is_approved', true)
+                    ->where('is_flagged', false)
+                    ->latest('created_at');
+
+                if ($city = $request->query('city')) {
+                    $query->where('city', 'like', '%' . SqlSafe::escapeLike((string) $city) . '%');
+                }
+                if ($tag = $request->query('tag')) {
+                    $query->where('safety_tag', $tag);
+                }
+
+                $reviews = $query->paginate(12)->withQueryString();
+            }
+        } catch (\Throwable) {
+            // Keep cafe reviews page resilient without 5xx
         }
 
         return view('pages.cafes', [

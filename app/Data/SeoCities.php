@@ -287,20 +287,15 @@ class SeoCities
         return self::all()[$slug] ?? null;
     }
 
-    /**
-     * Resolve curated city or build a clean, rich city/region entry for legacy Search Console slugs.
-     *
-     * @return array{slug: string, name: string, state: string, country: string, spot: string, vibe: string}|null
-     */
-    public static function findOrBuild(string $slug): ?array
+    public static function canonicalSlug(string $slug): ?string
     {
         $clean = strtolower(trim($slug, '/ '));
         if ($clean === '' || ! preg_match('/^[a-z0-9\-]{2,60}$/', $clean)) {
             return null;
         }
 
-        if ($found = self::findBySlug($clean)) {
-            return $found;
+        if (self::findBySlug($clean)) {
+            return $clean;
         }
 
         $aliases = [
@@ -325,25 +320,23 @@ class SeoCities
             'dharamsala' => 'dharamshala',
             'bilaspur' => 'bilaspur-hp',
             'goa' => 'panaji',
-            'uk' => 'united-kingdom',
-            'usa' => 'united-states',
-            'us' => 'united-states',
+            'himachal' => 'himachal-pradesh',
+            'himachal-pradesh' => 'shimla',
         ];
 
-        if (isset($aliases[$clean]) && ($aliased = self::findBySlug($aliases[$clean]))) {
-            return $aliased;
-        }
+        return $aliases[$clean] ?? null;
+    }
 
-        $title = ucwords(str_replace('-', ' ', $clean));
+    /**
+     * Resolve curated city by exact slug or alias (no synthetic thin pages for unknown slugs).
+     *
+     * @return array{slug: string, name: string, state: string, country: string, spot: string, vibe: string}|null
+     */
+    public static function findOrBuild(string $slug): ?array
+    {
+        $resolved = self::canonicalSlug($slug);
 
-        return [
-            'slug' => $clean,
-            'name' => $title,
-            'state' => $title,
-            'country' => 'India & Global',
-            'spot' => "Popular daytime cafés & coffee houses in {$title}",
-            'vibe' => "Genuine coffee dates, verified local profiles, and 100% free CupTV live video in {$title}",
-        ];
+        return $resolved ? self::findBySlug($resolved) : null;
     }
 
     /**

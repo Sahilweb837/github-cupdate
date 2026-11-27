@@ -32,6 +32,7 @@ class SeoService
         }
 
         $path = $request->getPathInfo() ?: '/';
+        $path = preg_replace('#^/index\.php#i', '', $path) ?: '/';
         $page = (int) $request->query('page', 1);
 
         $base = self::canonicalForPath($path);

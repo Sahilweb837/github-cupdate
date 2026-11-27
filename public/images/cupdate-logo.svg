@@ -1,11 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="CupDate Logo">
-  <rect width="64" height="64" rx="14" fill="#382820"/>
-  <!-- Coffee cup body -->
-  <path d="M16 26 H42 V37 C42 44.5 36.2 50 29 50 C21.8 50 16 44.5 16 37 Z" fill="#FFF8F0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 110" width="120" height="110" role="img" aria-label="CupDate.in Logo">
+  <!-- Heart-shaped rising steam -->
+  <path d="M58 50 C58 42 54 37 46 31 C39 25 36 18 40 12 C44 6 53 7 58 14 C63 7 72 6 76 12 C80 18 77 25 70 31 C63 36 60 40 58 46" fill="none" stroke="#A86450" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Cup rim -->
+  <ellipse cx="58" cy="56" rx="28" ry="6.5" fill="#FFFFFF" stroke="#A86450" stroke-width="5"/>
+  <!-- Cup body -->
+  <path d="M30 57 C30 78 42 90 58 90 C74 90 86 78 86 57 Z" fill="#A86450"/>
   <!-- Cup handle -->
-  <path d="M42 29 H45.5 C48.8 29 51 31.2 51 34.2 C51 37.2 48.8 39.5 45.5 39.5 H42" fill="none" stroke="#FFF8F0" stroke-width="3.6" stroke-linecap="round"/>
-  <!-- Saucer -->
-  <rect x="14" y="52" width="32" height="3.2" rx="1.6" fill="#F4A6B8"/>
-  <!-- Warm heart rising above cup -->
-  <path d="M29 21.5 C24.5 18 21.5 15.2 21.5 12.2 C21.5 9.8 23.4 8 25.7 8 C27.2 8 28.4 8.8 29 9.9 C29.6 8.8 30.8 8 32.3 8 C34.6 8 36.5 9.8 36.5 12.2 C36.5 15.2 33.5 18 29 21.5 Z" fill="#D96B89"/>
+  <path d="M85 62 C95 62 98 76 85 81" fill="none" stroke="#A86450" stroke-width="6" stroke-linecap="round"/>
+  <!-- Curved saucer -->
+  <path d="M22 92 Q58 104 94 92 Q58 98 22 92 Z" fill="#A86450" stroke="#A86450" stroke-width="2" stroke-linejoin="round"/>
 </svg>

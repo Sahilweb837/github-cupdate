@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
+use Throwable;
 
 class PublicController extends Controller
 {
@@ -57,18 +58,34 @@ class PublicController extends Controller
             default => $query->orderByDesc('is_online')->orderByRaw("CASE WHEN state = 'Himachal Pradesh' THEN 0 ELSE 1 END")->latest('last_active'),
         };
 
-        $featuredUsers = $query->take(6)->get();
-        $cities = City::where('is_active', true)->orderBy('sort_order')->get();
-        $interests = InterestCategory::where('is_active', true)->orderBy('name')->get();
-        $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
-
+        $featuredUsers = collect();
+        $cities = collect();
+        $interests = collect();
+        $datePlaces = collect();
         $recentMoments = collect();
-        if (Schema::hasTable('posts')) {
-            $momentsQuery = Moment::with('user')->latest('created_at');
-            if (Schema::hasColumn('posts', 'is_approved')) {
-                $momentsQuery->where('is_approved', true)->where('is_flagged', false);
+
+        try {
+            if (Schema::hasTable('users')) {
+                $featuredUsers = $query->take(6)->get();
             }
-            $recentMoments = $momentsQuery->take(4)->get();
+            if (Schema::hasTable('cities')) {
+                $cities = City::where('is_active', true)->orderBy('sort_order')->get();
+            }
+            if (Schema::hasTable('interest_categories')) {
+                $interests = InterestCategory::where('is_active', true)->orderBy('name')->get();
+            }
+            if (Schema::hasTable('date_places')) {
+                $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
+            }
+            if (Schema::hasTable('posts')) {
+                $momentsQuery = Moment::with('user')->latest('created_at');
+                if (Schema::hasColumn('posts', 'is_approved')) {
+                    $momentsQuery->where('is_approved', true)->where('is_flagged', false);
+                }
+                $recentMoments = $momentsQuery->take(4)->get();
+            }
+        } catch (Throwable) {
+            // Keep homepage resilient if DB tables are temporarily unavailable
         }
 
         $faqs = [
@@ -111,28 +128,47 @@ class PublicController extends Controller
         ]);
     }
 
-    public function cityLanding(string $slug): View
+    public function cityLanding(string $slug): View|RedirectResponse
     {
-        $city = SeoCities::findOrBuild($slug);
+        $canonicalSlug = SeoCities::canonicalSlug($slug);
+        abort_unless($canonicalSlug !== null, 404);
+
+        if (strtolower(trim($slug, '/ ')) !== $canonicalSlug) {
+            return redirect()->route('seo.city', ['slug' => $canonicalSlug], 301);
+        }
+
+        $city = SeoCities::findBySlug($canonicalSlug);
         abort_unless($city !== null, 404);
 
         $cityName = $city['name'];
         $stateName = $city['state'];
         $countryName = $city['country'];
 
-        $membersQuery = User::query()
-            ->where('status', 'active')
-            ->where('profile_visible', true)
-            ->where('is_admin', false)
-            ->where('email', 'not like', '%@cupdate.in');
+        $localMembers = collect();
+        $datePlaces = collect();
+        try {
+            if (Schema::hasTable('users')) {
+                $membersQuery = User::query()
+                    ->where('status', 'active')
+                    ->where('profile_visible', true)
+                    ->where('is_admin', false)
+                    ->where('email', 'not like', '%@cupdate.in');
 
-        if ($countryName === 'India' && $slug !== 'india') {
-            $safeCity = SqlSafe::escapeLike((string) $cityName);
-            $safeState = SqlSafe::escapeLike((string) $stateName);
-            $membersQuery->where(function ($q) use ($safeCity, $safeState) {
-                $q->where('city', 'like', "%{$safeCity}%")
-                    ->orWhere('state', 'like', "%{$safeState}%");
-            });
+                if ($countryName === 'India' && $canonicalSlug !== 'india') {
+                    $safeCity = SqlSafe::escapeLike((string) $cityName);
+                    $safeState = SqlSafe::escapeLike((string) $stateName);
+                    $membersQuery->where(function ($q) use ($safeCity, $safeState) {
+                        $q->where('city', 'like', "%{$safeCity}%")
+                            ->orWhere('state', 'like', "%{$safeState}%");
+                    });
+                }
+                $localMembers = $membersQuery->take(4)->get();
+            }
+            if (Schema::hasTable('date_places')) {
+                $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
+            }
+        } catch (Throwable) {
+            // Keep city landing resilient
         }
 
         $allCities = SeoCities::all();
@@ -165,10 +201,10 @@ class PublicController extends Controller
         ];
 
         return view('pages.seo-landing', [
-            'slug' => $slug,
+            'slug' => $canonicalSlug,
             'page' => $page,
-            'localMembers' => $membersQuery->take(4)->get(),
-            'datePlaces' => DatePlace::orderByDesc('rating')->take(4)->get(),
+            'localMembers' => $localMembers,
+            'datePlaces' => $datePlaces,
             'relatedCities' => $relatedCities,
         ]);
     }
@@ -205,17 +241,44 @@ class PublicController extends Controller
             default => $query->orderByDesc('is_online')->latest('last_active'),
         };
 
+        $profiles = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
+        $cities = collect();
+        $interests = collect();
+
+        try {
+            if (Schema::hasTable('users')) {
+                $profiles = $query->paginate(12)->withQueryString();
+            }
+            if (Schema::hasTable('cities')) {
+                $cities = City::where('is_active', true)->orderBy('sort_order')->get();
+            }
+            if (Schema::hasTable('interest_categories')) {
+                $interests = InterestCategory::where('is_active', true)->orderBy('name')->get();
+            }
+        } catch (Throwable) {
+            // Keep discover resilient
+        }
+
         return view('pages.discover', [
-            'profiles' => $query->paginate(12)->withQueryString(),
-            'cities' => City::where('is_active', true)->orderBy('sort_order')->get(),
-            'interests' => InterestCategory::where('is_active', true)->orderBy('name')->get(),
+            'profiles' => $profiles,
+            'cities' => $cities,
+            'interests' => $interests,
         ]);
     }
 
     public function howItWorks(): View
     {
+        $datePlaces = collect();
+        try {
+            if (Schema::hasTable('date_places')) {
+                $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
+            }
+        } catch (Throwable) {
+            // fallback empty
+        }
+
         return view('pages.how-it-works', [
-            'datePlaces' => DatePlace::orderByDesc('rating')->take(4)->get(),
+            'datePlaces' => $datePlaces,
         ]);
     }
 
@@ -226,8 +289,17 @@ class PublicController extends Controller
 
     public function about(): View
     {
+        $cities = collect();
+        try {
+            if (Schema::hasTable('cities')) {
+                $cities = City::where('is_active', true)->orderBy('sort_order')->take(6)->get();
+            }
+        } catch (Throwable) {
+            // fallback empty
+        }
+
         return view('pages.about', [
-            'cities' => City::where('is_active', true)->orderBy('sort_order')->take(6)->get(),
+            'cities' => $cities,
         ]);
     }
 
@@ -288,7 +360,7 @@ class PublicController extends Controller
                 'duration' => '3 Days · Weekend',
                 'city_match' => 'Dharamshala',
                 'meetup_spot' => 'McLeod Ganj & Bir',
-                'image' => 'images/couple-cafe-1.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Relaxed mountain coffee meetup, bookstore evenings in McLeod Ganj, and scenic sunset views around Bir.',
             ],
             [
@@ -298,7 +370,7 @@ class PublicController extends Controller
                 'duration' => '4 Days · Group',
                 'city_match' => 'Manali',
                 'meetup_spot' => 'Old Manali Cafes',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Meet fellow remote workers and travelers for daytime riverside cafes, cedar forest walks, and group dinners.',
             ],
             [
@@ -308,7 +380,7 @@ class PublicController extends Controller
                 'duration' => '2 Days · Weekend',
                 'city_match' => 'Shimla',
                 'meetup_spot' => 'The Ridge & Mall Road',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Colonial architecture strolls, warm bakery mornings, and peaceful photography meetups in Shimla.',
             ],
             [
@@ -318,7 +390,7 @@ class PublicController extends Controller
                 'duration' => '3 Days · Road Trip',
                 'city_match' => 'Dehradun',
                 'meetup_spot' => 'Tapovan & Landour',
-                'image' => 'images/member-diego.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Early morning Ganges riverside coffee, scenic Landour bakehouse stop, and sunset viewpoints.',
             ],
             [
@@ -328,7 +400,7 @@ class PublicController extends Controller
                 'duration' => '4 Days · Group',
                 'city_match' => 'Jaipur',
                 'meetup_spot' => 'C-Scheme & Lake Pichola',
-                'image' => 'images/member-sofia.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Courtyard roasteries, historic forts, and sunset terrace meetups across Rajasthan.',
             ],
             [
@@ -338,7 +410,7 @@ class PublicController extends Controller
                 'duration' => '4 Days · Coastal',
                 'city_match' => 'Bengaluru',
                 'meetup_spot' => 'Assagao & Indiranagar',
-                'image' => 'images/member-amara.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'summary' => 'Coastal specialty coffee spots, sunlit heritage lanes in Fontainhas, and weekend road-trip crews.',
             ],
         ]);
@@ -374,8 +446,17 @@ class PublicController extends Controller
 
     public function blog(): View
     {
+        $posts = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
+        try {
+            if (Schema::hasTable('blog_posts')) {
+                $posts = BlogPost::where('is_published', true)->latest('published_at')->paginate(12);
+            }
+        } catch (Throwable) {
+            // Keep blog directory resilient
+        }
+
         return view('pages.blog', [
-            'posts' => BlogPost::where('is_published', true)->latest('published_at')->paginate(12),
+            'posts' => $posts,
             'seoGuides' => SeoGuides::all(),
         ]);
     }
@@ -395,9 +476,18 @@ class PublicController extends Controller
             ]);
         }
 
-        $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        try {
+            if (Schema::hasTable('blog_posts')) {
+                $post = BlogPost::where('slug', $slug)->where('is_published', true)->first();
+                if ($post) {
+                    return view('pages.blog-show', ['post' => $post]);
+                }
+            }
+        } catch (Throwable) {
+            // fall through to 404
+        }
 
-        return view('pages.blog-show', ['post' => $post]);
+        abort(404);
     }
 
     public function guide(string $slug): View
@@ -497,23 +587,35 @@ class PublicController extends Controller
         abort_unless(isset($pages[$slug]), 404);
         $pageData = $pages[$slug];
 
-        $membersQuery = User::query()
-            ->where('status', 'active')
-            ->where('profile_visible', true)
-            ->where('is_admin', false)
-            ->where('email', 'not like', '%@cupdate.in');
+        $localMembers = collect();
+        $datePlaces = collect();
+        try {
+            if (Schema::hasTable('users')) {
+                $membersQuery = User::query()
+                    ->where('status', 'active')
+                    ->where('profile_visible', true)
+                    ->where('is_admin', false)
+                    ->where('email', 'not like', '%@cupdate.in');
 
-        if ($pageData['city']) {
-            $membersQuery->where('city', $pageData['city']);
-        } else {
-            $membersQuery->where('state', 'Himachal Pradesh');
+                if ($pageData['city']) {
+                    $membersQuery->where('city', $pageData['city']);
+                } else {
+                    $membersQuery->where('state', 'Himachal Pradesh');
+                }
+                $localMembers = $membersQuery->take(4)->get();
+            }
+            if (Schema::hasTable('date_places')) {
+                $datePlaces = DatePlace::orderByDesc('rating')->take(4)->get();
+            }
+        } catch (Throwable) {
+            // keep landing resilient
         }
 
         return view('pages.seo-landing', [
             'slug' => $slug,
             'page' => $pageData,
-            'localMembers' => $membersQuery->take(4)->get(),
-            'datePlaces' => DatePlace::orderByDesc('rating')->take(4)->get(),
+            'localMembers' => $localMembers,
+            'datePlaces' => $datePlaces,
         ]);
     }
 

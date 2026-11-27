@@ -9,8 +9,8 @@
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'CupDate App')</title>
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/cupdate-logo.jpg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
 
     <div class="mobile-app-topbar">
         <a href="{{ route('app.discover') }}" class="brand-logo">
-            <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="32" height="32">
-            <span class="brand-text">Cup<span>Date</span></span>
+            <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in" class="brand-logo-img" width="36" height="33">
+            <span class="brand-text">CupDate<span>.in</span></span>
         </a>
         <div class="mobile-topbar-right">
             <a href="{{ route('app.notifications') }}" class="icon-circle-btn" aria-label="Notifications">
@@ -38,8 +38,8 @@
         <aside class="app-sidebar">
             <div>
                 <a href="{{ route('home') }}" class="brand-logo app-brand">
-                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate" class="brand-logo-img" width="34" height="34">
-                    <span class="brand-text">Cup<span>Date</span></span>
+                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in" class="brand-logo-img" width="38" height="34">
+                    <span class="brand-text">CupDate<span>.in</span></span>
                 </a>
 
                 <nav class="sidebar-nav" aria-label="App Navigation">

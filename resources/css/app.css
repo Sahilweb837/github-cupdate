@@ -94,7 +94,7 @@ button, input, select, textarea { font: inherit; }
     font-size: 1.2rem;
     color: var(--coffee-dark);
 }
-.brand-text span { color: var(--pink-dark); }
+.brand-text span { color: #A86450; }
 
 .brand-mark {
     width: 34px;
@@ -1032,7 +1032,7 @@ button, input, select, textarea { font: inherit; }
 
 
 /* Brand Logo, Free Promo Strip, Live Visitors, OmeTV Live Video, Moments & 100+ Cities SEO */
-.brand-logo-img { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; display: block; }
+.brand-logo-img { width: 40px; height: 36px; object-fit: contain; display: block; flex-shrink: 0; }
 .top-promo-bar { position: sticky; top: 0; z-index: 60; background: var(--coffee-dark); color: var(--white); font-size: 0.78rem; padding: 7px 0; }
 .site-header { top: 33px; }
 .top-promo-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }

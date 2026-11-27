@@ -16,8 +16,8 @@
     <meta name="robots" content="{{ $robotsContent }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/cupdate-logo.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/cupdate-logo.jpg') }}">
     <meta property="og:site_name" content="CupDate">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('title', 'CupDate | Free CupTV Video and Coffee Dating')">
@@ -70,9 +70,9 @@
 
     <header class="site-header">
         <div class="container header-inner">
-            <a href="{{ route('home') }}" class="brand-logo" aria-label="CupDate Home">
-                <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate Logo" class="brand-logo-img" width="36" height="36">
-                <span class="brand-text">Cup<span>Date</span></span>
+            <a href="{{ route('home') }}" class="brand-logo" aria-label="CupDate.in Home">
+                <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in Logo" class="brand-logo-img" width="40" height="36">
+                <span class="brand-text">CupDate<span>.in</span></span>
             </a>
 
             <nav class="site-nav" id="siteNav" aria-label="Primary Navigation">
@@ -117,8 +117,8 @@
         <div class="container footer-grid">
             <div class="footer-brand-col">
                 <a href="{{ route('home') }}" class="brand-logo footer-logo">
-                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate Logo" class="brand-logo-img" width="34" height="34">
-                    <span class="brand-text">CupDate</span>
+                    <img src="{{ asset('images/cupdate-logo.svg') }}" alt="CupDate.in Logo" class="brand-logo-img" width="38" height="34">
+                    <span class="brand-text">CupDate.in</span>
                 </a>
                 <p class="footer-tagline">Free Coffee Dating and CupTV Live Video Across 200+ Cities.</p>
                 <p class="footer-sub">100% free messaging, CupTV live video chat, and community cafe reviews - zero paid paywalls, strict no-nudity &amp; anti-spam moderation.</p>

@@ -51,32 +51,53 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/sitemap.xml', 'sitemap')->name('sitemap');
     Route::get('/robots.txt', 'robots')->name('robots');
 
-    // Legacy Search Console / PHP URL compatibility (prevents 404s, Soft 404s & canonical drift)
+    // Legacy Search Console / PHP URL consolidation (301 to single canonical URL — eliminates duplicate canonicals)
     Route::get('/city.php', 'legacyCityQuery');
-    Route::get('/city/{slug}', 'cityLanding')->where('slug', '[a-z0-9\-]+');
-    Route::get('/dating-in-{slug}', 'cityLanding')->where('slug', '[a-z0-9\-]+');
-    Route::get('/dating-{slug}', 'cityLanding')->where('slug', '[a-z0-9\-]+');
+    Route::get('/city/{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating-in-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+    Route::get('/dating-{slug}', fn (string $slug) => redirect()->route('seo.city', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
     Route::get('/community/{slug}', fn (string $slug) => app(PublicController::class)->guide('community-' . $slug));
     Route::get('/rishta', fn () => app(PublicController::class)->guide('rishta'));
-    Route::get('/dates', 'howItWorks');
-    Route::get('/coffee-date-ideas', fn () => app(PublicController::class)->seoLanding('coffee-date-ideas-in-himachal-pradesh'));
-    Route::get('/privacy', fn () => app(PublicController::class)->legal('privacy-policy'));
-    Route::get('/terms', fn () => app(PublicController::class)->legal('terms-and-conditions'));
 
-    Route::get('/faq.php', fn () => app(PublicController::class)->guide('faq'));
-    Route::get('/disclaimer.php', fn () => app(PublicController::class)->guide('disclaimer'));
-    Route::get('/community-guidelines.php', fn () => app(PublicController::class)->legal('community-guidelines'));
-    Route::get('/privacy.php', fn () => app(PublicController::class)->legal('privacy-policy'));
-    Route::get('/terms.php', fn () => app(PublicController::class)->legal('terms-and-conditions'));
-    Route::get('/about.php', 'about');
-    Route::get('/contact.php', 'contact');
-    Route::get('/safety.php', 'safety');
-    Route::get('/blog.php', 'blog');
-    Route::get('/discover.php', 'discover');
-    Route::get('/tips-red-flags.php', fn () => app(PublicController::class)->guide('tips-red-flags'));
-    Route::get('/blog-how-to-report-suspicious-profile.php', fn () => app(PublicController::class)->guide('how-to-report-suspicious-profile'));
-    Route::get('/blog-mbti-personality-dating-compatibility.php', fn () => app(PublicController::class)->guide('mbti-personality-dating-compatibility'));
-    Route::get('/blog-{slug}.php', 'blogShow')->where('slug', '[a-z0-9\-]+');
+    Route::permanentRedirect('/dates', '/how-it-works');
+    Route::permanentRedirect('/coffee-date-ideas', '/coffee-date-ideas-in-himachal-pradesh');
+    Route::permanentRedirect('/privacy', '/privacy-policy');
+    Route::permanentRedirect('/terms', '/terms-and-conditions');
+    Route::permanentRedirect('/faq', '/blog/faq');
+    Route::permanentRedirect('/disclaimer', '/blog/disclaimer');
+
+    Route::permanentRedirect('/faq.php', '/blog/faq');
+    Route::permanentRedirect('/disclaimer.php', '/blog/disclaimer');
+    Route::permanentRedirect('/community-guidelines.php', '/community-guidelines');
+    Route::permanentRedirect('/privacy.php', '/privacy-policy');
+    Route::permanentRedirect('/terms.php', '/terms-and-conditions');
+    Route::permanentRedirect('/about.php', '/about-us');
+    Route::permanentRedirect('/contact.php', '/contact');
+    Route::permanentRedirect('/safety.php', '/safety');
+    Route::permanentRedirect('/blog.php', '/blog');
+    Route::permanentRedirect('/discover.php', '/discover');
+    Route::permanentRedirect('/cities.php', '/cities');
+    Route::permanentRedirect('/moments.php', '/moments');
+    Route::permanentRedirect('/cafes.php', '/cafes');
+    Route::permanentRedirect('/video.php', '/live-video');
+    Route::permanentRedirect('/live-video.php', '/live-video');
+    Route::permanentRedirect('/truth-dare.php', '/truth-and-dare');
+    Route::permanentRedirect('/travel.php', '/travel-groups');
+    Route::permanentRedirect('/login.php', '/login');
+    Route::permanentRedirect('/register.php', '/register');
+    Route::permanentRedirect('/signup.php', '/register');
+    Route::permanentRedirect('/join.php', '/register');
+    Route::permanentRedirect('/tips-red-flags.php', '/blog/tips-red-flags');
+    Route::permanentRedirect('/blog-how-to-report-suspicious-profile.php', '/blog/how-to-report-suspicious-profile');
+    Route::permanentRedirect('/blog-mbti-personality-dating-compatibility.php', '/blog/mbti-personality-dating-compatibility');
+    Route::get('/blog-{slug}.php', fn (string $slug) => redirect()->route('blog.show', ['slug' => strtolower($slug)], 301))->where('slug', '[A-Za-z0-9\-]+');
+
+    // Retired legacy dynamic profile/social URLs return clean 410 Gone so Search Console drops old 404s
+    Route::any('/{legacy}', fn () => response()->view('errors.410', [], 410))
+        ->where('legacy', '(profile\.php|user\.php|users\.php|match\.php|matches\.php|chat\.php|messages\.php|feed\.php|reels\.php|stories\.php)');
+    Route::get('/{prefix}/{any}', fn () => response()->view('errors.410', [], 410))
+        ->where('prefix', '(profile|user|u|post|p|reels|stories|match|chat)')
+        ->where('any', '.*');
 });
 
 // OmeTV-Style Live Random Video Chat
