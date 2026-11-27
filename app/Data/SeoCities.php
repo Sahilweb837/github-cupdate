@@ -11,6 +11,11 @@ class SeoCities
      */
     public static function all(): array
     {
+        static $cached = null;
+        if ($cached !== null) {
+            return $cached;
+        }
+
         $raw = [
             // Himachal Pradesh & North Hills
             ['shimla', 'Shimla', 'Himachal Pradesh', 'India', 'The Ridge & Mall Road cafés', 'Heritage hillside walks and warm espresso conversations'],
@@ -288,7 +293,74 @@ class SeoCities
             ];
         }
 
-        return $out;
+        // Expanded Regional Indian Districts, University Towns & Global Hubs (900+ City Pages Total)
+        $stateCatalog = [
+            'Himachal Pradesh' => ['Chopal', 'Rohru', 'Jubbal', 'Kotkhai', 'Rampur Bushahr', 'Narkanda', 'Theog', 'Arki', 'Karsog', 'Jogindernagar', 'Sarkaghat', 'Padhar', 'Aut', 'Banjar', 'Manikaran', 'Sainj', 'Tirthan Valley', 'Chitkul', 'Kalpa', 'Reckong Peo', 'Sangla', 'Tabo', 'Barot', 'Baijnath', 'Shahpur', 'Nagrota Bagwan', 'Jawalamukhi', 'Dehra Gopipur', 'Nadaun', 'Sujanpur Tira', 'Barsar', 'Haroli', 'Amb', 'Gagret', 'Chintpurni', 'Sirmaur', 'Rajgarh HP', 'Dadahu', 'Sarahan', 'Khajjiar', 'Bharmour', 'Tissa', 'Killar', 'Ghumarwin', 'Jhandutta', 'Swarghat', 'Parwanoo', 'Pinjore', 'Nalagarh', 'Kunihar', 'Kandaghat', 'Shoghi', 'Mashobra', 'Naldehra'],
+            'Punjab' => ['Abohar', 'Fazilka', 'Malout', 'Muktsar', 'Faridkot', 'Kotkapura', 'Jaitu', 'Mansa', 'Budhlada', 'Sangrur', 'Sunam', 'Malerkotla', 'Dhuri', 'Barnala', 'Tapa', 'Khanna', 'Samrala', 'Jagraon', 'Raikot', 'Mullanpur', 'Ropar', 'Nangal', 'Anandpur Sahib', 'Morinda', 'Chamkaur Sahib', 'Kharar', 'Kurali', 'Dera Bassi', 'Banur', 'Rajpura', 'Nabha', 'Samana', 'Patran', 'Sirhind', 'Fatehgarh Sahib', 'Bassi Pathana', 'Nawanshahr', 'Banga', 'Balachaur', 'Garhshankar', 'Dasuya', 'Mukerian', 'Tanda', 'Sultanpur Lodhi', 'Kapurthala', 'Nakodar', 'Shahkot', 'Phillaur', 'Goraya', 'Tarn Taran', 'Patti Punjab', 'Ajnala', 'Beas', 'Jandiala Guru', 'Gurdaspur', 'Dinanagar', 'Qadian'],
+            'Haryana' => ['Kaithal', 'Pehowa', 'Shahabad Markanda', 'Ladwa', 'Gharaunda', 'Nilokheri', 'Taraori', 'Assandh', 'Samalkha', 'Gohana', 'Ganaur', 'Bahadurgarh', 'Jhajjar', 'Beri Haryana', 'Charkhi Dadri', 'Mahendragarh', 'Narnaul', 'Bawal', 'Dharuhera', 'Manesar', 'Sohna', 'Pataudi', 'Palwal', 'Hodal', 'Nuh', 'Ballabhgarh', 'Jind', 'Narwana', 'Safidon', 'Fatehabad', 'Tohana', 'Ratia', 'Dabwali', 'Ellenabad', 'Hansi', 'Barwala', 'Tosham', 'Loharu', 'Pundri', 'Kalayat', 'Naraingarh', 'Barara', 'Kalka', 'Pehowa Sahib'],
+            'Uttarakhand' => ['Pauri', 'Srinagar Garhwal', 'Kotdwar', 'Lansdowne', 'Tehri', 'New Tehri', 'Chamba Tehri', 'Mussoorie Dhanaulti', 'Vikasnagar', 'Herbertpur', 'Chakrata', 'Doiwala', 'Devprayag', 'Rudraprayag', 'Ukhimath', 'Chopta', 'Chamoli', 'Gopeshwar', 'Joshimath', 'Auli', 'Karnaprayag', 'Uttarkashi', 'Harsil', 'Barkot', 'Bageshwar', 'Kausani', 'Ranikhet', 'Dwarahat', 'Chaukori', 'Pithoragarh', 'Munsiyari', 'Dharchula', 'Champawat', 'Lohaghat', 'Tanakpur', 'Naukuchiatal', 'Bhimtal', 'Sattal', 'Mukteshwar', 'Ramgarh Hills', 'Bazpur', 'Jaspur', 'Khatima', 'Sitarganj', 'Manglaur', 'Laksar'],
+            'Uttar Pradesh' => ['Noida', 'Greater Noida', 'Ghaziabad', 'Bulandshahr', 'Hapur', 'Modinagar', 'Muradnagar', 'Baghpat', 'Baraut', 'Shamli', 'Kairana', 'Bijnor', 'Najibabad', 'Dhampur', 'Amroha', 'Gajraula', 'Sambhal', 'Rampur', 'Pilibhit', 'Shahjahanpur', 'Lakhimpur Kheri', 'Sitapur', 'Hardoi', 'Unnao', 'Raebareli', 'Amethi', 'Sultanpur', 'Pratapgarh', 'Fatehpur UP', 'Kaushambi', 'Banda', 'Chitrakoot', 'Hamirpur UP', 'Mahoba', 'Orai', 'Lalitpur', 'Etawah', 'Mainpuri', 'Etah', 'Kasganj', 'Hathras', 'Aligarh Muslim Campus', 'Khurja', 'Sikandrabad', 'Shikohabad', 'Budaun', 'Farrukhabad', 'Kannauj', 'Auraiya', 'Jaunpur', 'Mirzapur', 'Vindhyachal', 'Sonbhadra', 'Robertsganj', 'Bhadohi', 'Chandauli', 'Ghazipur', 'Ballia', 'Mau', 'Azamgarh', 'Deoria', 'Kushinagar', 'Maharajganj', 'Siddharthnagar', 'Basti', 'Sant Kabir Nagar', 'Bahraich', 'Shravasti', 'Gonda', 'Balrampur'],
+            'Rajasthan' => ['Alwar Bhiwadi', 'Neemrana', 'Behror', 'Kotputli', 'Shahpura', 'Chomu', 'Sanganer', 'Dausa', 'Karauli', 'Sawai Madhopur', 'Ranthambore', 'Tonk', 'Bundi', 'Baran', 'Jhalawar', 'Chittorgarh', 'Pratapgarh RJ', 'Banswara', 'Dungarpur', 'Rajsamand', 'Nathdwara', 'Kumbhalgarh', 'Pali', 'Sirohi', 'Abu Road', 'Jalore', 'Barmer', 'Jaisalmer', 'Pokhran', 'Nagaur', 'Makrana', 'Kuchaman', 'Didwana', 'Churu', 'Sujangarh', 'Jhunjhunu', 'Pilani', 'Mandawa', 'Nawalgarh', 'Sri Ganganagar', 'Hanumangarh', 'Suratgarh', 'Anupgarh', 'Kishangarh', 'Beawar', 'Nasirabad', 'Pushkar Valley', 'Dholpur', 'Deeg'],
+            'Maharashtra' => ['Alibag', 'Panvel', 'Kharghar', 'Karjat', 'Khopoli', 'Kalyan', 'Dombivli', 'Ulhasnagar', 'Ambernath', 'Bhiwandi', 'Vasai', 'Virar', 'Palghar', 'Dahanu', 'Boisar', 'Igatpuri', 'Trimbakeshwar', 'Malegaon', 'Sinnar', 'Shirdi', 'Ahmednagar', 'Sangamner', 'Baramati', 'Daund', 'Indapur', 'Mahabaleshwar', 'Panchgani', 'Karad', 'Wai', 'Chiplun', 'Khed', 'Malvan', 'Sawantwadi', 'Sindhudurg', 'Ichalkaranji', 'Miraj', 'Pandharpur', 'Barshi', 'Osmanabad', 'Dharashiv', 'Latur', 'Beed', 'Parbhani', 'Hingoli', 'Nanded', 'Jalna', 'Buldhana', 'Shegaon', 'Washim', 'Yavatmal', 'Wardha', 'Sevagram', 'Gondia', 'Bhandara', 'Chandrapur', 'Tadoba', 'Gadchiroli', 'Nandurbar', 'Dhule', 'Bhusawal', 'Pimpri Chinchwad', 'Hinjewadi', 'Wakad'],
+            'Gujarat' => ['Gandhidham', 'Mundra', 'Mandvi Kutch', 'Palanpur', 'Deesa', 'Patan', 'Siddhpur', 'Mehsana', 'Kalol', 'Unjha', 'Himatnagar', 'Idar', 'Modasa', 'Nadiad', 'Kheda', 'Borsad', 'Ankleshwar', 'Bharuch', 'Dahej', 'Valsad', 'Bilimora', 'Daman Seaside', 'Silvassa', 'Bardoli', 'Navsari Town', 'Vyara', 'Dahod', 'Godhra', 'Halol', 'Pavagadh', 'Morbi', 'Wankaner', 'Gondal', 'Jetpur', 'Dhoraji', 'Porbandar', 'Dwarka', 'Veraval', 'Somnath', 'Amreli', 'Diu Coast', 'Botad', 'Surendranagar', 'Sanand', 'Gift City'],
+            'Madhya Pradesh' => ['Mhow', 'Pithampur', 'Dhar', 'Mandu', 'Khargone', 'Maheshwar', 'Barwani', 'Khandwa', 'Omkareshwar', 'Burhanpur', 'Harda', 'Narmadapuram', 'Itarsi', 'Pachmarhi', 'Betul', 'Chhindwara', 'Seoni', 'Balaghat', 'Mandla', 'Kanha', 'Dindori', 'Shahdol', 'Umaria', 'Bandhavgarh', 'Katni', 'Damoh', 'Panna', 'Khajuraho', 'Chhatarpur', 'Tikamgarh', 'Niwari', 'Orchha', 'Datia', 'Morena', 'Bhind', 'Shivpuri', 'Guna', 'Ashoknagar', 'Vidisha', 'Sanchi', 'Raisen', 'Sehore', 'Shajapur', 'Agar Malwa', 'Neemuch', 'Mandsaur', 'Singrauli', 'Sidhi', 'Maihar'],
+            'Karnataka' => ['Kolar', 'Chikkaballapur', 'Tumakuru', 'Chitradurga', 'Davangere', 'Haveri', 'Gadag', 'Koppal', 'Ballari', 'Hospet', 'Hampi', 'Vijayanagara', 'Bidar', 'Raichur', 'Yadgir', 'Vijayapura', 'Bagalkot', 'Badami', 'Dharwad', 'Karwar', 'Gokarna', 'Sirsi', 'Dandeli', 'Shivamogga', 'Bhadravati', 'Hassan', 'Belur', 'Halebidu', 'Sakleshpur', 'Mandya', 'Chamarajanagar', 'Nanjangud', 'Ramanagara', 'Kanakapura', 'Yelahanka', 'Whitefield', 'Electronic City', 'Kundapura', 'Karkala', 'Puttur', 'Bantwal', 'Sullia'],
+            'Tamil Nadu' => ['Kanchipuram', 'Chengalpattu', 'Mahabalipuram', 'Tambaram', 'Avadi', 'Tiruvallur', 'Ranipet', 'Vaniyambadi', 'Ambur', 'Tirupattur', 'Krishnagiri', 'Hosur', 'Dharmapuri', 'Yercaud', 'Namakkal', 'Rasipuram', 'Karur', 'Perambalur', 'Ariyalur', 'Cuddalore', 'Chidambaram', 'Neyveli', 'Villupuram', 'Auroville', 'Tindivanam', 'Kallakurichi', 'Mayiladuthurai', 'Nagapattinam', 'Velankanni', 'Thanjavur', 'Kumbakonam', 'Tiruvarur', 'Pudukkottai', 'Sivaganga', 'Karaikudi', 'Ramanathapuram', 'Rameswaram', 'Dindigul', 'Palani', 'Theni', 'Virudhunagar', 'Sivakasi', 'Thoothukudi', 'Tenkasi', 'Courtallam', 'Nagercoil', 'Kanyakumari', 'Pollachi', 'Valparai', 'Mettupalayam', 'Coonoor', 'Tiruppur'],
+            'Kerala' => ['Kasaragod', 'Bekal', 'Taliparamba', 'Thalassery', 'Wayanad', 'Kalpetta', 'Sulthan Bathery', 'Mananthavady', 'Malappuram', 'Manjeri', 'Tirur', 'Ponnani', 'Perinthalmanna', 'Palakkad', 'Ottapalam', 'Chalakudy', 'Irinjalakuda', 'Guruvayur', 'Aluva', 'Angamaly', 'Edappally', 'Muvattupuzha', 'Kothamangalam', 'Thodupuzha', 'Idukki', 'Vagamon', 'Thekkady', 'Kumily', 'Kottayam', 'Kumarakom', 'Pala', 'Changanassery', 'Alappuzha', 'Cherthala', 'Kayamkulam', 'Thiruvalla', 'Pathanamthitta', 'Adoor', 'Kollam', 'Karunagappally', 'Varkala', 'Neyyattinkara', 'Kovalam'],
+            'Telangana & Andhra' => ['Nalgonda', 'Suryapet', 'Khammam', 'Bhadrachalam', 'Kothagudem', 'Mahbubnagar', 'Wanaparthy', 'Gadwal', 'Adilabad', 'Nirmal', 'Mancherial', 'Jagtial', 'Siddipet', 'Sangareddy', 'Medak', 'Vikarabad', 'Srikakulam', 'Vizianagaram', 'Araku Valley', 'Anakapalli', 'Kakinada', 'Amalapuram', 'Eluru', 'Bhimavaram', 'Tadepalligudem', 'Machilipatnam', 'Vijayawada Kanuru', 'Tenali', 'Ongole', 'Chirala', 'Tirupati Chandragiri', 'Chittoor', 'Madanapalle', 'Anantapur', 'Hindupur', 'Kurnool', 'Nandyal', 'Kadapa', 'Proddatur'],
+            'Bihar & Jharkhand' => ['Ara', 'Buxar', 'Sasaram', 'Bhabua', 'Aurangabad Bihar', 'Jehanabad', 'Arwal', 'Nawada', 'Nalanda', 'Rajgir', 'Bihar Sharif', 'Munger', 'Jamui', 'Lakhisarai', 'Begusarai', 'Khagaria', 'Katihar', 'Purnia', 'Araria', 'Kishanganj', 'Supaul', 'Madhepura', 'Saharsa', 'Samastipur', 'Sitamarhi', 'Sheohar', 'Motihari', 'Bettiah', 'Chapra', 'Siwan', 'Gopalganj', 'Hajipur', 'Vaishali', 'Madhubani', 'Hazaribagh', 'Ramgarh JH', 'Chatra', 'Koderma', 'Giridih', 'Dumka', 'Jamtara', 'Godda', 'Sahibganj', 'Pakur', 'Palamu', 'Daltonganj', 'Garhwa', 'Latehar', 'Gumla', 'Simdega', 'Chaibasa', 'Seraikela', 'Netarhat'],
+            'West Bengal & Odisha' => ['Kalyani', 'Barasat', 'Barrackpore', 'New Town Kolkata', 'Chinsurah', 'Serampore', 'Bardhaman', 'Bolpur', 'Santiniketan', 'Suri', 'Rampurhat', 'Bankura', 'Bishnupur WB', 'Purulia', 'Medinipur', 'Tamluk', 'Digha', 'Mandarmani', 'Haldia Port', 'Krishnanagar', 'Nabadwip', 'Berhampore WB', 'Malda', 'Balurghat', 'Raiganj', 'Jalpaiguri', 'Cooch Behar', 'Alipurduar', 'Kurseong', 'Mirik', 'Balasore', 'Bhadrak', 'Baripada', 'Keonjhar', 'Jajpur', 'Dhenkanal', 'Angul', 'Talcher', 'Jharsuguda', 'Bargarh', 'Bolangir', 'Koraput', 'Jeypore', 'Rayagada', 'Paradeep', 'Konark', 'Gopalpur Sea'],
+            'Northeast & Chhattisgarh' => ['Tinsukia', 'Sivasagar', 'Jorhat Majuli', 'Golaghat', 'Kaziranga', 'Nagaon', 'Dhubri', 'Bongaigaon', 'Barpeta', 'Nalbari', 'Haflong', 'Karimganj', 'Hailakandi', 'Diphu', 'Cherrapunji', 'Mawlynnong', 'Dawki', 'Tura', 'Jowai', 'Passighat', 'Ziro', 'Tawang', 'Bomdila', 'Namchi', 'Pelling', 'Lachung', 'Mokokchung', 'Chumoukedima', 'Lunglei', 'Thoubal', 'Durg', 'Rajnandgaon', 'Dhamtari', 'Mahasamund', 'Jagdalpur', 'Bastar', 'Ambikapur', 'Raigarh CG', 'Chirmiri', 'Kanker'],
+            'Jammu & Ladakh' => ['Udhampur', 'Katra', 'Patnitop', 'Kishtwar', 'Doda', 'Bhaderwah', 'Ramban', 'Kathua', 'Samba', 'Rajouri', 'Poonch', 'Anantnag', 'Pahalgam', 'Gulmarg', 'Sonamarg', 'Baramulla', 'Sopore', 'Pulwama', 'Budgam', 'Ganderbal', 'Kupwara', 'Kargil', 'Nubra Valley', 'Pangong', 'Zanskar'],
+            'Global Hubs' => ['San Francisco', 'Los Angeles', 'Chicago', 'Seattle', 'Denver', 'Atlanta', 'Dallas', 'Washington DC', 'San Diego', 'Portland', 'Vancouver', 'Montreal', 'Ottawa', 'Calgary', 'Birmingham', 'Manchester', 'Edinburgh', 'Bristol', 'Leeds', 'Liverpool', 'Glasgow', 'Dublin', 'Amsterdam', 'Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Zurich', 'Geneva', 'Vienna', 'Rome', 'Milan', 'Barcelona', 'Madrid', 'Lisbon', 'Stockholm', 'Copenhagen', 'Oslo', 'Prague', 'Warsaw', 'Istanbul', 'Abu Dhabi', 'Sharjah', 'Doha', 'Muscat', 'Riyadh', 'Kuala Lumpur', 'Bangkok', 'Chiang Mai', 'Bali', 'Jakarta', 'Manila', 'Seoul', 'Busan', 'Osaka', 'Kyoto', 'Hong Kong', 'Taipei', 'Auckland', 'Wellington', 'Brisbane', 'Perth', 'Adelaide'],
+        ];
+
+        foreach ($stateCatalog as $region => $towns) {
+            $isGlobal = ($region === 'Global Hubs');
+            foreach ($towns as $townName) {
+                $townSlug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $townName), '-'));
+                if ($townSlug === '' || isset($out[$townSlug])) {
+                    continue;
+                }
+                $country = $isGlobal ? self::countryForGlobalHub($townName) : 'India';
+                $state = $isGlobal ? $townName : $region;
+                $out[$townSlug] = [
+                    'slug' => $townSlug,
+                    'name' => $townName,
+                    'state' => $state,
+                    'country' => $country,
+                    'spot' => $isGlobal
+                        ? "{$townName} central cafés, lakeside terraces & neighborhood coffee bars"
+                        : "{$townName} central market cafés, college coffee spots & daytime parks",
+                    'vibe' => $isGlobal
+                        ? "Free 18+ coffee dating, respectful conversations, and CupTV live video in {$townName}"
+                        : "Verified 18+ local connections, free messaging, and safe daytime coffee dates in {$townName}, {$region}",
+                ];
+            }
+        }
+
+        $cached = $out;
+
+        return $cached;
+    }
+
+    private static function countryForGlobalHub(string $city): string
+    {
+        return match (true) {
+            in_array($city, ['San Francisco', 'Los Angeles', 'Chicago', 'Seattle', 'Denver', 'Atlanta', 'Dallas', 'Washington DC', 'San Diego', 'Portland'], true) => 'United States',
+            in_array($city, ['Vancouver', 'Montreal', 'Ottawa', 'Calgary'], true) => 'Canada',
+            in_array($city, ['Birmingham', 'Manchester', 'Edinburgh', 'Bristol', 'Leeds', 'Liverpool', 'Glasgow'], true) => 'United Kingdom',
+            in_array($city, ['Berlin', 'Munich', 'Hamburg', 'Frankfurt'], true) => 'Germany',
+            in_array($city, ['Abu Dhabi', 'Sharjah'], true) => 'United Arab Emirates',
+            in_array($city, ['Osaka', 'Kyoto'], true) => 'Japan',
+            in_array($city, ['Brisbane', 'Perth', 'Adelaide'], true) => 'Australia',
+            in_array($city, ['Auckland', 'Wellington'], true) => 'New Zealand',
+            in_array($city, ['Zurich', 'Geneva'], true) => 'Switzerland',
+            in_array($city, ['Rome', 'Milan'], true) => 'Italy',
+            in_array($city, ['Barcelona', 'Madrid'], true) => 'Spain',
+            in_array($city, ['Seoul', 'Busan'], true) => 'South Korea',
+            default => 'International',
+        };
     }
 
     public static function findBySlug(string $slug): ?array

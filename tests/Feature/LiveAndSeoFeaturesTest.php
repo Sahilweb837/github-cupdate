@@ -17,15 +17,21 @@ class LiveAndSeoFeaturesTest extends TestCase
     public function test_over_200_indian_and_global_seo_cities_are_registered_and_render(): void
     {
         $cities = SeoCities::all();
-        $this->assertGreaterThanOrEqual(200, count($cities));
+        $this->assertGreaterThanOrEqual(800, count($cities));
 
         $this->get('/')->assertStatus(200)->assertSee('Free Forever Access')->assertSee('Explore Cities');
         $this->get('/cities')->assertStatus(200)->assertSee('Free Dating in New Delhi')->assertSee('Free Dating in McLeod Ganj');
-        $this->get('/dating-in/shimla')->assertStatus(200)->assertSee('Shimla');
+        $this->get('/dating-in/shimla')->assertStatus(200)->assertSee('Shimla')->assertSee('Frequently Asked Questions');
         $this->get('/dating-in/mcleod-ganj')->assertStatus(200)->assertSee('McLeod Ganj');
         $this->get('/dating-in/bengaluru')->assertStatus(200)->assertSee('Bengaluru');
         $this->get('/dating-in/india')->assertStatus(200)->assertSee('India');
-        $this->get('/sitemap.xml')->assertStatus(200)->assertSee('/dating-in/mumbai')->assertSee('/cafes');
+        $this->get('/astrology')->assertStatus(200)->assertSee('Zodiac Sign');
+        $this->get('/astrology/aries-and-libra')->assertStatus(200)->assertSee('Aries and Libra');
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertSee('/dating-in/mumbai')
+            ->assertSee('/cafes')
+            ->assertSee('/astrology/aries-and-libra');
     }
 
     public function test_cuptv_live_video_moments_and_real_live_stats_endpoints_work(): void
@@ -273,10 +279,12 @@ class LiveAndSeoFeaturesTest extends TestCase
                 ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
             if ($path === '/') {
-                $resp->assertSee('real-couple-shimla.jpg')
+                $resp->assertSee('hero-couple-walk.jpg')
+                    ->assertSee('real-couple-shimla.jpg')
                     ->assertSee('real-couple-delhi.jpg')
                     ->assertSee('couple-cafe-1.jpg')
-                    ->assertSee('Mandatory 18+ Age Check');
+                    ->assertSee('Mandatory 18+ Age Check')
+                    ->assertDontSee('Kismet');
             }
 
             $html = $resp->getContent();

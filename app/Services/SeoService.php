@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\SeoAstrology;
 use App\Data\SeoCities;
 use App\Data\SeoGuides;
 use App\Models\BlogPost;
@@ -77,6 +78,7 @@ class SeoService
             ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/cafes'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/cities'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
+            ['loc' => self::canonicalForPath('/astrology'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/truth-and-dare'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/travel-groups'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/icebreaker-questions'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.85'],
@@ -143,6 +145,19 @@ class SeoService
                     'lastmod' => $today,
                     'changefreq' => 'weekly',
                     'priority' => '0.85',
+                ];
+            }
+        }
+
+        foreach (SeoAstrology::all() as $astro) {
+            $loc = self::canonicalForPath('/astrology/' . $astro['slug']);
+            if (! isset($seenLocs[$loc])) {
+                $seenLocs[$loc] = true;
+                $entries[] = [
+                    'loc' => $loc,
+                    'lastmod' => $today,
+                    'changefreq' => 'weekly',
+                    'priority' => '0.8',
                 ];
             }
         }

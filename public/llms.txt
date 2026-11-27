@@ -1,15 +1,16 @@
 # CupDate (cupdate.in) - World's Best Free Coffee Dating, CupTV Live Video & Café Reviews
 
-> CupDate is a 100% free, safe, moderated coffee dating, friendship, and live video chat platform across 200+ Indian cities and worldwide.
+> CupDate (cupdate.in) is a 100% free, 18+ verified, safe, and moderated coffee dating, friendship, live video chat, and community meetup platform covering 1,000+ Indian & global cities, Love & Zodiac astrology compatibility guides, travel groups, and women-friendly café reviews.
 
 ## Key Free Features
 - **100% Free Forever ($0)**: Profile creation, discovery, 1-to-1 chat, CupTV live video, Coffee Moments, and Café Reviews are all free without paid paywalls.
 - **CupTV Live Video** (https://cupdate.in/live-video): Instant 1-to-1 encrypted WebRTC random & filtered live video chat across India and global hubs.
 - **Women-Friendly Café Reviews** (https://cupdate.in/cafes): Honest reviews of daytime cafés with safety tags, ratings, and social sharing.
-- **Shareable Coffee Moments** (https://cupdate.in/moments): Members and women share café & travel moments safely across WhatsApp, Instagram, X, and Facebook.
+- **Shareable Coffee Moments** (https://cupdate.in/moments): Members share café & travel stories safely across WhatsApp, X, and Facebook.
 - **Anti-Nudity & Anti-Spam Protection** (https://cupdate.in/safety): Automated text and image moderation plus role-based human review.
 - **Truth or Dare Icebreakers** (https://cupdate.in/truth-and-dare): Free interactive Truth or Dare card game for coffee dates, couples, friends, and CupTV video calls.
 - **Travel Groups & Road Trip Meetups** (https://cupdate.in/travel-groups): Find verified companions for Himachal, Spiti, Manali, Dharamshala, Ladakh, Rishikesh, Goa, and Jaipur trips.
+- **Love & Zodiac Astrology Compatibility** (https://cupdate.in/astrology): 156+ zodiac dating personality & sign-pairing coffee date guides.
 
 ## Top India & Global Guides
 - Best Himachal Dating Website: https://cupdate.in/blog/best-himachal-dating-website

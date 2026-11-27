@@ -31,7 +31,7 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     @stack('preload')
     <script type="application/ld+json">
     {
@@ -80,8 +80,8 @@
                 <a href="{{ route('public.discover') }}" class="nav-link {{ request()->routeIs('public.discover') ? 'is-active' : '' }}">Discover</a>
                 <a href="{{ route('live-video.index') }}" class="nav-link {{ request()->routeIs('live-video.*') ? 'is-active' : '' }}">CupTV Video</a>
                 <a href="{{ route('games.truth-dare') }}" class="nav-link {{ request()->routeIs('games.*') ? 'is-active' : '' }}">Truth &amp; Dare</a>
-                <a href="{{ route('travel.groups') }}" class="nav-link {{ request()->routeIs('travel.*') ? 'is-active' : '' }}">Travel Groups</a>
-                <a href="{{ route('cafes.index') }}" class="nav-link {{ request()->routeIs('cafes.*') ? 'is-active' : '' }}">Cafés</a>
+                <a href="{{ route('travel.groups') }}" class="nav-link {{ request()->routeIs('travel.*') ? 'is-active' : '' }}">Travel</a>
+                <a href="{{ route('astrology.index') }}" class="nav-link {{ request()->routeIs('astrology.*') ? 'is-active' : '' }}">Astrology</a>
                 <a href="{{ route('cities') }}" class="nav-link {{ request()->routeIs('cities', 'seo.city') ? 'is-active' : '' }}">Cities</a>
             </nav>
 
@@ -136,10 +136,11 @@
             </div>
 
             <div>
-                <h3 class="footer-heading">Games &amp; Meetups</h3>
+                <h3 class="footer-heading">Games, Love &amp; Travel</h3>
                 <ul class="footer-list">
                     <li><a href="{{ route('games.truth-dare') }}">Truth or Dare Online</a></li>
                     <li><a href="{{ route('travel.groups') }}">Travel Groups &amp; Road Trips</a></li>
+                    <li><a href="{{ route('astrology.index') }}">Love &amp; Zodiac Compatibility</a></li>
                     <li><a href="{{ route('seo.speed-dating') }}">Free Video Speed Dating</a></li>
                     <li><a href="{{ route('seo.icebreakers') }}">Coffee Icebreaker Questions</a></li>
                     <li><a href="{{ route('seo.meetups') }}">Weekend Coffee Meetups</a></li>
@@ -172,12 +173,16 @@
             </div>
         </div>
 
+        <div class="container">
+            <div class="footer-giant-brand" aria-hidden="true">CupDate</div>
+        </div>
+
         <div class="container footer-bottom">
-            <p>&copy; 2026 CupDate (cupdate.in). 100% Free Forever | Safe, Clean &amp; Moderated.</p>
-            <div class="footer-socials" aria-label="Social Media">
-                <a href="{{ route('moments.index') }}">Share Moments</a>
+            <p>&copy; 2026 CupDate (cupdate.in). 100% Free Forever | 18+ Verified, Safe &amp; Moderated.</p>
+            <div class="footer-socials" aria-label="Footer Quick Links">
+                <a href="{{ route('astrology.index') }}">Astrology</a>
                 <span>·</span>
-                <a href="{{ route('cities') }}">100+ Cities</a>
+                <a href="{{ route('cities') }}">1000+ City &amp; Love Guides</a>
                 <span>·</span>
                 <a href="{{ route('contact') }}">Support</a>
             </div>

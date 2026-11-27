@@ -16,6 +16,8 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/live-stats', 'liveStats')->name('live-stats');
     Route::get('/discover', 'discover')->name('public.discover');
     Route::get('/cities', 'cities')->name('cities');
+    Route::get('/astrology', 'astrology')->name('astrology.index');
+    Route::get('/astrology/{slug}', 'astrologyShow')->where('slug', '[a-z0-9\-]+')->name('astrology.show');
     Route::get('/dating-in/{slug}', 'cityLanding')->name('seo.city');
     Route::get('/how-it-works', 'howItWorks')->name('how-it-works');
     Route::get('/safety', 'safety')->name('safety');

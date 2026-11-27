@@ -68,22 +68,127 @@
         <div class="hero-visual">
             <div class="hero-couple-showcase">
                 <div class="hero-couple-main">
-                    <img src="{{ asset('images/real-couple-shimla.jpg') }}" alt="Real couple smiling over warm coffee by a sunlit Himalayan cafe window" class="hero-couple-img" fetchpriority="high" decoding="async">
+                    <img src="{{ asset('images/hero-couple-walk.jpg') }}" alt="Smiling couple walking arm in arm past fresh outdoor flowers on a weekend date" class="hero-couple-img" fetchpriority="high" decoding="async">
                     <div class="hero-couple-caption">
-                        <strong>Real Conversations Over Coffee</strong>
-                        <span>Shimla, Dharamshala &amp; {{ $totalSeoCities }}+ Cities</span>
+                        <strong>Real Connections, Not Endless Swipes</strong>
+                        <span>Free Coffee Dates · {{ $totalSeoCities }}+ Cities · Love &amp; Astrology</span>
                     </div>
                 </div>
                 <div class="hero-couple-pair">
                     <figure class="hero-couple-thumb">
-                        <img src="{{ asset('images/real-couple-delhi.jpg') }}" alt="Indian couple laughing over afternoon coffee at a sunlit outdoor garden cafe in New Delhi" loading="eager" decoding="async">
-                        <figcaption>Daytime Cafe Meetups · Delhi &amp; NCR</figcaption>
+                        <img src="{{ asset('images/real-couple-shimla.jpg') }}" alt="Couple smiling beside a sunlit Himalayan wooden cafe window over warm coffee" loading="eager" decoding="async">
+                        <figcaption>Shimla &amp; Himachal Cafes</figcaption>
                     </figure>
                     <figure class="hero-couple-thumb">
-                        <img src="{{ asset('images/couple-cafe-1.jpg') }}" alt="Couple sharing cappuccinos beside a bright mountain cafe window" loading="eager" decoding="async">
-                        <figcaption>100% Free · Verified 18+ Community</figcaption>
+                        <img src="{{ asset('images/real-couple-delhi.jpg') }}" alt="Indian couple laughing over afternoon coffee at an outdoor garden cafe in New Delhi" loading="eager" decoding="async">
+                        <figcaption>Delhi, Mumbai &amp; Global</figcaption>
                     </figure>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="cup-marquee-band" aria-label="CupDate Platform Highlights">
+    <div class="cup-marquee-track">
+        @for ($loopIdx = 0; $loopIdx < 2; $loopIdx++)
+            <div class="cup-marquee-item"><span class="cup-marquee-serif">Zero Subscription Paywalls</span><span>/</span><span class="cup-marquee-mono">100% Free Forever</span></div>
+            <div class="cup-marquee-item"><span class="cup-marquee-serif">Real Conversations Over Coffee</span><span>/</span><span class="cup-marquee-mono">{{ $totalSeoCities }}+ Cities Indexed</span></div>
+            <div class="cup-marquee-item"><span class="cup-marquee-serif">Verified 18+ Community</span><span>/</span><span class="cup-marquee-mono">Anti-Nudity &amp; Anti-Spam</span></div>
+            <div class="cup-marquee-item"><span class="cup-marquee-serif">Love, Astrology &amp; Travel Groups</span><span>/</span><span class="cup-marquee-mono">CupTV Live Video</span></div>
+        @endfor
+    </div>
+</div>
+
+<section class="section-white">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow-text">EDITORIAL PHOTOGRAPHY · GENUINE MEETUPS</span>
+            <h2 class="section-title">Designed for Real-World Chemistry</h2>
+        </div>
+        <div class="cup-bento-grid">
+            <article class="cup-bento-card col-7">
+                <img src="{{ asset('images/hero-couple-walk.jpg') }}" alt="Couple enjoying an afternoon flower market walk together" loading="lazy" decoding="async">
+                <div class="cup-bento-overlay">
+                    <span class="cup-bento-tag">Public Daytime Dates</span>
+                    <h3>Intentional Meetups Across India &amp; Worldwide</h3>
+                    <p>Start with respectful conversation, move to a quick video hello, and meet comfortably in bright daytime venues.</p>
+                </div>
+            </article>
+            <article class="cup-bento-card col-5">
+                <img src="{{ asset('images/real-couple-shimla.jpg') }}" alt="Couple talking over hot cappuccinos at a sunlit cafe window" loading="lazy" decoding="async">
+                <div class="cup-bento-overlay">
+                    <span class="cup-bento-tag">Women-Friendly Cafes</span>
+                    <h3>Curated Café Discovery</h3>
+                    <p>Read honest community café notes before choosing your first coffee spot.</p>
+                </div>
+            </article>
+            <article class="cup-bento-card col-6">
+                <img src="{{ asset('images/real-couple-delhi.jpg') }}" alt="Couple sharing laughter over outdoor espresso and pastries" loading="lazy" decoding="async">
+                <div class="cup-bento-overlay">
+                    <span class="cup-bento-tag">Free Messaging &amp; Video</span>
+                    <h3>Talk Face-to-Face Before You Meet</h3>
+                    <p>Built-in encrypted 1-to-1 video calls and CupTV speed rooms at zero cost.</p>
+                </div>
+            </article>
+            <article class="cup-bento-card col-6">
+                <img src="{{ asset('images/couple-cafe-1.jpg') }}" alt="Young couple over coffee cups beside mountain trees" loading="lazy" decoding="async">
+                <div class="cup-bento-overlay">
+                    <span class="cup-bento-tag">Travel &amp; Truth or Dare</span>
+                    <h3>Group Travel &amp; Icebreakers</h3>
+                    <p>Explore Himachal, Spiti, Goa, or Jaipur travel groups and play clean Truth or Dare prompts.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section-cream">
+    <div class="container">
+        <div class="section-heading centered">
+            <span class="eyebrow-text">HOW CUPDATE WORKS</span>
+            <h2 class="section-title">Three Calm Steps to a Real Coffee Date</h2>
+        </div>
+        <div class="cup-steps-grid">
+            <article class="cup-step-card is-maroon">
+                <span class="cup-step-num">01 / PROFILE</span>
+                <h3>Create Your 18+ Account Free</h3>
+                <p>Protected with cryptographic password hashing, privacy controls, and city preferences. No subscriptions ever.</p>
+            </article>
+            <article class="cup-step-card is-grey">
+                <span class="cup-step-num">02 / DISCOVERY</span>
+                <h3>Chat, Check Compatibility &amp; Video</h3>
+                <p>Send free messages, explore Love &amp; Zodiac guides, play Truth or Dare, or verify chemistry on CupTV live video.</p>
+            </article>
+            <article class="cup-step-card is-stone">
+                <span class="cup-step-num">03 / MEETUP</span>
+                <h3>Meet at Safe Daytime Cafés</h3>
+                <p>Browse community-reviewed women-friendly coffee houses across {{ $totalSeoCities }}+ cities before scheduling a meetup.</p>
+            </article>
+        </div>
+
+        <div class="cup-chemistry-box mt-24" data-chemistry-explorer>
+            <div class="cup-chem-left">
+                <span class="cup-chem-label">CUPDATE CHEMISTRY &amp; CONVERSATION DIAL</span>
+                <h3 class="card-title">Preview Your Preferred Dating Pace</h3>
+                <div>
+                    <label for="chemPaceRange" class="cup-chem-label">Conversation Tempo: <strong id="chemPaceLabel">Thoughtful &amp; Warm</strong></label>
+                    <input type="range" id="chemPaceRange" min="1" max="3" value="2" class="cup-chem-dial mt-8">
+                </div>
+                <div>
+                    <label for="chemSettingRange" class="cup-chem-label">Ideal First Spot: <strong id="chemSettingLabel">Neighborhood Coffeehouse</strong></label>
+                    <input type="range" id="chemSettingRange" min="1" max="3" value="2" class="cup-chem-dial mt-8">
+                </div>
+                <div class="hero-actions">
+                    <a href="{{ route('astrology.index') }}" class="btn btn-outline btn-xs">Explore 156+ Zodiac Guides</a>
+                    <a href="{{ route('games.truth-dare') }}" class="btn btn-blush btn-xs">Try Truth or Dare</a>
+                </div>
+            </div>
+            <div class="cup-chem-right">
+                <span class="cup-chem-label">SUGGESTED DATE FORMAT</span>
+                <h3 class="cup-chem-result-title" id="chemResultTitle">Relaxed Afternoon Cappuccino &amp; Real Banter</h3>
+                <p class="cup-chem-result-desc" id="chemResultDesc">Take a 5-minute CupTV video hello first, then meet during daylight at a comfortable neighborhood coffee shop for unhurried conversation.</p>
+                <a href="{{ route('register') }}" class="btn btn-outline btn-sm" style="align-self:flex-start;">Start Free on CupDate</a>
             </div>
         </div>
     </div>

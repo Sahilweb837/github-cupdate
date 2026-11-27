@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\SeoAstrology;
 use App\Data\SeoCities;
 use App\Data\SeoGuides;
 use App\Models\BlogPost;
@@ -134,6 +135,34 @@ class PublicController extends Controller
         ]);
     }
 
+    public function astrology(): View
+    {
+        $all = SeoAstrology::all();
+
+        return view('pages.astrology', [
+            'signs' => SeoAstrology::signs(),
+            'featuredPairs' => array_slice(array_filter($all, fn ($g) => $g['kind'] === 'pair'), 0, 24),
+        ]);
+    }
+
+    public function astrologyShow(string $slug): View
+    {
+        $guide = SeoAstrology::findBySlug($slug);
+        abort_unless($guide !== null, 404);
+
+        $relatedSigns = collect(SeoAstrology::all())
+            ->reject(fn ($g) => $g['slug'] === $guide['slug'])
+            ->filter(fn ($g) => str_contains($g['slug'], $guide['sign_a']['slug']))
+            ->take(8)
+            ->values()
+            ->all();
+
+        return view('pages.astrology-show', [
+            'guide' => $guide,
+            'relatedSigns' => $relatedSigns,
+        ]);
+    }
+
     public function cityLanding(string $slug): View|RedirectResponse
     {
         $canonicalSlug = SeoCities::canonicalSlug($slug);
@@ -203,6 +232,13 @@ class PublicController extends Controller
                 "Daytime coffee meetup around {$city['spot']}",
                 "Start with a 5-minute CupTV Live Video hello in {$cityName}",
                 'Share your favorite local café moment to spark real conversations',
+            ],
+            'city_culture' => "Across {$cityName} ({$stateName}, {$countryName}), daytime coffeehouses around {$city['spot']} have become the natural way for verified 18+ singles, students, and remote professionals to meet respectfully. CupDate highlights genuine local profiles, community-reviewed women-friendly cafés, Love & Astrology compatibility guides, and free 1-to-1 encrypted video calls.",
+            'city_faqs' => [
+                ['q' => "Is dating in {$cityName} on CupDate really 100% free?", 'a' => "Yes. Creating your profile, browsing verified members in {$cityName}, messaging, joining CupTV live video, and reading {$cityName} café notes are all 100% free with zero paywalls."],
+                ['q' => "What are popular coffee date spots in {$cityName}?", 'a' => "Members frequently meet in bright daytime public spaces around {$city['spot']}."],
+                ['q' => "How does CupDate protect member safety and privacy in {$cityName}?", 'a' => "CupDate enforces mandatory 18+ age verification, cryptographic password hashing, automated anti-spam/anti-nudity screening, and never discloses exact street coordinates."],
+                ['q' => "Can I video chat or check compatibility before meeting in {$cityName}?", 'a' => "Yes. Use free CupTV or 1-to-1 browser video calls, play Truth or Dare icebreakers, or explore CupDate's Love & Astrology compatibility guides before planning a daytime meetup."],
             ],
         ];
 
