@@ -18,7 +18,7 @@
                 $other = $isRequester ? $date->partner : $date->requester;
             @endphp
             <article class="date-card">
-                <img src="{{ $other?->avatarUrl() ?? asset('images/cafe-blue-bottle.jpg') }}" alt="{{ $other?->firstName() }}" class="date-avatar">
+                <x-avatar :user="$other" :alt="$other?->firstName() ?? 'Member'" class="date-avatar" />
                 <div class="date-info">
                     <div class="date-with">{{ $other?->firstName() ?? 'Member' }} · {{ $date->city }}</div>
                     <div class="date-venue">{{ $date->venue_suggestion }}</div>

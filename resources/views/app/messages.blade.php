@@ -42,7 +42,7 @@
                    data-thread-name="{{ strtolower($partner->full_name . ' ' . $partner->city) }}"
                    class="thread-item {{ $activePartner && $activePartner->id === $partner->id ? 'is-active' : '' }}">
                     <div class="thread-avatar-wrap">
-                        <img src="{{ $partner->avatarUrl() }}" alt="{{ $partner->firstName() }}" class="thread-avatar">
+                        <x-avatar :user="$partner" :alt="$partner->firstName()" class="thread-avatar" />
                         @if ($partner->is_online)
                             <span class="thread-online-dot" title="Online"></span>
                         @endif
@@ -80,7 +80,7 @@
             <div class="chat-pane-header">
                 <button type="button" id="mobileBackToThreads" class="btn btn-outline btn-xs mobile-only-btn">Back</button>
                 <div class="thread-avatar-wrap">
-                    <img src="{{ $activePartner->avatarUrl() }}" alt="{{ $activePartner->firstName() }}" class="thread-avatar">
+                    <x-avatar :user="$activePartner" :alt="$activePartner->firstName()" class="thread-avatar" />
                     @if ($activePartner->is_online)
                         <span class="thread-online-dot"></span>
                     @endif

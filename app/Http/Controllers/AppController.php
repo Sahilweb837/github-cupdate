@@ -39,6 +39,7 @@ class AppController extends Controller
             ->where('status', 'active')
             ->where('profile_visible', true)
             ->where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in')
             ->whereNotIn('role', User::ADMIN_ROLES);
 
         if ($city = $request->query('city')) {

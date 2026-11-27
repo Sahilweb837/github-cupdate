@@ -2,11 +2,6 @@
 
 @section('title', \App\Models\SiteSetting::getValue('seo_default_title', 'CupDate | Free Coffee Dating and CupTV Live Video'))
 
-@push('preload')
-<link rel="preload" as="image" href="{{ asset('images/hero-coffee-couple.jpg') }}" fetchpriority="high">
-<link rel="preload" as="image" href="{{ asset('images/couple-cafe-1.jpg') }}">
-@endpush
-
 @push('head')
 <script type="application/ld+json">
 {
@@ -29,50 +24,7 @@
 @endpush
 
 @section('content')
-@php
-    $heroSlides = [
-        [
-            'image' => asset('images/hero-coffee-couple.jpg'),
-            'alt' => 'Couple talking over coffee inside a sunlit local cafe',
-            'city' => 'Shimla',
-            'caption' => 'Mall Road Cafe Meetup',
-        ],
-        [
-            'image' => asset('images/couple-cafe-1.jpg'),
-            'alt' => 'Indian couple smiling over cappuccinos beside a mountain cafe window',
-            'city' => 'Dharamshala',
-            'caption' => 'Morning Cappuccino in the Hills',
-        ],
-        [
-            'image' => asset('images/cafe-blue-bottle.jpg'),
-            'alt' => 'Warm sunlit neighborhood coffee shop table set for two',
-            'city' => 'New Delhi',
-            'caption' => 'Connaught Place Espresso Date',
-        ],
-        [
-            'image' => asset('images/member-sofia.jpg'),
-            'alt' => 'Woman smiling during a relaxed afternoon coffee meetup',
-            'city' => 'Bengaluru',
-            'caption' => 'Indiranagar Roastery',
-        ],
-        [
-            'image' => asset('images/member-diego.jpg'),
-            'alt' => 'Young man outdoors enjoying daytime coffee conversation',
-            'city' => 'Chandigarh',
-            'caption' => 'Sector 17 Courtyard Coffee',
-        ],
-    ];
-@endphp
 <section class="hero-section">
-    <div class="hero-bg-slider" data-hero-bg-slider aria-hidden="true">
-        @foreach ($heroSlides as $idx => $slide)
-            <div class="hero-bg-slide {{ $idx === 0 ? 'is-active' : '' }}" data-bg-index="{{ $idx }}">
-                <img src="{{ $slide['image'] }}" alt="" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}" decoding="async">
-            </div>
-        @endforeach
-        <div class="hero-bg-overlay"></div>
-    </div>
-
     <div class="container hero-grid">
         <div class="hero-copy">
             <div class="eyebrow-pill">
@@ -114,26 +66,15 @@
         </div>
 
         <div class="hero-visual">
-            <div class="tinder-stage" data-tinder-deck>
-                <div class="tinder-deck-cards" aria-live="polite">
-                    @foreach ($heroSlides as $idx => $slide)
-                        <article class="tinder-card" data-tinder-card data-slide-index="{{ $idx }}">
-                            <img src="{{ $slide['image'] }}" alt="{{ $slide['alt'] }}" loading="{{ $idx < 2 ? 'eager' : 'lazy' }}" decoding="async" draggable="false">
-                            <div class="tinder-card-scrim"></div>
-                            <div class="tinder-card-stamp tinder-stamp-like" aria-hidden="true">COFFEE</div>
-                            <div class="tinder-card-stamp tinder-stamp-pass" aria-hidden="true">NEXT</div>
-                            <div class="tinder-card-caption">
-                                <span class="tinder-card-city"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $slide['city'] }}</span>
-                                <strong class="tinder-card-title">{{ $slide['caption'] }}</strong>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-
-                <div class="tinder-controls" aria-label="Photo deck controls">
-                    <button type="button" class="btn btn-outline btn-sm tinder-nav-btn" data-deck-prev aria-label="Previous couple photo">Prev</button>
-                    <span class="tinder-counter"><span data-deck-current>1</span> / {{ count($heroSlides) }}</span>
-                    <button type="button" class="btn btn-pink btn-sm tinder-nav-btn" data-deck-next aria-label="Next couple photo">Swipe Next</button>
+            <div class="hero-shape-blush" aria-hidden="true"></div>
+            <div class="hero-photo-frame">
+                <img src="{{ asset('images/cupdate-scene.svg') }}" alt="CupDate free coffee dates, CupTV live video, and safe connections" class="scene-illustration">
+                <div class="floating-badge badge-bottom-left">
+                    <span class="badge-coffee-dot"><x-icon name="coffee" class="cup-icon-xs" /></span>
+                    <div>
+                        <div class="badge-title">Real Verified Community</div>
+                        <div class="badge-sub">Zero Fake Profiles · 100% Free</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -234,11 +175,11 @@
                          data-name="{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif"
                          data-city="{{ $person->city }}, {{ $person->state }}"
                          data-coffee="{{ $person->coffee_preference ?? 'Cappuccino' }}"
-                         data-bio="{{ $person->bio ?: 'Enjoying good coffee and genuine conversation.' }}"
-                         data-avatar="{{ $person->avatarUrl() }}"
+                         data-bio="{{ $person->bio ?? '' }}"
+                         data-avatar="{{ $person->avatarUrl() ?? '' }}"
                          data-verified="{{ $person->is_verified ? 'Verified Member' : 'Member' }}">
                     <div class="profile-card-img-wrap">
-                        <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }} in {{ $person->city }}" loading="lazy" decoding="async">
+                        <x-avatar :user="$person" :alt="$person->firstName() . ' in ' . $person->city" />
                         @if ($person->is_online)
                             <span class="online-pill"><span class="online-dot"></span> Online</span>
                         @endif
@@ -251,7 +192,9 @@
                             <h3>{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif</h3>
                             <span class="city-tag"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $person->city }}</span>
                         </div>
-                        <p class="profile-card-bio">{{ Str::limit($person->bio ?: 'Enjoying good coffee and genuine conversation.', 90) }}</p>
+                        @if ($person->bio)
+                            <p class="profile-card-bio">{{ Str::limit($person->bio, 90) }}</p>
+                        @endif
                         <div class="tag-list">
                             @foreach (array_slice($person->interestsList(), 0, 3) as $tag)
                                 <span class="tag-soft">{{ $tag }}</span>

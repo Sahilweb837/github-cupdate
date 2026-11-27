@@ -53,7 +53,7 @@
             @php $acted = $mySwipes[$person->id] ?? null; @endphp
             <article class="profile-card-public" data-discover-card="{{ $person->id }}">
                 <div class="profile-card-img-wrap">
-                    <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }}" loading="lazy">
+                    <x-avatar :user="$person" :alt="$person->firstName()" />
                     @php $sharedCount = count(array_intersect($me->interestsList(), $person->interestsList())); @endphp
                     @if ($sharedCount > 0)
                         <span class="compat-badge">{{ $sharedCount }} shared {{ Str::plural('interest', $sharedCount) }}</span>
@@ -68,7 +68,9 @@
                         <h3>{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif</h3>
                         <span class="city-tag"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $person->city }}</span>
                     </div>
-                    <p class="profile-card-bio">{{ Str::limit($person->bio ?: 'Enjoys genuine conversations over coffee.', 90) }}</p>
+                    @if ($person->bio)
+                        <p class="profile-card-bio">{{ Str::limit($person->bio, 90) }}</p>
+                    @endif
 
                     <div class="tag-list">
                         @foreach (array_slice($person->interestsList(), 0, 3) as $tag)

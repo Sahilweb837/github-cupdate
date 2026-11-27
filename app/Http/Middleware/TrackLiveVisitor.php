@@ -13,7 +13,21 @@ class TrackLiveVisitor
 
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->isMethod('GET') && ! $request->is('live-stats') && ! $request->is('admin*') && ! $request->ajax()) {
+        if (
+            $request->isMethod('GET')
+            && ! $request->ajax()
+            && ! $request->expectsJson()
+            && ! $request->is(
+                'live-stats',
+                'admin*',
+                'sitemap.xml',
+                'robots.txt',
+                'live-video/poll',
+                'app/messages/*/poll',
+                'app/video-call/incoming',
+                'app/video-call/*/signals'
+            )
+        ) {
             $visitorId = $request->hasSession()
                 ? $request->session()->getId()
                 : sha1(($request->ip() ?? '') . '|' . ($request->userAgent() ?? ''));

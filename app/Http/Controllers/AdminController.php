@@ -62,29 +62,38 @@ class AdminController extends Controller
 
     public function dashboard(Request $request, LiveStatsService $liveStats): View
     {
+        $range = in_array($request->query('range'), ['today', '7d', '30d', 'all'], true)
+            ? (string) $request->query('range')
+            : 'all';
+
         $live = $liveStats->snapshot();
-        $analytics = $liveStats->adminAnalytics();
+        $analytics = $liveStats->adminAnalytics($range);
 
         $stats = [
-            'total_users' => User::withTrashed()->count(),
-            'active_users' => User::where('status', 'active')->count(),
-            'new_users' => User::where('created_at', '>=', now()->subDays(7))->count(),
-            'verified_users' => User::where('is_verified', true)->count(),
+            'total_users' => User::withTrashed()->where('email', 'not like', '%@cupdate.in')->count(),
+            'active_users' => User::where('status', 'active')->where('email', 'not like', '%@cupdate.in')->count(),
+            'new_users' => User::where('created_at', '>=', now()->subDays(7))->where('email', 'not like', '%@cupdate.in')->count(),
+            'verified_users' => User::where('is_verified', true)->where('email', 'not like', '%@cupdate.in')->count(),
             'reported_accounts' => UserReport::where('status', 'pending')->count(),
             'suspended_accounts' => User::where('status', 'suspended')->count(),
             'deleted_accounts' => User::onlyTrashed()->count(),
             'coffee_dates' => CoffeeDate::count(),
+            'messages_count' => Message::count(),
             'open_tickets' => SupportTicket::where('status', '!=', 'resolved')->count(),
             'active_visitors' => $live['active_visitors'],
             'online_members' => $live['online_members'],
             'live_video_active' => $live['live_video_active'],
             'today_visits' => $analytics['today_visits'],
             'today_unique' => $analytics['today_unique'],
+            'yesterday_visits' => $analytics['yesterday_visits'],
+            'visits_7d' => $analytics['visits_7d'],
+            'visits_30d' => $analytics['visits_30d'],
             'total_visits' => $analytics['total_visits'],
             'total_unique' => $analytics['total_unique'],
         ];
 
         $usersByLocation = User::where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in')
             ->select('city', 'state', 'country', DB::raw('COUNT(*) as total'))
             ->groupBy('city', 'state', 'country')
             ->orderByDesc('total')
@@ -93,10 +102,30 @@ class AdminController extends Controller
 
         $onlineUsersByCity = $liveStats->onlineUsersByCity(12);
 
-        $recentUsers = User::withTrashed()->latest('created_at')->take(8)->get();
+        $recentUsers = User::withTrashed()
+            ->where('email', 'not like', '%@cupdate.in')
+            ->latest('created_at')
+            ->take(8)
+            ->get();
         $recentReports = UserReport::with(['reporter', 'reportedUser'])->latest('created_at')->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'analytics', 'usersByLocation', 'onlineUsersByCity', 'recentUsers', 'recentReports'));
+        return view('admin.dashboard', compact('stats', 'analytics', 'usersByLocation', 'onlineUsersByCity', 'recentUsers', 'recentReports', 'range'));
+    }
+
+    public function liveAnalytics(LiveStatsService $liveStats): \Illuminate\Http\JsonResponse
+    {
+        $live = $liveStats->snapshot();
+        $analytics = $liveStats->adminAnalytics('today');
+
+        return response()->json([
+            'active_visitors' => $live['active_visitors'],
+            'online_members' => $live['online_members'],
+            'live_video_active' => $live['live_video_active'],
+            'today_visits' => $analytics['today_visits'],
+            'today_unique' => $analytics['today_unique'],
+            'total_visits' => $analytics['total_visits'],
+            'total_unique' => $analytics['total_unique'],
+        ]);
     }
 
     public function users(Request $request): View
@@ -287,7 +316,7 @@ class AdminController extends Controller
             'slug' => Str::slug($data['title']) . '-' . Str::random(4),
             'excerpt' => $data['excerpt'],
             'body' => $data['body'],
-            'cover_image' => 'images/cafe-blue-bottle.jpg',
+            'cover_image' => null,
             'author_id' => $request->user()->id,
             'meta_title' => $data['meta_title'] ?: $data['title'],
             'meta_description' => $data['meta_description'] ?: $data['excerpt'],

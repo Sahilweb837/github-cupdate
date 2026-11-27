@@ -3,7 +3,7 @@
 @section('title', $guide['title'])
 @section('description', $guide['description'])
 @section('og_type', 'article')
-@section('og_image', asset($guide['image'] ?? 'images/hero-coffee-couple.jpg'))
+@section('og_image', asset('images/cupdate-scene.svg'))
 
 @push('head')
 <script type="application/ld+json">
@@ -12,7 +12,7 @@
     "@@type": "Article",
     "headline": "{{ addslashes($guide['h1']) }}",
     "description": "{{ addslashes($guide['description']) }}",
-    "image": "{{ asset($guide['image'] ?? 'images/hero-coffee-couple.jpg') }}",
+    "image": "{{ asset('images/cupdate-scene.svg') }}",
     "author": {
         "@@type": "Organization",
         "name": "CupDate Editorial Team"
@@ -77,8 +77,6 @@
 
 <section class="section-white">
     <div class="container narrow">
-        <img src="{{ asset($guide['image'] ?? 'images/cafe-blue-bottle.jpg') }}" alt="{{ $guide['h1'] }}" class="blog-cover-img" loading="lazy" decoding="async">
-
         <div class="blog-body-text">
             @foreach ($guide['paragraphs'] as $paragraph)
                 <p>{{ $paragraph }}</p>

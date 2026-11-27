@@ -30,7 +30,7 @@ return new class extends Migration
                         'slug' => $guide['slug'],
                         'excerpt' => $guide['description'],
                         'body' => implode("\n\n", $guide['paragraphs']),
-                        'cover_image' => $guide['image'] ?? 'images/cafe-blue-bottle.jpg',
+                        'cover_image' => null,
                         'meta_title' => $guide['title'],
                         'meta_description' => mb_substr($guide['description'], 0, 250),
                         'is_published' => true,

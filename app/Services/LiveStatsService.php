@@ -144,6 +144,7 @@ class LiveStatsService
         try {
             $onlineMembers = (int) User::where('status', 'active')
                 ->where('is_admin', false)
+                ->where('email', 'not like', '%@cupdate.in')
                 ->where(function ($q) {
                     $q->where('is_online', true)
                         ->orWhere('last_active', '>=', now()->subMinutes(10));
@@ -152,6 +153,7 @@ class LiveStatsService
 
             $totalMembers = (int) User::where('status', 'active')
                 ->where('is_admin', false)
+                ->where('email', 'not like', '%@cupdate.in')
                 ->count();
         } catch (Throwable) {
             // fallback 0
@@ -180,13 +182,22 @@ class LiveStatsService
      *
      * @return array<string, mixed>
      */
-    public function adminAnalytics(): array
+    public function adminAnalytics(string $range = 'all'): array
     {
         $empty = [
+            'range' => $range,
             'today_visits' => 0,
             'today_unique' => 0,
+            'yesterday_visits' => 0,
+            'visits_7d' => 0,
+            'visits_30d' => 0,
             'total_visits' => 0,
             'total_unique' => 0,
+            'range_visits' => 0,
+            'range_unique' => 0,
+            'member_visits' => 0,
+            'guest_visits' => 0,
+            'daily_series' => collect(),
             'top_locations' => collect(),
             'top_pages' => collect(),
             'top_referrers' => collect(),
@@ -200,45 +211,92 @@ class LiveStatsService
             }
 
             $todayStart = now()->startOfDay();
+            $yesterdayStart = now()->subDay()->startOfDay();
+            $sevenDaysAgo = now()->subDays(6)->startOfDay();
+            $thirtyDaysAgo = now()->subDays(29)->startOfDay();
 
             $todayVisits = (int) VisitorLog::where('created_at', '>=', $todayStart)->count();
             $todayUnique = (int) VisitorLog::where('created_at', '>=', $todayStart)->distinct('session_id')->count('session_id');
+            $yesterdayVisits = (int) VisitorLog::whereBetween('created_at', [$yesterdayStart, $todayStart])->count();
+            $visits7d = (int) VisitorLog::where('created_at', '>=', $sevenDaysAgo)->count();
+            $visits30d = (int) VisitorLog::where('created_at', '>=', $thirtyDaysAgo)->count();
             $totalVisits = (int) VisitorLog::count();
             $totalUnique = (int) VisitorLog::distinct('session_id')->count('session_id');
 
-            $topLocations = VisitorLog::select('city', 'region', 'country', DB::raw('COUNT(*) as visits'), DB::raw('COUNT(DISTINCT session_id) as unique_visitors'))
+            $since = match ($range) {
+                'today' => $todayStart,
+                '7d' => $sevenDaysAgo,
+                '30d' => $thirtyDaysAgo,
+                default => null,
+            };
+
+            $scoped = VisitorLog::query()->when($since, fn ($q) => $q->where('created_at', '>=', $since));
+
+            $rangeVisits = (int) (clone $scoped)->count();
+            $rangeUnique = (int) (clone $scoped)->distinct('session_id')->count('session_id');
+            $memberVisits = (int) (clone $scoped)->whereNotNull('user_id')->count();
+            $guestVisits = max(0, $rangeVisits - $memberVisits);
+
+            $rawDaily = VisitorLog::where('created_at', '>=', $sevenDaysAgo)
+                ->select(DB::raw('DATE(created_at) as day'), DB::raw('COUNT(*) as visits'), DB::raw('COUNT(DISTINCT session_id) as unique_visitors'))
+                ->groupBy(DB::raw('DATE(created_at)'))
+                ->get()
+                ->keyBy('day');
+
+            $dailySeries = collect();
+            for ($i = 6; $i >= 0; $i--) {
+                $d = now()->subDays($i);
+                $key = $d->format('Y-m-d');
+                $row = $rawDaily->get($key);
+                $dailySeries->push([
+                    'label' => $d->format('M j'),
+                    'visits' => (int) ($row->visits ?? 0),
+                    'unique' => (int) ($row->unique_visitors ?? 0),
+                ]);
+            }
+
+            $topLocations = (clone $scoped)->select('city', 'region', 'country', DB::raw('COUNT(*) as visits'), DB::raw('COUNT(DISTINCT session_id) as unique_visitors'))
                 ->groupBy('city', 'region', 'country')
                 ->orderByDesc('visits')
                 ->take(12)
                 ->get();
 
-            $topPages = VisitorLog::select('path', DB::raw('COUNT(*) as visits'), DB::raw('COUNT(DISTINCT session_id) as unique_visitors'))
+            $topPages = (clone $scoped)->select('path', DB::raw('COUNT(*) as visits'), DB::raw('COUNT(DISTINCT session_id) as unique_visitors'))
                 ->groupBy('path')
                 ->orderByDesc('visits')
-                ->take(10)
+                ->take(12)
                 ->get();
 
-            $topReferrers = VisitorLog::select('referrer', DB::raw('COUNT(*) as visits'))
+            $topReferrers = (clone $scoped)->select('referrer', DB::raw('COUNT(*) as visits'))
                 ->groupBy('referrer')
                 ->orderByDesc('visits')
                 ->take(8)
                 ->get();
 
-            $deviceBreakdown = VisitorLog::select('device_type', DB::raw('COUNT(*) as visits'))
+            $deviceBreakdown = (clone $scoped)->select('device_type', DB::raw('COUNT(*) as visits'))
                 ->groupBy('device_type')
                 ->orderByDesc('visits')
                 ->get();
 
             $recentVisitors = VisitorLog::with('user:id,full_name,email,city')
                 ->latest('created_at')
-                ->take(15)
+                ->take(20)
                 ->get();
 
             return [
+                'range' => $range,
                 'today_visits' => $todayVisits,
                 'today_unique' => $todayUnique,
+                'yesterday_visits' => $yesterdayVisits,
+                'visits_7d' => $visits7d,
+                'visits_30d' => $visits30d,
                 'total_visits' => $totalVisits,
                 'total_unique' => $totalUnique,
+                'range_visits' => $rangeVisits,
+                'range_unique' => $rangeUnique,
+                'member_visits' => $memberVisits,
+                'guest_visits' => $guestVisits,
+                'daily_series' => $dailySeries,
                 'top_locations' => $topLocations,
                 'top_pages' => $topPages,
                 'top_referrers' => $topReferrers,
@@ -258,6 +316,7 @@ class LiveStatsService
         try {
             return User::where('status', 'active')
                 ->where('is_admin', false)
+                ->where('email', 'not like', '%@cupdate.in')
                 ->where(function ($q) {
                     $q->where('is_online', true)
                         ->orWhere('last_active', '>=', now()->subMinutes(10));

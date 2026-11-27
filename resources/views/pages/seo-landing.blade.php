@@ -84,7 +84,7 @@
             @foreach ($localMembers as $person)
                 <article class="profile-card-public">
                     <div class="profile-card-img-wrap">
-                        <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }} in {{ $person->city }}" loading="lazy" decoding="async">
+                        <x-avatar :user="$person" :alt="$person->firstName() . ' in ' . $person->city" />
                     </div>
                     <div class="profile-card-body">
                         <div class="profile-card-top">

@@ -89,7 +89,7 @@
                     @endphp
                     <article class="moment-card">
                         <div class="moment-head">
-                            <img src="{{ $moment->user?->avatarUrl() ?? asset('images/cafe-blue-bottle.jpg') }}" alt="{{ $moment->user?->firstName() ?? 'Member' }}" class="thread-avatar">
+                            <x-avatar :user="$moment->user" :alt="$moment->user?->firstName() ?? 'Member'" class="thread-avatar" />
                             <div>
                                 <strong>{{ $moment->user?->firstName() ?? 'CupDate Member' }}</strong>
                                 <div class="muted-small">

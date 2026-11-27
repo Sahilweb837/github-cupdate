@@ -98,12 +98,43 @@ class User extends Authenticatable
         return ($age >= 18 && $age <= 90) ? $age : null;
     }
 
-    public function avatarUrl(): string
+    public function initials(): string
+    {
+        $parts = preg_split('/\s+/', trim((string) $this->full_name)) ?: [];
+        $first = mb_strtoupper(mb_substr($parts[0] ?? 'M', 0, 1));
+        $second = isset($parts[1]) ? mb_strtoupper(mb_substr($parts[1], 0, 1)) : '';
+
+        return $first . $second;
+    }
+
+    public function hasRealAvatar(): bool
     {
         $raw = html_entity_decode((string) ($this->avatar ?? ''));
         if ($raw === '' || $raw === 'default_avatar.jpg') {
-            return asset('images/cafe-blue-bottle.jpg');
+            return false;
         }
+        $lower = strtolower($raw);
+        if (str_contains($lower, 'unsplash.com')
+            || str_contains($lower, 'member-')
+            || str_contains($lower, 'cafe-blue-bottle')
+            || str_contains($lower, 'hero-coffee-couple')
+            || str_contains($lower, 'couple-cafe-1')) {
+            return false;
+        }
+        if (str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')) {
+            return true;
+        }
+
+        return file_exists(public_path(ltrim($raw, '/')));
+    }
+
+    public function avatarUrl(): ?string
+    {
+        if (! $this->hasRealAvatar()) {
+            return null;
+        }
+
+        $raw = html_entity_decode((string) $this->avatar);
         if (str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')) {
             return $raw;
         }

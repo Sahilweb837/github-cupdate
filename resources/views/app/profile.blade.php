@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="profile-banner">
-    <img src="{{ $me->avatarUrl() }}" alt="{{ $me->full_name }}" class="profile-banner-avatar">
+    <x-avatar :user="$me" :alt="$me->full_name" class="profile-banner-avatar" />
     <div>
         <h1 class="profile-banner-name">{{ $me->full_name }}</h1>
         <p class="profile-banner-city">

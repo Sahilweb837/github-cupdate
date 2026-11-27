@@ -23,7 +23,7 @@
     <meta property="og:title" content="@yield('title', 'CupDate | Free CupTV Video and Coffee Dating')">
     <meta property="og:description" content="@yield('description', 'Meet verified people across India and global cities, chat free, use CupTV live video, and read cafe reviews.')">
     <meta property="og:url" content="{{ $canonicalUrl }}">
-    <meta property="og:image" content="@yield('og_image', asset('images/hero-coffee-couple.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('images/cupdate-scene.svg'))">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', 'CupDate')">
     <meta name="twitter:description" content="@yield('description', '100% Free Coffee & Live Video Dating Across India & Worldwide.')">

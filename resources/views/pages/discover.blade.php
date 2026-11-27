@@ -56,7 +56,7 @@
             @forelse ($profiles as $person)
                 <article class="profile-card-public">
                     <div class="profile-card-img-wrap">
-                        <img src="{{ $person->avatarUrl() }}" alt="{{ $person->firstName() }} in {{ $person->city }}" loading="lazy">
+                        <x-avatar :user="$person" :alt="$person->firstName() . ' in ' . $person->city" />
                         @if ($person->is_online)
                             <span class="online-pill"><span class="online-dot"></span> Online</span>
                         @endif
@@ -69,7 +69,9 @@
                             <h3>{{ $person->firstName() }}@if($person->ageNumber()), {{ $person->ageNumber() }}@endif</h3>
                             <span class="city-tag"><x-icon name="map-pin" class="cup-icon-xs" /> {{ $person->city }}</span>
                         </div>
-                        <p class="profile-card-bio">{{ Str::limit($person->bio ?: 'Open to friendship and meaningful coffee dates.', 95) }}</p>
+                        @if ($person->bio)
+                            <p class="profile-card-bio">{{ Str::limit($person->bio, 95) }}</p>
+                        @endif
                         <div class="tag-list">
                             @foreach (array_slice($person->interestsList(), 0, 3) as $tag)
                                 <span class="tag-soft">{{ $tag }}</span>

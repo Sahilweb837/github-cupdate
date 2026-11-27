@@ -162,6 +162,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/analytics/live', [AdminController::class, 'liveAnalytics'])->name('analytics.live');
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::post('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
         Route::get('/moderation', [AdminController::class, 'moderation'])->middleware('admin:super_admin,moderator,support_admin')->name('moderation');

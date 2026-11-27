@@ -15,7 +15,7 @@
 <section class="section-white">
     <div class="container editorial-grid">
         <div>
-            <img src="{{ asset('images/hero-coffee-couple.jpg') }}" alt="Couple sharing coffee in a sunlit cafe" loading="lazy" class="editorial-photo">
+            <img src="{{ asset('images/cupdate-scene.svg') }}" alt="CupDate genuine coffee conversations and safe connections" loading="lazy" class="editorial-photo">
         </div>
         <div>
             <span class="eyebrow-text">OUR PHILOSOPHY</span>

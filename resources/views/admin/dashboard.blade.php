@@ -1,33 +1,68 @@
 @extends('layouts.admin')
 
-@section('title', 'Overview & Visitor Locations | CupDate Admin')
+@section('title', 'Overview & Visitor Analytics | CupDate Admin')
 
 @section('content')
-<div class="app-header-row">
+<div class="app-header-row" data-admin-live-url="{{ route('admin.analytics.live') }}">
     <div>
         <span class="eyebrow-text">REAL-TIME ANALYTICS &amp; VISITOR LOCATIONS</span>
         <h1 class="app-page-title">Admin Dashboard</h1>
     </div>
     <div class="admin-action-btns">
+        <span class="app-status-pill"><span class="online-dot"></span> Live Tracking Active</span>
         <a href="{{ route('admin.users') }}" class="btn btn-pink btn-sm">Manage Users</a>
         <a href="{{ route('admin.moderation') }}" class="btn btn-outline btn-sm">Moderation</a>
     </div>
 </div>
 
-<div class="admin-stats-grid">
-    <div class="admin-stat-card"><span>Live Visitors (5m)</span><strong data-live-visitors>{{ $stats['active_visitors'] }}</strong></div>
-    <div class="admin-stat-card"><span>Today Page Visits</span><strong>{{ $stats['today_visits'] }}</strong></div>
-    <div class="admin-stat-card"><span>Today Unique Visitors</span><strong>{{ $stats['today_unique'] }}</strong></div>
-    <div class="admin-stat-card"><span>Total Page Visits</span><strong>{{ $stats['total_visits'] }}</strong></div>
-    <div class="admin-stat-card"><span>Total Unique Visitors</span><strong>{{ $stats['total_unique'] }}</strong></div>
-    <div class="admin-stat-card"><span>Members Online</span><strong data-live-members>{{ $stats['online_members'] }}</strong></div>
-    <div class="admin-stat-card"><span>CupTV Video Queue</span><strong>{{ $stats['live_video_active'] }}</strong></div>
-    <div class="admin-stat-card"><span>Total Users</span><strong>{{ $stats['total_users'] }}</strong></div>
-    <div class="admin-stat-card"><span>Verified Users</span><strong>{{ $stats['verified_users'] }}</strong></div>
-    <div class="admin-stat-card"><span>Pending Reports</span><strong>{{ $stats['reported_accounts'] }}</strong></div>
-    <div class="admin-stat-card"><span>Coffee Dates</span><strong>{{ $stats['coffee_dates'] }}</strong></div>
-    <div class="admin-stat-card"><span>Open Tickets</span><strong>{{ $stats['open_tickets'] }}</strong></div>
+<div class="filter-bar admin-range-bar" role="region" aria-label="Analytics Time Range">
+    <a href="{{ route('admin.dashboard', ['range' => 'today']) }}" class="filter-chip {{ $range === 'today' ? 'is-active' : '' }}">Today</a>
+    <a href="{{ route('admin.dashboard', ['range' => '7d']) }}" class="filter-chip {{ $range === '7d' ? 'is-active' : '' }}">Last 7 Days</a>
+    <a href="{{ route('admin.dashboard', ['range' => '30d']) }}" class="filter-chip {{ $range === '30d' ? 'is-active' : '' }}">Last 30 Days</a>
+    <a href="{{ route('admin.dashboard', ['range' => 'all']) }}" class="filter-chip {{ $range === 'all' ? 'is-active' : '' }}">All Time</a>
+    <span class="muted-small admin-range-note">
+        Showing {{ $analytics['range_visits'] }} visits ({{ $analytics['range_unique'] }} unique) · {{ $analytics['member_visits'] }} signed-in · {{ $analytics['guest_visits'] }} guests
+    </span>
 </div>
+
+<div class="admin-stats-grid">
+    <div class="admin-stat-card"><span>Live Visitors (5m)</span><strong data-admin-stat="active_visitors">{{ $stats['active_visitors'] }}</strong></div>
+    <div class="admin-stat-card"><span>Today Page Visits</span><strong data-admin-stat="today_visits">{{ $stats['today_visits'] }}</strong><small class="muted-small">Yesterday: {{ $stats['yesterday_visits'] }}</small></div>
+    <div class="admin-stat-card"><span>Today Unique Visitors</span><strong data-admin-stat="today_unique">{{ $stats['today_unique'] }}</strong></div>
+    <div class="admin-stat-card"><span>Last 7 Days Visits</span><strong>{{ $stats['visits_7d'] }}</strong></div>
+    <div class="admin-stat-card"><span>Last 30 Days Visits</span><strong>{{ $stats['visits_30d'] }}</strong></div>
+    <div class="admin-stat-card"><span>All-Time Total Visits</span><strong data-admin-stat="total_visits">{{ $stats['total_visits'] }}</strong><small class="muted-small">Unique: <span data-admin-stat="total_unique">{{ $stats['total_unique'] }}</span></small></div>
+    <div class="admin-stat-card"><span>Members Online</span><strong data-admin-stat="online_members">{{ $stats['online_members'] }}</strong></div>
+    <div class="admin-stat-card"><span>Registered Users</span><strong>{{ $stats['total_users'] }}</strong><small class="muted-small">New (7d): {{ $stats['new_users'] }}</small></div>
+    <div class="admin-stat-card"><span>Verified Users</span><strong>{{ $stats['verified_users'] }}</strong></div>
+    <div class="admin-stat-card"><span>Messages Sent</span><strong>{{ $stats['messages_count'] }}</strong></div>
+    <div class="admin-stat-card"><span>Coffee Dates</span><strong>{{ $stats['coffee_dates'] }}</strong></div>
+    <div class="admin-stat-card"><span>Pending Reports / Tickets</span><strong>{{ $stats['reported_accounts'] }} / {{ $stats['open_tickets'] }}</strong></div>
+</div>
+
+<section class="admin-panel-card mt-24">
+    <div class="panel-head-row">
+        <h2 class="card-title">Daily Visits Trend (Last 7 Days)</h2>
+        <span class="muted-small">Page visits vs unique visitor sessions</span>
+    </div>
+    @php
+        $daily = $analytics['daily_series'] ?? collect();
+        $maxDay = max(1, (int) $daily->max('visits'));
+    @endphp
+    <div class="admin-chart-bars mt-16">
+        @foreach ($daily as $day)
+            @php $pct = $day['visits'] > 0 ? max(8, (int) round(($day['visits'] / $maxDay) * 100)) : 4; @endphp
+            <div class="admin-bar-col" title="{{ $day['label'] }}: {{ $day['visits'] }} visits ({{ $day['unique'] }} unique)">
+                <span class="admin-bar-count">{{ $day['visits'] }}</span>
+                <div class="admin-bar-track">
+                    <div class="admin-bar-fill" style="height: {{ $pct }}%"></div>
+                </div>
+                <span class="admin-bar-label">{{ $day['label'] }}</span>
+                <span class="muted-small">{{ $day['unique'] }} uniq</span>
+            </div>
+        @endforeach
+    </div>
+</section>
 
 <div class="admin-two-col mt-24">
     <section class="admin-panel-card">
@@ -193,7 +228,7 @@
 <section class="admin-panel-card mt-24">
     <div class="panel-head-row">
         <h2 class="card-title">Recent Real-Time Visitors Log</h2>
-        <span class="muted-small">Latest 15 visits</span>
+        <span class="muted-small">Latest 20 visits</span>
     </div>
     <div class="table-responsive mt-12">
         <table class="admin-table">

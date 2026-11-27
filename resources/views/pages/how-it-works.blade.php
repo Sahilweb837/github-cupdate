@@ -46,8 +46,8 @@
                 <p class="step-detail-desc">Talk comfortably via real-time text chat and optional one-to-one video calls before deciding to meet in person.</p>
             </div>
             <div class="step-widget-panel">
-                <div class="chat-bubble-in">Would you like to grab a cappuccino this weekend?</div>
-                <div class="chat-bubble-out">Saturday afternoon in McLeod Ganj sounds lovely!</div>
+                <div class="checklist-row"><span><x-icon name="message" class="cup-icon-xs" /> 1-to-1 text chat with anti-spam protection</span><span class="check-mark">Free</span></div>
+                <div class="checklist-row"><span><x-icon name="video" class="cup-icon-xs" /> Encrypted WebRTC video call before meeting</span><span class="check-mark">Free</span></div>
             </div>
         </article>
 

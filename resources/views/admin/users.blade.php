@@ -40,7 +40,7 @@
                     <tr>
                         <td>
                             <div class="admin-user-cell">
-                                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->full_name }}">
+                                <x-avatar :user="$user" :alt="$user->full_name" class="admin-avatar-thumb" />
                                 <div>
                                     <strong>{{ $user->full_name }}</strong>
                                     <div class="muted-small">{{ $user->email }}</div>

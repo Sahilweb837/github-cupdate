@@ -128,7 +128,7 @@
                     @endphp
                     <article class="moment-card">
                         <div class="moment-head">
-                            <img src="{{ $review->user?->avatarUrl() ?? asset('images/cafe-blue-bottle.jpg') }}" alt="{{ $review->user?->firstName() ?? 'Member' }}" class="thread-avatar">
+                            <x-avatar :user="$review->user" :alt="$review->user?->firstName() ?? 'Member'" class="thread-avatar" />
                             <div>
                                 <strong>{{ $review->cafe_name }}</strong>
                                 <div class="muted-small">{{ $review->city }} · By {{ $review->user?->firstName() ?? 'Member' }} · Rating: {{ $review->rating }}/5</div>

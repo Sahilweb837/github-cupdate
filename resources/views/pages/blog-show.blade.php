@@ -3,7 +3,7 @@
 @section('title', $post->meta_title ?: $post->title . ' - CupDate')
 @section('description', $post->meta_description ?: $post->excerpt)
 @section('og_type', 'article')
-@section('og_image', asset($post->cover_image ?: 'images/cafe-blue-bottle.jpg'))
+@section('og_image', ($post->cover_image && file_exists(public_path($post->cover_image))) ? asset($post->cover_image) : asset('images/cupdate-scene.svg'))
 
 @push('head')
 <script type="application/ld+json">
@@ -12,7 +12,7 @@
     "@@type": "Article",
     "headline": "{{ addslashes($post->title) }}",
     "description": "{{ addslashes($post->meta_description ?: $post->excerpt) }}",
-    "image": "{{ asset($post->cover_image ?: 'images/cafe-blue-bottle.jpg') }}",
+    "image": "{{ ($post->cover_image && file_exists(public_path($post->cover_image))) ? asset($post->cover_image) : asset('images/cupdate-scene.svg') }}",
     "datePublished": "{{ ($post->published_at ?? $post->created_at)?->toAtomString() }}",
     "dateModified": "{{ ($post->updated_at ?? $post->published_at ?? $post->created_at)?->toAtomString() }}",
     "publisher": {
@@ -30,7 +30,9 @@
         <a href="{{ route('blog') }}" class="text-link">← Back to Blog</a>
         <h1 class="page-title left mt-16">{{ $post->title }}</h1>
         <p class="muted-small">Published {{ $post->published_at?->format('M j, Y') }}</p>
-        <img src="{{ asset($post->cover_image ?: 'images/cafe-blue-bottle.jpg') }}" alt="{{ $post->title }}" class="blog-cover-img">
+        @if ($post->cover_image && file_exists(public_path($post->cover_image)))
+            <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" class="blog-cover-img">
+        @endif
         <div class="blog-body-text">
             {!! nl2br(e($post->body)) !!}
         </div>

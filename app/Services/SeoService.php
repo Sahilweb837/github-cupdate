@@ -44,7 +44,7 @@ class SeoService
         $today = now()->toAtomString();
 
         $entries = [
-            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/hero-coffee-couple.jpg', 'image_title' => 'CupDate Free Coffee & CupTV Live Video Dating Website'],
+            ['loc' => self::canonicalForPath('/'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '1.0', 'image' => self::baseUrl() . '/images/cupdate-scene.svg', 'image_title' => 'CupDate Free Coffee & CupTV Live Video Dating Website'],
             ['loc' => self::canonicalForPath('/discover'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/live-video'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.95'],
             ['loc' => self::canonicalForPath('/moments'), 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
@@ -70,7 +70,7 @@ class SeoService
             ['loc' => self::canonicalForPath('/meet-singles-in-kangra'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/meet-singles-in-dharamshala'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/meet-singles-in-mandi'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
-            ['loc' => self::canonicalForPath('/coffee-date-ideas-in-himachal-pradesh'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9', 'image' => self::baseUrl() . '/images/cafe-blue-bottle.jpg', 'image_title' => 'Coffee Date Ideas in Himachal Pradesh'],
+            ['loc' => self::canonicalForPath('/coffee-date-ideas-in-himachal-pradesh'), 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => self::canonicalForPath('/privacy-policy'), 'lastmod' => $today, 'changefreq' => 'yearly', 'priority' => '0.4'],
             ['loc' => self::canonicalForPath('/terms-and-conditions'), 'lastmod' => $today, 'changefreq' => 'yearly', 'priority' => '0.4'],
             ['loc' => self::canonicalForPath('/community-guidelines'), 'lastmod' => $today, 'changefreq' => 'yearly', 'priority' => '0.4'],
@@ -88,7 +88,7 @@ class SeoService
                     'lastmod' => $today,
                     'changefreq' => 'weekly',
                     'priority' => '0.85',
-                    'image' => self::baseUrl() . '/' . ltrim($guide['image'] ?? 'images/cafe-blue-bottle.jpg', '/'),
+                    'image' => self::baseUrl() . '/images/cupdate-scene.svg',
                     'image_title' => $guide['h1'],
                 ];
             }

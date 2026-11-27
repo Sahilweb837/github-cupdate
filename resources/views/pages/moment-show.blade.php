@@ -3,7 +3,7 @@
 @section('title', ($moment->user?->firstName() ?? 'CupDate') . '’s Coffee Moment' . ($moment->city ? ' in ' . $moment->city : '') . ' | CupDate')
 @section('description', \Illuminate\Support\Str::limit($moment->content, 150))
 @section('og_type', 'article')
-@section('og_image', $moment->image_url ? asset($moment->image_url) : asset('images/hero-coffee-couple.jpg'))
+@section('og_image', $moment->image_url ? asset($moment->image_url) : asset('images/cupdate-scene.svg'))
 
 @section('content')
 <section class="page-hero section-cream">

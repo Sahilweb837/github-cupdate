@@ -28,7 +28,7 @@ class SeoGuides
                 'h1' => 'Best Free Himachal Pradesh Dating & Coffee Meetup Website',
                 'description' => 'Discover why CupDate (cupdate.in) is Himachal Pradesh’s best 100% free dating, friendship, and CupTV live video website across Shimla, Dharamshala, Kangra, Mandi, Manali, and Palampur.',
                 'category' => 'Himachal Pradesh SEO Guide',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Finding genuine people in Himachal Pradesh shouldn’t require expensive subscriptions or fake swipe decks. CupDate connects verified locals, students, remote creators, and travelers across Shimla, Dharamshala, McLeod Ganj, Kangra, Mandi, Manali, Palampur, Solan, Kullu, Hamirpur, and Una - completely free.',
                     'Unlike generic apps, CupDate focuses on real conversations first: free 1-to-1 encrypted chat, instant CupTV live video matching, women-friendly café reviews, and shareable Coffee Moments protected by automated anti-nudity and anti-spam moderation.',
@@ -51,7 +51,7 @@ class SeoGuides
                 'h1' => 'Best Free Dating & Coffee Meetup Website in Delhi NCR',
                 'description' => 'Meet verified singles in New Delhi, Noida, Gurugram, Faridabad, and Ghaziabad for free coffee dates, respectful chat, and CupTV live video on CupDate.',
                 'category' => 'Delhi NCR Guide',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Delhi NCR is one of India’s liveliest cities for specialty coffee, book cafés, and creative meetups - from Connaught Place, Khan Market, and Hauz Khas Village to CyberHub in Gurugram and Sector 18 in Noida.',
                     'CupDate gives Delhi NCR singles a refreshing alternative to paywalled dating apps: every member gets free messaging, CupTV live video face-to-face intros, and access to women-reviewed safe cafés before stepping out.',
@@ -74,7 +74,7 @@ class SeoGuides
                 'h1' => 'Dating in Pune: Cozy Cafés, Real Conversations & Free Live Video',
                 'description' => 'Meet genuine singles in Pune across Koregaon Park, FC Road, Baner, Viman Nagar, and Kothrud for free coffee dates and safe CupTV video chats.',
                 'category' => 'City Dating Guide',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Pune’s leafy lanes in Koregaon Park, bustling student cafés on FC Road, and modern roasteries in Baner and Viman Nagar make it one of India’s best cities for relaxed coffee dating.',
                     'On CupDate, Pune members connect around shared hobbies - trekking to Sinhagad, live acoustic nights, books, tech, and specialty brews - with 100% free chat and CupTV video calls.',
@@ -94,7 +94,7 @@ class SeoGuides
                 'h1' => 'Complete Haryana Dating & Safe Coffee Meetup Guide',
                 'description' => 'Connect safely with verified singles across Gurugram, Faridabad, Panchkula, Ambala, Karnal, Panipat, Rohtak, Hisar, and Sonipat on CupDate.',
                 'category' => 'State Dating Guide',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Across Gurugram’s modern cafés, Panchkula’s quiet parks, and university hubs like Kurukshetra, Rohtak, and Sonipat, young professionals and students in Haryana are choosing intentional, respectful conversations over noisy apps.',
                     'CupDate offers dedicated city guides across Haryana with zero paid paywalls, verified profiles, and strict anti-spam and anti-nudity protection.',
@@ -114,7 +114,7 @@ class SeoGuides
                 'h1' => 'Women’s Dating Safety Guide in India',
                 'description' => 'Essential online and in-person safety tips for women dating in India: verifying profiles, avoiding scams, picking safe cafés, and protecting personal privacy.',
                 'category' => 'Safety Guide',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Your comfort and safety always come first. Before sharing your phone number or meeting someone new in India, keep all early chats and video calls inside CupDate so you remain protected by our moderation, block, and report systems.',
                     'Always choose well-lit public cafés during daytime hours, share your live location with a trusted friend, arrange your own transport, and check our community Café Reviews written by other women.',
@@ -135,7 +135,7 @@ class SeoGuides
                 'h1' => 'How to Make a Great Impression on Your First Coffee Date',
                 'description' => 'Practical, authentic tips for a relaxed and memorable first coffee date: listening well, picking the right café, keeping conversation natural, and being respectful.',
                 'category' => 'Dating Tips',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Great first dates aren’t about flashy gestures - they’re about showing up on time, choosing a comfortable café where you can actually hear each other, and being genuinely curious about the other person.',
                     'Put your phone face-down, ask open-ended questions about their favorite travel memory or weekend routine, and keep the first coffee date relaxed at 45–60 minutes so there’s zero pressure.',
@@ -155,7 +155,7 @@ class SeoGuides
                 'h1' => 'How to Spot and Report a Suspicious Profile',
                 'description' => 'Learn the warning signs of fake or spam profiles and how to block and report suspicious accounts in one tap on CupDate.',
                 'category' => 'Safety Guide',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'If someone immediately asks to move off-platform to Telegram/WhatsApp, avoids a live CupTV video hello, sends external spam links, or asks for money/crypto, stop engaging right away.',
                     'On CupDate, every chat, profile, and CupTV live video room includes a one-tap Report & Block button that immediately severs contact and sends a snapshot to our moderation team.',
@@ -175,7 +175,7 @@ class SeoGuides
                 'h1' => 'MBTI Personality & Dating Compatibility Explained',
                 'description' => 'Explore how personality types (ENFP, INFJ, INTJ, ESFP, and more) shape conversation styles and coffee date chemistry on CupDate.',
                 'category' => 'Compatibility Guide',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Understanding communication styles - whether someone recharges in quiet one-on-one café chats (I) or lively group conversations (E) - helps turn awkward small talk into effortless chemistry.',
                     'CupDate combines city proximity, shared hobbies, coffee preferences, and personality cues to help you spark better conversations.',
@@ -195,7 +195,7 @@ class SeoGuides
                 'h1' => '10 Online Dating Red Flags & How to Stay Safe',
                 'description' => 'Protect yourself while dating online in India and worldwide: recognize love-bombing, fake profiles, boundary-pushing, and spam links early.',
                 'category' => 'Safety Tips',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Healthy connections feel calm, consistent, and respectful. Watch out for anyone who pressures you for private photos, gets angry when you set a boundary, or tries to rush you off CupDate within minutes.',
                     'Trust your instincts: if a conversation feels off, block and report with one tap and keep meeting people who value genuine respect.',
@@ -215,7 +215,7 @@ class SeoGuides
                 'h1' => 'CupDate Frequently Asked Questions',
                 'description' => 'Answers to common questions about CupDate: 100% free access, CupTV live video chat, women-friendly café reviews, 200+ cities, and anti-nudity safety.',
                 'category' => 'Help & FAQ',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'CupDate (cupdate.in) is built to be the world’s warmest 100% free coffee dating and CupTV live video community - with zero hidden paywalls, real active visitor transparency, and dedicated safety protection.',
                 ],
@@ -235,7 +235,7 @@ class SeoGuides
                 'h1' => 'CupDate Platform Disclaimer',
                 'description' => 'Important platform disclaimer, user responsibility guidelines, and safety standards for CupDate (cupdate.in).',
                 'category' => 'Legal & Safety',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'CupDate provides an online social discovery, messaging, live video, and café review platform for adults aged 18 and older. While we actively screen content against nudity, spam, and abuse and provide verification badges, users remain responsible for exercising good judgment during offline meetups.',
                     'Always meet in public places during daytime hours, avoid sharing financial or sensitive personal details, and report any suspicious activity to our moderation team.',
@@ -255,7 +255,7 @@ class SeoGuides
                 'h1' => 'Serious Relationships, Rishta & Meaningful Connections in India',
                 'description' => 'Looking for a serious relationship or respectful rishta introduction? Meet family-oriented, verified singles across India over honest conversations and coffee.',
                 'category' => 'Serious Relationships',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Not everyone wants casual swiping. Many members on CupDate across Himachal Pradesh, Punjab, Delhi, Chandigarh, Maharashtra, and South India are looking for respectful, long-term companionship and marriage-minded introductions.',
                     'Take time to chat calmly, meet on CupTV or 1-to-1 video calls, and arrange a comfortable daytime café introduction with verified members.',
@@ -275,7 +275,7 @@ class SeoGuides
                 'h1' => 'Respectful, Safe & Inclusive Community for Everyone',
                 'description' => 'CupDate welcomes everyone with preference controls, strict anti-harassment moderation, privacy settings, and safe coffee meetup spaces.',
                 'category' => 'Community',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Everyone deserves a safe, respectful space to build genuine friendships and romantic connections. CupDate lets you set your own discovery preferences, control profile visibility, and connect without fear of harassment or spam.',
                     'Our moderation team enforces zero tolerance for hate speech, outing, harassment, or unsolicited explicit content.',
@@ -295,7 +295,7 @@ class SeoGuides
                 'h1' => 'Best Icebreaker Questions for First Coffee Dates & CupTV Video',
                 'description' => 'Break the ice naturally on your first coffee date or live video chat with thoughtful, respectful, and fun conversation starters.',
                 'category' => 'Conversation Guides',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Good conversations rarely start with generic small talk. Asking about memorable travel detours, favorite weekend café spots, or books someone actually finished creates natural warmth from the first minute.',
                     'Pair these prompts with our free interactive Truth or Dare card deck or try one during a 5-minute CupTV Live Video introduction.',
@@ -315,7 +315,7 @@ class SeoGuides
                 'h1' => 'Weekend Coffee Meetups, Book Circles & Local Hangouts',
                 'description' => 'Discover weekend coffee meetups, book discussions, photography walks, and travel groups across Shimla, Delhi, Chandigarh, Bengaluru, Pune, and Mumbai.',
                 'category' => 'Community Meetups',
-                'image' => 'images/couple-cafe-1.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Meeting new people feels far easier in relaxed daytime settings built around shared interests. CupDate highlights coffee circles, book swaps, and outdoor morning walks across India.',
                     'Start by chatting free on CupDate, check café reviews for comfortable daylight seating, or join a weekend travel group.',
@@ -335,7 +335,7 @@ class SeoGuides
                 'h1' => 'Free Live Video Speed Dating on CupTV',
                 'description' => 'Try safe, 100% free live video speed dating from your browser with CupTV. Meet verified singles across India and worldwide face-to-face before meeting in person.',
                 'category' => 'Live Video',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Traditional dating apps trap people in days of dry texting. CupDate brings fast, safe face-to-face chemistry checks to your phone and desktop via encrypted WebRTC live video.',
                     'Choose your city or region preference, start a respectful 5-minute video hello, and tap Next anytime.',
@@ -355,7 +355,7 @@ class SeoGuides
                 'h1' => 'Thoughtful Daytime Couple Activities & Date Ideas Across India',
                 'description' => 'Explore safe, creative daytime date ideas including botanical walks, bookstore cafés, pottery workshops, museum visits, and coffee tastings across India.',
                 'category' => 'Date Ideas',
-                'image' => 'images/couple-cafe-1.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Memorable dates do not require noisy clubs or expensive bookings. Shared experiences like specialty pour-over tastings, independent bookstore browsing, morning botanical trails, or weekend art galleries encourage easy conversation.',
                     'Browse verified café reviews and share your favorite moments safely on CupDate.',
@@ -375,7 +375,7 @@ class SeoGuides
                 'h1' => 'Respectful College & Young Adult Meetups in India',
                 'description' => 'Meet genuine 18+ college students and young professionals in Chandigarh, Delhi University, Pune, Manipal, Roorkee, Shimla, and Bengaluru for free coffee dates.',
                 'category' => 'Student & Youth Guides',
-                'image' => 'images/hero-coffee-couple.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Campus towns across India thrive on neighborhood coffeehouses, evening chai stalls, and weekend study groups. CupDate helps adults aged 18+ connect safely without fake profiles or paywalls.',
                     'Every account supports interest tags, privacy toggles, instant blocking, and moderation review.',
@@ -395,7 +395,7 @@ class SeoGuides
                 'h1' => 'Solo Travel Companions & Safe Road Trip Coffee Meetups',
                 'description' => 'Traveling solo to Himachal Pradesh, Spiti, Rishikesh, Goa, or Jaipur? Meet verified fellow travelers over daytime coffee or join open weekend travel groups on CupDate.',
                 'category' => 'Travel & Meetups',
-                'image' => 'images/couple-cafe-1.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Exploring new hill stations or coastal cities solo is rewarding, and sharing a sunset coffee with fellow travelers makes trips even better. CupDate connects travelers and locals across 200+ cities.',
                     'Start on a CupTV video call first, review local cafés, and always pick sunlit public meetup spots.',
@@ -415,7 +415,7 @@ class SeoGuides
                 'h1' => 'Respectful Dating Etiquette in India: From First Chat to Coffee Date',
                 'description' => 'Practical guide to respectful texting, split-bill etiquette, punctuality, privacy boundaries, and honest communication while dating in India.',
                 'category' => 'Relationship Advice',
-                'image' => 'images/cafe-blue-bottle.jpg',
+                'image' => 'images/cupdate-scene.svg',
                 'paragraphs' => [
                     'Respectful communication sets CupDate apart. Clear intentions, respecting personal pace, confirming public daytime venues beforehand, and never pressuring someone for personal numbers early build lasting trust.',
                     'Whether you are looking for friendship, serious matchmaking, or casual coffee company, sincerity always stands out.',

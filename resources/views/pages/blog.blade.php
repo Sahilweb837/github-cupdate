@@ -18,9 +18,11 @@
             <div class="cards-grid-3">
                 @foreach ($posts as $post)
                     <article class="profile-card-public">
+                        @if ($post->cover_image && file_exists(public_path($post->cover_image)))
                         <div class="profile-card-img-wrap">
-                            <img src="{{ asset($post->cover_image ?: 'images/cafe-blue-bottle.jpg') }}" alt="{{ $post->title }}" loading="lazy" decoding="async">
+                            <img src="{{ asset($post->cover_image) }}" alt="{{ $post->title }}" loading="lazy" decoding="async">
                         </div>
+                        @endif
                         <div class="profile-card-body">
                             <h3>{{ $post->title }}</h3>
                             <p class="profile-card-bio">{{ $post->excerpt }}</p>

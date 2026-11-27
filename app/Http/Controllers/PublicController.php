@@ -40,6 +40,7 @@ class PublicController extends Controller
             ->where('status', 'active')
             ->where('profile_visible', true)
             ->where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in')
             ->whereNotIn('role', User::ADMIN_ROLES);
 
         if ($cityFilter) {
@@ -122,7 +123,8 @@ class PublicController extends Controller
         $membersQuery = User::query()
             ->where('status', 'active')
             ->where('profile_visible', true)
-            ->where('is_admin', false);
+            ->where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in');
 
         if ($countryName === 'India' && $slug !== 'india') {
             $safeCity = SqlSafe::escapeLike((string) $cityName);
@@ -177,6 +179,7 @@ class PublicController extends Controller
             ->where('status', 'active')
             ->where('profile_visible', true)
             ->where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in')
             ->whereNotIn('role', User::ADMIN_ROLES);
 
         if ($city = $request->query('city')) {
@@ -497,7 +500,8 @@ class PublicController extends Controller
         $membersQuery = User::query()
             ->where('status', 'active')
             ->where('profile_visible', true)
-            ->where('is_admin', false);
+            ->where('is_admin', false)
+            ->where('email', 'not like', '%@cupdate.in');
 
         if ($pageData['city']) {
             $membersQuery->where('city', $pageData['city']);

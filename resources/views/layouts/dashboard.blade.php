@@ -29,7 +29,7 @@
                 <x-icon name="bell" class="cup-icon-sm" />
             </a>
             <a href="{{ route('app.profile') }}" class="mobile-avatar-link">
-                <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->firstName() }}">
+                <x-avatar :user="auth()->user()" :alt="auth()->user()->firstName()" />
             </a>
         </div>
     </div>
@@ -72,7 +72,7 @@
 
             <div class="sidebar-footer">
                 <div class="sidebar-user">
-                    <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->full_name }}" class="sidebar-avatar">
+                    <x-avatar :user="auth()->user()" :alt="auth()->user()->full_name" class="sidebar-avatar" />
                     <div class="min-w-0">
                         <div class="sidebar-user-name">{{ auth()->user()->full_name }}</div>
                         <div class="sidebar-user-city">{{ auth()->user()->city }}</div>
